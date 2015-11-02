@@ -46,7 +46,7 @@ abstract class Board(val grid: Vector[Option[Piece]], xSize: Int) {
 
     if (isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
        (isEmptyCell(toLocation) || isPiece(toLocation) && toLocation.get.get.owner != fromLocation.get.get.owner)) {
-      Some(Movement(fromLocation.get.get, dx, dy, this))
+      Some(Movement(fromLocation.get.get, dx, dy))
     } else {
       None
     }
@@ -67,7 +67,7 @@ abstract class Piece(val x: Int, val y: Int, val owner: Player) {
   }
 }
 
-case class Movement(fromPiece: Piece, dx: Int, dy: Int, fromBoard: Board)
+case class Movement(fromPiece: Piece, dx: Int, dy: Int)
 
 class Player(val name: String) {
   def pieces(board: Board) = board.grid.flatten.filter(_.owner == this)
