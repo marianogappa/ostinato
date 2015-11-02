@@ -28,7 +28,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
       implicit val rules = game.rules
 
-      val movements = game.board.get(3,3).get.get.movements(board)
+      val movements = board.get(3,3).get.get.movements(board)
       movements map board.move foreach (b => println(b + "\n"))
 
       movements.size shouldBe 14
@@ -48,7 +48,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
       implicit val rules = game.rules
 
-      val movements = game.board.get(3,3).get.get.movements(board)
+      val movements = board.get(3,3).get.get.movements(board)
       movements map board.move foreach (b => println(b + "\n"))
 
       movements.size shouldBe 0
@@ -68,7 +68,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
       implicit val rules = game.rules
 
-      val movements = game.board.get(3,3).get.get.movements(board)
+      val movements = board.get(3,3).get.get.movements(board)
       movements map board.move foreach (b => println(b + "\n"))
 
       movements.size shouldBe 1
