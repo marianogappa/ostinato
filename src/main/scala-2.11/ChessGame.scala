@@ -50,6 +50,19 @@ class ChessBoard(grid: Vector[Option[Piece]]) extends Board(grid, ChessBoard.xSi
     )
   }
 
+  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: Rules): Option[Movement] = {
+    val fromLocation = get(fromX, fromY)
+    val toLocation = get(fromX + dx, fromY + dy)
+    val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
+
+    if (isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
+      (isEmptyCell(toLocation) || isPiece(toLocation) && toLocation.get.get.owner != fromLocation.get.get.owner)) {
+      Some(Movement(fromLocation.get.get, dx, dy))
+    } else {
+      None
+    }
+  }
+
   override def toString: String = {
     def cellToChar(cell: Cell): Char = cell match {
       case Some(piece) => (piece.owner.name, piece) match {

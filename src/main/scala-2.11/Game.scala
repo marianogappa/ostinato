@@ -39,18 +39,7 @@ abstract class Board(val grid: Vector[Option[Piece]], xSize: Int) {
       Set(get(xFrom, yFrom)) ++ betweenInclusive(xFrom + deltaX, yFrom + deltaY, xTo, yTo, deltaX, deltaY)
   }
 
-  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: Rules): Option[Movement] = {
-    val fromLocation = get(fromX, fromY)
-    val toLocation = get(fromX + dx, fromY + dy)
-    val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
-
-    if (isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
-       (isEmptyCell(toLocation) || isPiece(toLocation) && toLocation.get.get.owner != fromLocation.get.get.owner)) {
-      Some(Movement(fromLocation.get.get, dx, dy))
-    } else {
-      None
-    }
-  }
+  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: Rules): Option[Movement]
 
   def move(m: Movement)(implicit rules: Rules): Board
 }
