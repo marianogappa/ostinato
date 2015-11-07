@@ -51,31 +51,25 @@ class ChessBoard(grid: Vector[Option[Piece]]) extends Board(grid, ChessBoard.xSi
   }
 
   override def toString: String = {
-    val linesOfMaybePieces = grid.grouped(8).map(_.toList)
+    def cellToChar(cell: Cell): Char = cell match {
+      case Some(piece) => (piece.owner.name, piece) match {
+        case ("White", p: Rook) => '♜'
+        case ("White", p: Knight) => '♞'
+        case ("White", p: Bishop) => '♝'
+        case ("White", p: Queen) => '♛'
+        case ("White", p: King) => '♚'
+        case ("Black", p: Rook) => '♖'
+        case ("Black", p: Knight) => '♘'
+        case ("Black", p: Bishop) => '♗'
+        case ("Black", p: Queen) => '♕'
+        case ("Black", p: King) => '♔'
+      }
+      case None => '.'
+    }
 
-    val lines: Iterator[String] = linesOfMaybePieces.map( line => line map (
-      maybePiece =>
-        if (maybePiece.nonEmpty) {
+    val linesOfCells = grid.grouped(8) map (_.toList)
 
-          (maybePiece.get.owner.name, maybePiece.get) match {
-            case ("White", p: Rook) => '♜'
-            case ("White", p: Knight) => '♞'
-            case ("White", p: Bishop) => '♝'
-            case ("White", p: Queen) => '♛'
-            case ("White", p: King) => '♚'
-            case ("Black", p: Rook) => '♖'
-            case ("Black", p: Knight) => '♘'
-            case ("Black", p: Bishop) => '♗'
-            case ("Black", p: Queen) => '♕'
-            case ("Black", p: King) => '♔'
-          }
-        } else {
-          '.'
-        }
-      )
-    ).map(_.mkString)
-
-    lines mkString "\n"
+    linesOfCells map (_ map cellToChar) map (_.mkString) mkString "\n"
   }
 }
 
