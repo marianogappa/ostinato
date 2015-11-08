@@ -55,7 +55,8 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
     val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
 
     if (isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
-      (isEmptyCell(toLocation) || isPiece(toLocation) && toLocation.get.get.owner != fromLocation.get.get.owner)) {
+        (isEmptyCell(toLocation) || isPiece(toLocation) && !toLocation.get.get.isKing &&
+        toLocation.get.get.owner != fromLocation.get.get.owner)) {
       Some(new ChessMovement(fromLocation.get.get, dx, dy))
     } else {
       None
@@ -108,7 +109,9 @@ object Queen {
   val char = '♛'
 }
 
-abstract class ChessPiece(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends Piece[Player[ChessBoard, ChessMovement, ChessPiece], ChessMovement, ChessBoard](x, y, owner)
+abstract class ChessPiece(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends Piece[Player[ChessBoard, ChessMovement, ChessPiece], ChessMovement, ChessBoard](x, y, owner) {
+  val isKing = false
+}
 
 class ChessMovement(override val fromPiece: ChessPiece, dx: Int, dy: Int) extends Movement[ChessPiece](fromPiece, dx, dy)
 
@@ -150,4 +153,5 @@ class King(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece])
   }
   val toChar = King.char
   override def toString = s"${owner.name}'s King on ($x, $y)"
+  override val isKing = true
 }
