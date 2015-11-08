@@ -1,4 +1,4 @@
-abstract class Game(board: Board, players: List[Player], rules: Rules)
+abstract class Game[B <: Board[_,_,_], P <: Player[B,_]](board: B, players: List[P], rules: Rules)
 
 object Board {
   def fromXY(xSize: Int)(x: Int, y: Int) = y * xSize + x
@@ -8,8 +8,8 @@ object Board {
   def sign(from: Int, to: Int) = math.signum(to - from)
 }
 
-abstract class Board(val grid: Vector[Option[Piece]], xSize: Int) {
-  type Cell = Option[Piece]
+abstract class Board[P <: Piece[_,_,_], M <: Movement[P], B <: Board[P,M,_]](val grid: Vector[Option[P]], xSize: Int) {
+  type Cell = Option[P]
   type Location = Option[Cell]
 
   def fromXY = Board.fromXY(xSize) _
@@ -39,28 +39,42 @@ abstract class Board(val grid: Vector[Option[Piece]], xSize: Int) {
       Set(get(xFrom, yFrom)) ++ betweenInclusive(xFrom + deltaX, yFrom + deltaY, xTo, yTo, deltaX, deltaY)
   }
 
-  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: Rules): Option[Movement]
+  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: Rules): Option[M]
 
-  def move(m: Movement)(implicit rules: Rules): Board
+  def move(m: M)(implicit rules: Rules): B
 }
 
-abstract class Piece(val x: Int, val y: Int, val owner: Player) {
-  def movements(board: Board)(implicit rules: Rules): Set[Movement]
+abstract class Piece[P <: Player[B,M], M <: Movement[_], B <: Board[_, M, B]](val x: Int, val y: Int, val owner: P) {
+  def movements(board: B)(implicit rules: Rules): Set[M]
 
-  protected def allMovementsOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: Board, inc: Int = 1)(implicit rules: Rules): Set[Movement] = {
-    board.movement(fromX, fromY, dx * inc, dy * inc) map (m ⇒ Set(m) ++ allMovementsOfDelta(fromX, fromY, dx, dy, board, inc + 1)) getOrElse Set()
+  protected def allMovementsOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: B, inc: Int = 1)(implicit rules: Rules): Set[M] = {
+    Set.empty[M]
+    val a: Option[M] = board.movement(fromX, fromY, dx * inc, dy * inc)
+    val b: Option[Set[M]] = a map { m: M ⇒ Set(m) ++ allMovementsOfDelta(fromX, fromY, dx, dy, board, inc + 1) }
+    val c: Set[M] = b getOrElse Set.empty[M]
+    c
   }
 
-  protected def movementOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: Board)(implicit rules: Rules): Option[Movement] = {
+  protected def movementOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: B)(implicit rules: Rules): Option[M] = {
     board.movement(fromX, fromY, dx, dy)
   }
 }
 
-case class Movement(fromPiece: Piece, dx: Int, dy: Int)
+case class Movement[P <: Piece[_,_,_]](fromPiece: P, dx: Int, dy: Int)
 
-class Player(val name: String) {
-  def pieces(board: Board) = board.grid.flatten.filter(_.owner == this)
-  def movements(board: Board)(implicit rules: Rules): Set[Movement] = pieces(board).flatMap(_.movements(board)).toSet
+class Player[B <: Board[_, _, _], M <: Movement[_]](val name: String) {
+  
+//  def pieces(board: B): Set[Piece[_,_,_]] = board.grid.flatten.filter(_.owner == this).toSet
+//  def movements(board: B)(implicit rules: Rules): Set[M] = {
+//    val movements = for {
+//      piece: Piece[_,_,B] <- pieces(board).toSet: Set[Piece[_,_,B]]
+//      movements <- piece.movements(board): Set[M]
+//    } yield movements
+
+//    val p = pieces(board)
+//    p.flatMap { case piece: Piece[_,M,B] => piece.movements(board) }
+//    movements
+//  }
 }
 
 class Rules {}
