@@ -1,6 +1,6 @@
 object ChessGame {
   def fromString(string: String): ChessGame = {
-    val (white, black) = (new Player[ChessBoard, ChessMovement]("White"), new Player[ChessBoard, ChessMovement]("Black"))
+    val (white, black) = (new Player[ChessBoard, ChessMovement, ChessPiece]("White"), new Player[ChessBoard, ChessMovement, ChessPiece]("Black"))
     val grid = string.split('\n').mkString.zipWithIndex.toVector map {
       case ('♜', pos) => Some(new Rook(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
       case ('♞', pos) => Some(new Knight(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
@@ -31,8 +31,8 @@ object ChessGame {
   val defaultRules = new ChessRules
 }
 
-class ChessGame(val board: ChessBoard, val players: List[Player[ChessBoard, ChessMovement]], val rules: ChessRules) extends Game[ChessBoard, Player[ChessBoard, ChessMovement]](board, players, rules)
-//class Player(name: String) extends Player[ChessBoard, ChessMovement](name)
+class ChessGame(val board: ChessBoard, val players: List[Player[ChessBoard, ChessMovement, ChessPiece]], val rules: ChessRules) extends Game[ChessBoard, Player[ChessBoard, ChessMovement, ChessPiece]](board, players, rules)
+//class Player(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece](name)
 
 object ChessBoard {
   val xSize = 8
@@ -108,11 +108,11 @@ object Queen {
   val char = '♛'
 }
 
-abstract class ChessPiece(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends Piece[Player[ChessBoard, ChessMovement], ChessMovement, ChessBoard](x, y, owner)
+abstract class ChessPiece(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends Piece[Player[ChessBoard, ChessMovement, ChessPiece], ChessMovement, ChessBoard](x, y, owner)
 
 class ChessMovement(override val fromPiece: ChessPiece, dx: Int, dy: Int) extends Movement[ChessPiece](fromPiece, dx, dy)
 
-class Rook(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends ChessPiece(x, y, owner) {
+class Rook(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: Rules): Set[ChessMovement] = {
     Rook.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
@@ -120,7 +120,7 @@ class Rook(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends Che
   override def toString = s"${owner.name}'s Rook on ($x, $y)"
 }
 
-class Bishop(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends ChessPiece(x, y, owner) {
+class Bishop(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: Rules): Set[ChessMovement] = {
     Bishop.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
@@ -128,7 +128,7 @@ class Bishop(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends C
   override def toString = s"${owner.name}'s Bishop on ($x, $y)"
 }
 
-class Knight(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends ChessPiece(x, y, owner) {
+class Knight(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: Rules): Set[ChessMovement] = {
     Knight.deltas.flatMap { case (dx, dy) => movementOfDelta(x, y, dx, dy, board) }
   }
@@ -136,7 +136,7 @@ class Knight(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends C
   override def toString = s"${owner.name}'s Knight on ($x, $y)"
 }
 
-class Queen(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends ChessPiece(x, y, owner) {
+class Queen(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: Rules): Set[ChessMovement] = {
     Queen.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
@@ -144,7 +144,7 @@ class Queen(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends Ch
   override def toString = s"${owner.name}'s Queen on ($x, $y)"
 }
 
-class King(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement]) extends ChessPiece(x, y, owner) {
+class King(x: Int, y: Int, owner: Player[ChessBoard, ChessMovement, ChessPiece]) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: Rules): Set[ChessMovement] = {
     King.deltas.flatMap { case (dx, dy) => movementOfDelta(x, y, dx, dy, board) }
   }
