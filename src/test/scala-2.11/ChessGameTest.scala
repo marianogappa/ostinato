@@ -1,7 +1,7 @@
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 class ChessGameTest extends FunSpec with ShouldMatchers {
-  describe("ChessGame") {
+  describe("ChessGame movements") {
     it("should print out a default starting game of Chess") {
       ChessGame.defaultGame.board.toString shouldBe
         """♜♞♝♛♚♝♞♜
@@ -240,12 +240,80 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
 
   }
 
+  describe("ChessGame threatened/defended pieces") {
+    it("should find no moves for King if it's threatened in every direction") {
+      val game = ChessGame.fromString(
+        """..♛.....
+          |........
+          |♛.......
+          |...♔....
+          |.......♛
+          |........
+          |........
+          |....♛...""".stripMargin)
+
+      val board = game.board
+
+      implicit val rules = game.rules
+
+      movementCount(game, 3, 3) shouldBe 0
+    }
+    it("should find that the Queen is defended") {
+      val game = ChessGame.fromString(
+        """..♛.....
+          |........
+          |..♛.....
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin)
+      val board = game.board
+      implicit val rules = game.rules
+
+      board.get(2,2).get.get.isDefended(board) shouldBe true
+    }
+
+    it("should find that the Queen is threatened") {
+      val game = ChessGame.fromString(
+        """..♖.....
+          |........
+          |..♛.....
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin)
+      val board = game.board
+      implicit val rules = game.rules
+
+      board.get(2,2).get.get.isThreatened(board) shouldBe true
+    }
+
+    it("should find that the Queen is not threatened") {
+      val game = ChessGame.fromString(
+        """...♖....
+          |........
+          |..♛.....
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin)
+      val board = game.board
+      implicit val rules = game.rules
+      val pieces = board.get(2,2).get.get.owner.pieces(board).toList
+
+      board.get(2,2).get.get.isThreatened(board) shouldBe false
+    }
+  }
+
   private def movementCount(game: ChessGame, x: Int, y: Int, show: Boolean = true) = {
     val board = game.board
     implicit val rules = game.rules
 
     val movements = board.get(x,y).get.get.movements(board)
-    movements map board.move foreach (b => println(b + "\n"))
+    //movements map board.move foreach (b => println(b + "\n"))
 
     movements.size
   }
