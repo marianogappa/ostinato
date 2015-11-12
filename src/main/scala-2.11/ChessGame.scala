@@ -1,6 +1,6 @@
 object ChessGame {
   def fromString(string: String): ChessGame = {
-    val (white, black) = (new ChessPlayer("White"), new ChessPlayer("Black"))
+    val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
     val grid = string.split('\n').mkString.zipWithIndex.toVector map {
       case ('♜', pos) => Some(new Rook(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
       case ('♞', pos) => Some(new Knight(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
@@ -31,7 +31,11 @@ object ChessGame {
   val defaultRules = new ChessRules
 }
 
-class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](board, players, rules)
+class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](board, players, rules) {
+  def isGameOver(implicit rules: ChessRules): Boolean = isDraw || lossFor.nonEmpty
+  def lossFor(implicit rules: ChessRules): Option[ChessPlayer] = players find board.isLossFor
+  def isDraw(implicit rules: ChessRules): Boolean = players exists board.isDrawFor
+}
 
 object ChessBoard {
   val xSize = 8
@@ -80,19 +84,27 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
     }
   }
 
+  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty
+  def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
+    val nowSafe = player.kingPiece(this).map(!_.isThreatened(this))
+    val nextMovesSafe = (player.movements(this) map move) map (b => player.kingPiece(b).map(!_.isThreatened(b)))
+
+    (Set(nowSafe) ++ nextMovesSafe).flatten.fold(false)(_ || _)
+  }
+
   override def toString: String = {
     def cellToChar(cell: Cell): Char = cell match {
-      case Some(piece) => (piece.owner.name, piece) match {
-        case ("White", p: Rook) => '♜'
-        case ("White", p: Knight) => '♞'
-        case ("White", p: Bishop) => '♝'
-        case ("White", p: Queen) => '♛'
-        case ("White", p: King) => '♚'
-        case ("Black", p: Rook) => '♖'
-        case ("Black", p: Knight) => '♘'
-        case ("Black", p: Bishop) => '♗'
-        case ("Black", p: Queen) => '♕'
-        case ("Black", p: King) => '♔'
+      case Some(piece) => (piece.owner, piece) match {
+        case (WhiteChessPlayer, p: Rook) => '♜'
+        case (WhiteChessPlayer, p: Knight) => '♞'
+        case (WhiteChessPlayer, p: Bishop) => '♝'
+        case (WhiteChessPlayer, p: Queen) => '♛'
+        case (WhiteChessPlayer, p: King) => '♚'
+        case (BlackChessPlayer, p: Rook) => '♖'
+        case (BlackChessPlayer, p: Knight) => '♘'
+        case (BlackChessPlayer, p: Bishop) => '♗'
+        case (BlackChessPlayer, p: Queen) => '♕'
+        case (BlackChessPlayer, p: King) => '♔'
       }
       case None => '.'
     }
@@ -138,16 +150,14 @@ abstract class ChessPiece(x: Int, y: Int, owner: ChessPlayer) extends Piece[Ches
     owner.pieces(board).filter(_.canMoveTo(x, y, board.move(new ChessMovement(withOwner(otherPlayer), 0, 0))))
 
   def canMoveTo(toX: Int, toY: Int, board: ChessBoard)(implicit rules: ChessRules) = movements(board).exists {
-    m => (x + m.dx, y + m.dy) == (toX, toY) // TODO THIS DOESN'T WORK FOR THREATENED BY!!!
+    m => (x + m.dx, y + m.dy) == (toX, toY)
   }
 
-  def otherPlayer: ChessPlayer =
-    new ChessPlayer(List("White", "Black").filter(_ != owner.name).head)
-
+  def otherPlayer: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
-
   def equals(that: ChessPiece) = x == that.x && y == that.y && owner == that.owner
   def movedTo(x: Int, y: Int): ChessPiece // N.B. unsafe (doesn't check bounds)
+  def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement]
 }
 
 case class ChessMovement(fromPiece: ChessPiece, dx: Int, dy: Int) extends Movement[ChessPiece](fromPiece, dx, dy)
@@ -203,6 +213,17 @@ class King(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner) {
   def movedTo(newX: Int, newY: Int) = new King(newX, newY, owner)
 }
 
-class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece, ChessPlayer](name) {
+case object WhiteChessPlayer extends ChessPlayer("White") {
+  def enemy = BlackChessPlayer
+}
+case object BlackChessPlayer extends ChessPlayer("Black") {
+  def enemy = WhiteChessPlayer
+}
+
+abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece, ChessPlayer](name) {
   def equals(that: Player[_,_,_,_]): Boolean = { that.name == name }
+  def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
+  def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] =
+    board.pieces.filter(_.owner == this).toSet.flatMap { p: ChessPiece => p.movements(board) }
+  def enemy: ChessPlayer
 }
