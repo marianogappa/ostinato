@@ -309,7 +309,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
   }
 
   describe("Game ending") {
-    it("should find game over") {
+    it("should find game over but not draw") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -321,9 +321,10 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |.......♔""".stripMargin)
       implicit val rules = game.rules
       game.isGameOver shouldBe true
+      game.isDraw shouldBe false
     }
 
-    it("should find draw") {
+    it("should find draw and game over") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -335,9 +336,10 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |.......♔""".stripMargin)
       implicit val rules = game.rules
       game.isDraw shouldBe true
+      game.isGameOver shouldBe true
     }
 
-    it("should not find draw") {
+    it("should not find draw nor game over") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -349,8 +351,22 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |.......♔""".stripMargin)
       implicit val rules = game.rules
       game.isDraw shouldBe false
+      game.isGameOver shouldBe false
     }
 
+    it("should not find game over even if threatened") {
+      val game = ChessGame.fromString(
+        """........
+          |........
+          |........
+          |........
+          |........
+          |........
+          |......♛.
+          |.......♔""".stripMargin)
+      implicit val rules = game.rules
+      game.isGameOver shouldBe false
+    }
   }
 
   private def movementCount(game: ChessGame, x: Int, y: Int, show: Boolean = true) = {

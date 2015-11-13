@@ -33,7 +33,7 @@ object ChessGame {
 
 class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](board, players, rules) {
   def isGameOver(implicit rules: ChessRules): Boolean = isDraw || lossFor.nonEmpty
-  def lossFor(implicit rules: ChessRules): Option[ChessPlayer] = players find board.isLossFor
+  def lossFor(implicit rules: ChessRules): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
   def isDraw(implicit rules: ChessRules): Boolean = players exists board.isDrawFor
 }
 
@@ -84,12 +84,13 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
     }
   }
 
-  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty
+  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
-    val nowSafe = player.kingPiece(this).map(!_.isThreatened(this))
-    val nextMovesSafe = (player.movements(this) map move) map (b => player.kingPiece(b).map(!_.isThreatened(b)))
+    lazy val allNewBoards = player.movements(this) map move
+    def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).get.isThreatened(b) // N.B. king should exist
 
-    (Set(nowSafe) ++ nextMovesSafe).flatten.fold(false)(_ || _)
+    player.kingPiece(this).map { _.isThreatened(this) && (allNewBoards forall isKingThreatened) } getOrElse
+      rules.noKingMeansLoss
   }
 
   override def toString: String = {
@@ -115,7 +116,11 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
   }
 }
 
-case class ChessRules(kingIsTakeable: Boolean = false) extends Rules
+case class ChessRules(
+                       kingIsTakeable: Boolean = false,
+                       allowImpossibleBoards: Boolean = false,
+                       noKingMeansLoss: Boolean = false
+                     ) extends Rules
 
 object Rook {
   val deltas = Set((-1, 0), (1, 0), (0, -1), (0, 1))
