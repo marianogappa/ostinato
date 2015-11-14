@@ -1,5 +1,5 @@
 object ChessGame {
-  def fromString(string: String): ChessGame = {
+  def fromString(string: String, rules: ChessRules = ChessRules.default): ChessGame = {
     val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
     val grid = string.split('\n').mkString.zipWithIndex.toVector map {
       case ('♜', pos) => Some(new Rook(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
@@ -7,28 +7,28 @@ object ChessGame {
       case ('♝', pos) => Some(new Bishop(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
       case ('♛', pos) => Some(new Queen(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
       case ('♚', pos) => Some(new King(ChessBoard.toX(pos), ChessBoard.toY(pos), white))
+      case ('♟', pos) => Some(new Pawn(ChessBoard.toX(pos), ChessBoard.toY(pos), white, rules.whitePawnDirection))
       case ('♖', pos) => Some(new Rook(ChessBoard.toX(pos), ChessBoard.toY(pos), black))
       case ('♘', pos) => Some(new Knight(ChessBoard.toX(pos), ChessBoard.toY(pos), black))
       case ('♗', pos) => Some(new Bishop(ChessBoard.toX(pos), ChessBoard.toY(pos), black))
       case ('♕', pos) => Some(new Queen(ChessBoard.toX(pos), ChessBoard.toY(pos), black))
       case ('♔', pos) => Some(new King(ChessBoard.toX(pos), ChessBoard.toY(pos), black))
+      case ('♙', pos) => Some(new Pawn(ChessBoard.toX(pos), ChessBoard.toY(pos), black, rules.whitePawnDirection * -1))
       case _ => None
     }
-    new ChessGame(new ChessBoard(grid), List(white, black), defaultRules)
+    new ChessGame(new ChessBoard(grid), List(white, black), rules)
   }
 
   val defaultGame: ChessGame = fromString(
     """♜♞♝♛♚♝♞♜
+      |♟♟♟♟♟♟♟♟
       |........
       |........
       |........
       |........
-      |........
-      |........
+      |♙♙♙♙♙♙♙♙
       |♖♘♗♕♔♗♘♖
       |""".stripMargin)
-
-  val defaultRules = new ChessRules
 }
 
 class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](board, players, rules) {
@@ -56,14 +56,23 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
   def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: ChessRules): Option[ChessMovement] = {
     val fromLocation = get(fromX, fromY)
     val toLocation = get(fromX + dx, fromY + dy)
-    val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
+    lazy val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
+    lazy val differentOwner = fromLocation.flatten.map (_.owner) != toLocation.flatten.map (_.owner)
+
+    lazy val pawnConditions = fromLocation.get.get.isPawn &&
+      ((dx == 0 && isEmptyCell(toLocation)) || (dx != 0 && pieceDestinationConditions))
+
+    lazy val pieceDestinationConditions =
+      isPiece(toLocation) && (!toLocation.get.get.isKing || rules.kingIsTakeable) && differentOwner &&
+      (!fromLocation.get.get.isPawn || dx != 0)
+
+    lazy val emptyDestinationConditions = !fromLocation.get.get.isPawn && isEmptyCell(toLocation)
+
 
     if  (
           isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
           (
-            isEmptyCell(toLocation) ||
-            isPiece(toLocation) && (!toLocation.get.get.isKing || rules.kingIsTakeable) &&
-            toLocation.get.get.owner != fromLocation.get.get.owner
+            pawnConditions || emptyDestinationConditions || pieceDestinationConditions
           )
         )
     {
@@ -101,10 +110,20 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
   }
 }
 
+
+object ChessRules {
+  def default = ChessRules(
+    whitePawnDirection = 1,
+    kingIsTakeable = false,
+    allowImpossibleBoards = false,
+    noKingMeansLoss = false
+  )
+}
 case class ChessRules(
-                       kingIsTakeable: Boolean = false,
-                       allowImpossibleBoards: Boolean = false,
-                       noKingMeansLoss: Boolean = false
+                       whitePawnDirection: Int,
+                       kingIsTakeable: Boolean,
+                       allowImpossibleBoards: Boolean,
+                       noKingMeansLoss: Boolean
                      ) extends Rules
 
 object Rook {
@@ -142,9 +161,20 @@ object Queen {
     case BlackChessPlayer => '♕'
   }
 }
+object Pawn {
+  def deltas(dy: Int, isInInitialPosition: Boolean) =
+    Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set())
+
+  def char(owner: ChessPlayer) = owner match {
+    case WhiteChessPlayer => '♟'
+    case BlackChessPlayer => '♙'
+  }
+  def promotingPosition(dy: Int) = Map(-1 -> 0, 1 -> (ChessBoard.xSize - 1))(dy)
+}
 
 abstract class ChessPiece(x: Int, y: Int, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules](x, y, owner) {
   val isKing = false
+  val isPawn = false
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules): Boolean = defendedBy(board).nonEmpty
 
@@ -161,9 +191,11 @@ abstract class ChessPiece(x: Int, y: Int, owner: ChessPlayer) extends Piece[Ches
   def otherPlayer: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
   def equals(that: ChessPiece) = x == that.x && y == that.y && owner == that.owner
+  override def toString = s"${owner.name}'s $pieceName on ($x, $y)"
   def movedTo(x: Int, y: Int): ChessPiece // N.B. unsafe (doesn't check bounds)
   def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement]
   val toChar: Char
+  val pieceName: String
 }
 
 case class ChessMovement(fromPiece: ChessPiece, dx: Int, dy: Int) extends Movement[ChessPiece](fromPiece, dx, dy)
@@ -173,7 +205,7 @@ class Rook(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner) {
     Rook.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
   val toChar = Rook.char(owner)
-  override def toString = s"${owner.name}'s Rook on ($x, $y)"
+  val pieceName = "Rook"
   def withOwner(newOwner: ChessPlayer) = new Rook(x, y, newOwner)
   def movedTo(newX: Int, newY: Int) = new Rook(newX, newY, owner)
 }
@@ -183,7 +215,7 @@ class Bishop(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner)
     Bishop.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
   val toChar = Bishop.char(owner)
-  override def toString = s"${owner.name}'s Bishop on ($x, $y)"
+  val pieceName = "Bishop"
   def withOwner(newOwner: ChessPlayer) = new Bishop(x, y, newOwner)
   def movedTo(newX: Int, newY: Int) = new Bishop(newX, newY, owner)
 }
@@ -193,7 +225,7 @@ class Knight(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner)
     Knight.deltas.flatMap { case (dx, dy) => movementOfDelta(x, y, dx, dy, board) }
   }
   val toChar = Knight.char(owner)
-  override def toString = s"${owner.name}'s Knight on ($x, $y)"
+  val pieceName = "Knight"
   def withOwner(newOwner: ChessPlayer) = new Knight(x, y, newOwner)
   def movedTo(newX: Int, newY: Int) = new Knight(newX, newY, owner)
 }
@@ -203,7 +235,7 @@ class Queen(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner) 
     Queen.deltas.flatMap { case (dx, dy) => allMovementsOfDelta(x, y, dx, dy, board) }
   }
   val toChar = Queen.char(owner)
-  override def toString = s"${owner.name}'s Queen on ($x, $y)"
+  val pieceName = "Queen"
   def withOwner(newOwner: ChessPlayer) = new Queen(x, y, newOwner)
   def movedTo(newX: Int, newY: Int) = new Queen(newX, newY, owner)
 }
@@ -213,10 +245,22 @@ class King(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner) {
     King.deltas.flatMap { case (dx, dy) => movementOfDelta(x, y, dx, dy, board) }
   }
   val toChar = King.char(owner)
-  override def toString = s"${owner.name}'s King on ($x, $y)"
+  val pieceName = "King"
   override val isKing = true
   def withOwner(newOwner: ChessPlayer) = new King(x, y, newOwner)
   def movedTo(newX: Int, newY: Int) = new King(newX, newY, owner)
+}
+class Pawn(x: Int, y: Int, owner: ChessPlayer, dy: Int) extends ChessPiece(x, y, owner) {
+  def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] = {
+    Pawn.deltas(dy, isInInitialPosition).flatMap { case (mdx, mdy) => movementOfDelta(x, y, mdx, mdy, board) }
+  }
+  val isInInitialPosition = dy == 1 && y == 1 || dy == -1 && y == 6
+  val isPromoting = y == Pawn.promotingPosition(dy)
+  val toChar = Pawn.char(owner)
+  val pieceName = "Pawn"
+  override val isPawn = true
+  def withOwner(newOwner: ChessPlayer) = new Pawn(x, y, newOwner, dy)
+  def movedTo(newX: Int, newY: Int) = new Pawn(newX, newY, owner, dy)
 }
 
 case object WhiteChessPlayer extends ChessPlayer("White") {
