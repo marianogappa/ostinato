@@ -1,6 +1,7 @@
 # board-game-helper
 A helper library for board games.
 
+[![Build Status](https://travis-ci.org/MarianoGappa/board-game-helper.png)](https://travis-ci.org/MarianoGappa/board-game-helper)
 
 ## Classes
 
