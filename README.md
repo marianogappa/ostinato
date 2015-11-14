@@ -178,13 +178,12 @@ movements map board.move foreach (b => println(b + "\n"))
 
 - Making board game AIs
 - UI API for board games (e.g. asking it "check mate?", or "which cells can I move to?" to highlight them)
-- Solving board games
+- Solving/researching board games
 - Inventing board games
 
 ## TODO
 
-- Add Pawns to Chess including moving, first move, taking piece, en passant and crowning (oh, the irony)
+- Implement en passant
 - Implement PegSolitaireGame as proof of concept
 - Solve PegSolitaireGame as proof of concept
 - Invent awesome game using this library
-- Use `rules` for something or throw them away
