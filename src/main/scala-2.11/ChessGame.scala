@@ -77,17 +77,15 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
         )
     {
       val m = new ChessMovement(fromLocation.get.get, dx, dy)
+      val newBoard = move(m)
+      val fromPiece = fromLocation.get.get
 
-      if (!fromLocation.get.get.isKing) {
+      // i.e. Don't allow the movement if the moving piece's owner's King ends up threatened
+      if (fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true))
         Some(m)
-      } else {
-        val boardWithMovedKing = move(m)
-        if (boardWithMovedKing.get(fromX + dx, fromY + dy).get.get.isThreatened(boardWithMovedKing)) {
-          None
-        } else {
-          Some(m)
-        }
-      }
+      else
+        None
+
     } else {
       None
     }
