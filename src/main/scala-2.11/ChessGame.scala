@@ -54,41 +54,35 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
   }
 
   def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: ChessRules): Option[ChessMovement] = {
-    val fromLocation = get(fromX, fromY)
-    val toLocation = get(fromX + dx, fromY + dy)
-    lazy val betweenLocations = between(fromX, fromY, fromX + dx, fromY + dy)
-    lazy val differentOwner = fromLocation.flatten.map (_.owner) != toLocation.flatten.map (_.owner)
+    val from = get(fromX, fromY)
+    val to = get(fromX + dx, fromY + dy)
+    lazy val betweenLocationsFree = between(fromX, fromY, fromX + dx, fromY + dy) forall isEmptyCell
 
-    lazy val pawnConditions = fromLocation.get.get.isPawn &&
-      ((dx == 0 && isEmptyCell(toLocation)) || (dx != 0 && pieceDestinationConditions))
+    val validateFromPiece: Option[ChessPiece] = (from, to) match {
+      case (Some(Some(p: Pawn)), Some(None))
+        if dx == 0 && betweenLocationsFree => Some(p)
 
-    lazy val pieceDestinationConditions =
-      isPiece(toLocation) && (!toLocation.get.get.isKing || rules.kingIsTakeable) && differentOwner &&
-      (!fromLocation.get.get.isPawn || dx != 0)
+      case (Some(Some(p: Pawn)), Some(Some(toP: ChessPiece)))
+        if dx != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner => Some(p)
 
-    lazy val emptyDestinationConditions = !fromLocation.get.get.isPawn && isEmptyCell(toLocation)
+      case (Some(Some(p: ChessPiece)), Some(None))
+        if !p.isPawn && betweenLocationsFree => Some(p)
 
+      case (Some(Some(p: ChessPiece)), Some(Some(toP: ChessPiece)))
+        if !p.isPawn && betweenLocationsFree && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner => Some(p)
 
-    if  (
-          isPiece(fromLocation) && (betweenLocations forall isEmptyCell) &&
-          (
-            pawnConditions || emptyDestinationConditions || pieceDestinationConditions
-          )
-        )
-    {
-      val m = new ChessMovement(fromLocation.get.get, dx, dy)
+      case _ => None
+    }
+
+    def validateMovement(fromPiece: ChessPiece): Option[ChessMovement] = {
+      val m = new ChessMovement(fromPiece, dx, dy)
       val newBoard = move(m)
-      val fromPiece = fromLocation.get.get
 
       // i.e. Don't allow the movement if the moving piece's owner's King ends up threatened
-      if (fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true))
-        Some(m)
-      else
-        None
-
-    } else {
-      None
+      Some(m).filter(_ => fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true))
     }
+
+    validateFromPiece flatMap validateMovement
   }
 
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
