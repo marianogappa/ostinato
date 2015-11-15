@@ -88,7 +88,7 @@ class ChessBoard(grid: Vector[Option[ChessPiece]]) extends Board[ChessPiece, Che
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
     lazy val allNewBoards = player.movements(this) map move
-    def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).get.isThreatened(b) // N.B. king should exist
+    def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b))
 
     player.kingPiece(this).map { _.isThreatened(this) && (allNewBoards forall isKingThreatened) } getOrElse
       rules.noKingMeansLoss
