@@ -6,19 +6,14 @@ A helper library for board games.
 ## Classes
 
 - Game: a Game has a Board, some Players and some Rules
+- A Board has a collection of Cells (which can have Pieces) and a Horizontal width
+- Pieces have an owner (a Player) and a location within the Board
+- Pieces can move within the Board. A Movement has a Piece and a pair of Deltas.
+
 ```
 abstract class Game(board: Board, players: List[Player], rules: Rules)
-```
-- A Board has a collection of Cells (which can have Pieces) and a Horizontal width
-```
 abstract class Board(val grid: Vector[Option[Piece]], xSize: Int)
-```
-- Pieces have an owner (a Player) and a location within the Board
-```
 abstract class Piece(val x: Int, val y: Int, val owner: Player)
-```
-- Pieces can move within the Board. A Movement has a Piece and a pair of Deltas.
-```
 case class Movement(fromPiece: Piece, dx: Int, dy: Int)
 ```
 
