@@ -98,6 +98,10 @@ class ChessBoard(grid: Vector[Option[ChessPiece]], val enPassantPawn: Option[EnP
           Some(EnPassantMovement(p, dx, dy))
 
       case (Some(Some(p: Pawn)), Some(None), _)
+        if dx == 0 && math.abs(dy) == 1 && toY == Pawn.promotingPosition(dy) =>
+          Some(PromoteMovement(p, dx, dy))
+
+      case (Some(Some(p: Pawn)), Some(None), _)
         if dx == 0 && math.abs(dy) == 1 =>
           Some(MoveMovement(p, dx, dy))
 
@@ -118,9 +122,10 @@ class ChessBoard(grid: Vector[Option[ChessPiece]], val enPassantPawn: Option[EnP
 
     def validateAfterMovement(m: ChessMovement): Option[ChessMovement] = {
       val newBoard = move(m)
+      val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true)
+      lazy val isCheckMate = rules.checkForCheckmates && newBoard.isLossFor(m.fromPiece.owner.enemy)
 
-      // i.e. Don't allow the movement if the moving piece's owner's King ends up threatened
-      Some(m).filter(_ => m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true))
+      Some(m) filter (_ => isPlayersKingThreatened) map (m => if (isCheckMate) CheckMateMovement.from(m) else m)
     }
 
     validateMovement flatMap validateAfterMovement
@@ -128,10 +133,11 @@ class ChessBoard(grid: Vector[Option[ChessPiece]], val enPassantPawn: Option[EnP
 
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
-    lazy val allNewBoards = player.movements(this) map move
-    def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b))
+    val noCheckForMates = rules.copy(checkForCheckmates = false)
+    lazy val allNewBoards = player.movements(this)(noCheckForMates) map move
+    def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 
-    player.kingPiece(this).map { _.isThreatened(this) && (allNewBoards forall isKingThreatened) } getOrElse
+    player.kingPiece(this).map { _.isThreatened(this)(noCheckForMates) && (allNewBoards forall isKingThreatened) } getOrElse
       rules.noKingMeansLoss
   }
 
@@ -149,14 +155,16 @@ object ChessRules {
     whitePawnDirection = 1,
     kingIsTakeable = false,
     allowImpossibleBoards = false,
-    noKingMeansLoss = false
+    noKingMeansLoss = false,
+    checkForCheckmates = true
   )
 }
 case class ChessRules(
                        whitePawnDirection: Int,
                        kingIsTakeable: Boolean,
                        allowImpossibleBoards: Boolean,
-                       noKingMeansLoss: Boolean
+                       noKingMeansLoss: Boolean,
+                       checkForCheckmates: Boolean
                      ) extends Rules
 
 object Rook {
@@ -240,8 +248,10 @@ case class EnPassantTakeMovement(fromPawn: Pawn, override val dx: Int, override 
 case class EnPassantMovement(fromPawn: Pawn, override val dx: Int, override val dy: Int) extends ChessMovement(fromPawn, dx, dy)
 case class PromoteMovement(override val fromPiece: Pawn, override val dx: Int, override val dy: Int) extends ChessMovement(fromPiece, dx, dy)
 
-// TODO implement the CheckMateCase
-case class CheckMateMovement(override val fromPiece: Pawn, override val dx: Int, override val dy: Int) extends ChessMovement(fromPiece, dx, dy)
+object CheckMateMovement {
+  def from(m: ChessMovement) = CheckMateMovement(m.fromPiece, m.dx, m.dy)
+}
+case class CheckMateMovement(override val fromPiece: ChessPiece, override val dx: Int, override val dy: Int) extends ChessMovement(fromPiece, dx, dy)
 
 class Rook(x: Int, y: Int, owner: ChessPlayer) extends ChessPiece(x, y, owner) {
   def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] = {
