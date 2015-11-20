@@ -3,6 +3,11 @@ A helper library for board games.
 
 [![Build Status](https://travis-ci.org/MarianoGappa/board-game-helper.png)](https://travis-ci.org/MarianoGappa/board-game-helper)
 
+## Status
+
+- Chess implementation still not feature complete: only castling remains! Some tidy up outstanding.
+- Highly experimental at the moment; implementation might change drastically at any time
+
 ## Classes
 
 - Game: a Game has a Board, some Players and some Rules
@@ -177,9 +182,18 @@ movements map board.move foreach (b => println(b + "\n"))
 - Solving/researching board games
 - Inventing board games
 
-## TODO
+## Short term TODO
 
-- Implement en passant
+- Research repositories
+- Optimise canMoveTo
+- Implement castling
+- Remove players property from Game
+- Change pieces' class names to unicode characters
+
+## Long term TODO
+
 - Implement PegSolitaireGame as proof of concept
 - Solve PegSolitaireGame as proof of concept
+- Implement Chess Game as proof of concept
+- Implement partial/complete algebraic chess notation to Game: can display and practice from there
 - Invent awesome game using this library
