@@ -1,3 +1,7 @@
+package boardgame.chess.core
+
+import boardgame.core._
+
 object ChessGame {
   def fromString(string: String, rules: ChessRules = ChessRules.default): ChessGame = {
     val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
@@ -56,9 +60,9 @@ object ChessBoard {
 }
 
 class ChessBoard(
-  grid: Vector[Option[ChessPiece]],
-  val enPassantPawn: Option[EnPassantPawn],
-  val canCastle: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> true, BlackChessPlayer -> true)) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid, ChessBoard.xSize) {
+                  grid: Vector[Option[ChessPiece]],
+                  val enPassantPawn: Option[EnPassantPawn],
+                  val canCastle: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> true, BlackChessPlayer -> true)) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid, ChessBoard.xSize) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules) = {
     val resultingEnPassants = m match {
@@ -156,11 +160,11 @@ object ChessRules {
   )
 }
 case class ChessRules(
-  whitePawnDirection: Int,
-  kingIsTakeable: Boolean,
-  allowImpossibleBoards: Boolean,
-  noKingMeansLoss: Boolean,
-  checkForCheckmates: Boolean) extends Rules
+                       whitePawnDirection: Int,
+                       kingIsTakeable: Boolean,
+                       allowImpossibleBoards: Boolean,
+                       noKingMeansLoss: Boolean,
+                       checkForCheckmates: Boolean) extends Rules
 
 object Rook {
   val deltas = Set((-1, 0), (1, 0), (0, -1), (0, 1))

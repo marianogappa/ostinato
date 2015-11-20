@@ -1,5 +1,7 @@
 import org.scalatest.{FunSpec, ShouldMatchers}
 
+import boardgame.core._
+
 class BoardTest extends FunSpec with ShouldMatchers{
   describe("Board") {
     it("should correctly translate coordinates") {

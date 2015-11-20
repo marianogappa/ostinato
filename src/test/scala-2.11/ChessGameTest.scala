@@ -1,5 +1,7 @@
 import org.scalatest.{ShouldMatchers, FunSpec}
 
+import boardgame.chess.core._
+
 class ChessGameTest extends FunSpec with ShouldMatchers {
   describe("ChessGame movements") {
     it("should print out a default starting game of Chess") {

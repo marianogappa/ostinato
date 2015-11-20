@@ -1,3 +1,5 @@
+package boardgame.core
+
 abstract class Game[B <: Board[_,_,_,_], P <: Player[B,_,_, _]](board: B, players: List[P], rules: Rules)
 
 object Board {
@@ -26,8 +28,8 @@ abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_],
     val deltaY = Board.sign(yFrom, yTo)
 
     if ((deltaX != 0 && deltaY != 0 && distanceX == distanceY && distanceX >= 2) ||
-        (deltaX == 0 && deltaY != 0 && distanceY >= 2) ||
-        (deltaX != 0 && deltaY == 0 && distanceX >= 2))
+      (deltaX == 0 && deltaY != 0 && distanceY >= 2) ||
+      (deltaX != 0 && deltaY == 0 && distanceX >= 2))
       betweenInclusive(xFrom + deltaX, yFrom + deltaY, xTo - deltaX, yTo - deltaY, deltaX, deltaY)
     else
       Set()
@@ -73,4 +75,3 @@ abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_
 }
 
 class Rules {}
-
