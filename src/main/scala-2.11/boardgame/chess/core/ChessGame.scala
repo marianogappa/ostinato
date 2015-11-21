@@ -23,8 +23,8 @@ object ChessGame {
     }
 
     val enPassantPawns = charVector flatMap {
-      case ('↑', i) ⇒ EnPassantPawn.fromXYDY(XY.fromI(i), -1, grid)
-      case ('↓', i) ⇒ EnPassantPawn.fromXYDY(XY.fromI(i), 1, grid)
+      case ('↑', i) ⇒ EnPassantPawn.fromXYD(XY.fromI(i), XY(0, -1), grid)
+      case ('↓', i) ⇒ EnPassantPawn.fromXYD(XY.fromI(i), XY(0, 1), grid)
       case _          ⇒ None
     }
 
@@ -317,11 +317,9 @@ class Pawn(pos: XY, owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) 
 }
 
 object EnPassantPawn {
-  def posDy(pos: XY, dy: Int) = (pos + XY(0, dy)).toI
-
-  def fromXYDY(pos: XY, dy: Int, grid: Vector[Option[ChessPiece]]): Option[EnPassantPawn] = {
-    if (pos.exists && (pos + XY(0, dy)).exists) {
-      grid(posDy(pos, dy)) map {
+  def fromXYD(pos: XY, delta: XY, grid: Vector[Option[ChessPiece]]): Option[EnPassantPawn] = {
+    if (pos.exists && (pos + delta).exists) {
+      grid((pos + delta).toI) map {
         case p: Pawn ⇒ EnPassantPawn(pos, p)
       }
     } else None
