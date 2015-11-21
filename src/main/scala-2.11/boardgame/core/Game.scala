@@ -11,7 +11,9 @@ abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_],
   def isEmptyCell(l: Location): Boolean = l.nonEmpty && l.flatten.isEmpty
   def pieces = grid.flatten
 
-  protected def between(from: XY, to: XY)(implicit boardSize: BoardSize): Set[Location] = {
+  protected def between(from: XY, to: XY)(implicit boardSize: BoardSize): Set[Location] = xyBetween(from, to) map get
+
+  protected def xyBetween(from: XY, to: XY)(implicit boardSize: BoardSize): Set[XY] = {
     val distance = from.distance(to)
     val delta = from.sign(to)
 
@@ -23,12 +25,8 @@ abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_],
       Set()
   }
 
-  private def betweenInclusive(from: XY, to: XY, delta: XY)(implicit boardSize: BoardSize): Set[Location] = {
-    if (from == to)
-      Set(get(from))
-    else
-      Set(get(from)) ++ betweenInclusive(from + delta, to, delta)
-  }
+  private def betweenInclusive(from: XY, to: XY, delta: XY)(implicit boardSize: BoardSize): Set[XY] =
+    Set(from) ++ (if (from == to) Set() else betweenInclusive(from + delta, to, delta))
 
   def movement(from: XY, delta: XY)(implicit rules: R): Option[M]
 
