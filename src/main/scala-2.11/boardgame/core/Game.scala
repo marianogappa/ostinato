@@ -59,7 +59,7 @@ class Movement[P <: Piece[_,_,_,_]](fromPiece: P, delta: XY)
 
 // TODO either implement movements or remove the M type parameter
 abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_], PL <: Player[_,_,_,_]](val name: String) {
-  def equals(that: Player[_,_,_,_]): Boolean // TODO wtf why doesn't this return a PL
+  def equals(that: PL): Boolean = { that.name == name }
 
   def pieces(board: B): Set[P] = {
     board.pieces.filter { a: P => a.owner.equals(this)}.toSet
@@ -87,4 +87,4 @@ case class XY(x: Int, y: Int) {
   def sign(that: XY): XY = (that - this).sign
 }
 
-case class BoardSize(x: Int, y: Int)
+case class BoardSize(x: Int, y: Int) // N.B. implementation defines an implicit BoardSize -> wouldn't make this a Point

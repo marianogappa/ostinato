@@ -337,7 +337,6 @@ case object BlackChessPlayer extends ChessPlayer("Black") {
 }
 
 abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece, ChessPlayer](name) {
-  def equals(that: Player[_, _, _, _]): Boolean = { that.name == name }
   def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
   def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] =
     board.pieces.filter(_.owner == this).toSet.flatMap { p: ChessPiece ⇒ p.movements(board) }
