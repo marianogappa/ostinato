@@ -1,3 +1,4 @@
+import boardgame.core.Point
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 import boardgame.chess.core._
@@ -27,7 +28,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 14
+      movementCount(game, Point(3, 3)) shouldBe 14
     }
 
     it("should find 0 possible movements for a Rook") {
@@ -41,7 +42,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 0
+      movementCount(game, Point(3, 3)) shouldBe 0
     }
 
     it("should find 1 possible movements for a Rook") {
@@ -55,7 +56,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 1
+      movementCount(game, Point(3, 3)) shouldBe 1
     }
 
     it("should find 13 possible movements for a Bishop") {
@@ -69,7 +70,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 13
+      movementCount(game, Point(3, 3)) shouldBe 13
     }
 
     it("should find 0 possible movements for a Bishop") {
@@ -83,7 +84,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 0
+      movementCount(game, Point(3, 3)) shouldBe 0
     }
 
     it("should find 0 possible movements for a Bishop (diagonally trapped)") {
@@ -97,7 +98,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 0
+      movementCount(game, Point(3, 3)) shouldBe 0
     }
 
     it("should find 0 possible movements for a Bishop (one diagonal free)") {
@@ -111,7 +112,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 3
+      movementCount(game, Point(3, 3)) shouldBe 3
     }
 
     it("should find 1 possible movements for a Bishop (take)") {
@@ -125,7 +126,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 1
+      movementCount(game, Point(3, 3)) shouldBe 1
     }
 
     it("should find 8 possible movements for a Knight") {
@@ -139,7 +140,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 8
+      movementCount(game, Point(3, 3)) shouldBe 8
     }
 
     it("should find 0 possible movements for a Knight") {
@@ -153,7 +154,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 0, 0) shouldBe 0
+      movementCount(game, Point(0, 0)) shouldBe 0
     }
 
     it("should find 1 possible movements for a Knight") {
@@ -167,7 +168,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 0, 0) shouldBe 1
+      movementCount(game, Point(0, 0)) shouldBe 1
     }
 
     it("should find 27 possible movements for a Queen") {
@@ -181,7 +182,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 27
+      movementCount(game, Point(3, 3)) shouldBe 27
     }
 
     it("should find 7 possible movements for a Queen") {
@@ -195,7 +196,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 7, 0) shouldBe 7
+      movementCount(game, Point(7, 0)) shouldBe 7
     }
 
     it("should find 1 possible movements for a Queen") {
@@ -209,7 +210,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 7, 0) shouldBe 1
+      movementCount(game, Point(7, 0)) shouldBe 1
     }
 
     it("should find 0 possible movements for a Queen; can't take King") {
@@ -223,7 +224,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 7, 0) shouldBe 0
+      movementCount(game, Point(7, 0)) shouldBe 0
     }
 
     it("should find 8 possible movements for a King") {
@@ -237,7 +238,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, 3, 3) shouldBe 8
+      movementCount(game, Point(3, 3)) shouldBe 8
     }
 
   }
@@ -258,7 +259,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
 
       implicit val rules = game.rules
 
-      movementCount(game, 3, 3) shouldBe 0
+      movementCount(game, Point(3, 3)) shouldBe 0
     }
     it("should find that the Queen is defended") {
       val game = ChessGame.fromString(
@@ -273,7 +274,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
       implicit val rules = game.rules
 
-      board.get(2,2).get.get.isDefended(board) shouldBe true
+      board.get(Point(2,2)).get.get.isDefended(board) shouldBe true
     }
 
     it("should find that the Queen is threatened") {
@@ -289,7 +290,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
       implicit val rules = game.rules
 
-      board.get(2,2).get.get.isThreatened(board) shouldBe true
+      board.get(Point(2,2)).get.get.isThreatened(board) shouldBe true
     }
 
     it("should find that the Queen is not threatened") {
@@ -304,9 +305,9 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       val board = game.board
       implicit val rules = game.rules
-      val pieces = board.get(2,2).get.get.owner.pieces(board).toList
+      val pieces = board.get(Point(2,2)).get.get.owner.pieces(board).toList
 
-      board.get(2,2).get.get.isThreatened(board) shouldBe false
+      board.get(Point(2,2)).get.get.isThreatened(board) shouldBe false
     }
   }
 
@@ -383,7 +384,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
       val board = game.board
 
-      board.get(5, 4).get.get.owner.movements(board).filter {
+      board.get(Point(5, 4)).get.get.owner.movements(board).filter {
         case m: CheckMateMovement => true
         case _ => false
       }.size shouldBe 7
@@ -403,7 +404,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 2, 2) shouldBe 1
+      movementCount(game, Point(2, 2)) shouldBe 1
     }
 
     it("should find 2 possible moves for white pawn") {
@@ -418,7 +419,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 2, 1) shouldBe 2
+      movementCount(game, Point(2, 1)) shouldBe 2
     }
 
     it("should find 4 possible moves for white pawn") {
@@ -433,7 +434,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 2, 1) shouldBe 4
+      movementCount(game, Point(2, 1)) shouldBe 4
     }
 
     it("should find 3 possible moves for white pawn") {
@@ -448,7 +449,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 2, 2) shouldBe 3
+      movementCount(game, Point(2, 2)) shouldBe 3
     }
 
     it("should find 0 possible moves for white pawn") {
@@ -463,7 +464,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 2, 1) shouldBe 0
+      movementCount(game, Point(2, 1), true) shouldBe 0
     }
 
     it("should not find white pawn in promoting position") {
@@ -478,7 +479,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(2, 0).get.get match {
+      game.board.get(Point(2, 0)).get.get match {
         case p: Pawn => p.isPromoting shouldBe false
         case _ => fail
       }
@@ -496,7 +497,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |..♟.....""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(2, 7).get.get match {
+      game.board.get(Point(2, 7)).get.get match {
         case p: Pawn => p.isPromoting shouldBe true
         case _ => fail
       }
@@ -514,7 +515,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |..♙.....""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(2, 7).get.get match {
+      game.board.get(Point(2, 7)).get.get match {
         case p: Pawn => p.isPromoting shouldBe false
         case _ => fail
       }
@@ -532,7 +533,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(2, 0).get.get match {
+      game.board.get(Point(2, 0)).get.get match {
         case p: Pawn => p.isPromoting shouldBe true
         case _ => fail
       }
@@ -554,7 +555,8 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
 
       val board = game.board
 
-      val movements = board.get(2,5).get.get.movements(board)
+      val movements = board.get(Point(2,5)).get.get.movements(board)
+
       movements.size shouldBe 1
       movements.toList.head shouldBe a [EnPassantTakeMovement]
     }
@@ -570,7 +572,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 4, 3) shouldBe 2
+      movementCount(game, Point(4, 3)) shouldBe 2
     }
     it("should not find en passant take move for black pawn, since king would be threatened") {
       val game = ChessGame.fromString(
@@ -584,7 +586,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, 4, 3) shouldBe 1
+      movementCount(game, Point(4, 3)) shouldBe 1
     }
   }
 
@@ -697,11 +699,11 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
   }
 
-  private def movementCount(game: ChessGame, x: Int, y: Int, show: Boolean = false) = {
+  private def movementCount(game: ChessGame, point: Point, show: Boolean = false) = {
     val board = game.board
     implicit val rules = game.rules
 
-    val movements = board.get(x,y).get.get.movements(board)
+    val movements = board.get(point).get.get.movements(board)
     if (show) movements map board.move foreach (b => println(b + "\n"))
 
     movements.size

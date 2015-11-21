@@ -2,71 +2,64 @@ package boardgame.core
 
 abstract class Game[B <: Board[_,_,_,_], P <: Player[B,_,_, _]](board: B, players: List[P], rules: Rules)
 
-object Board {
-  def fromXY(xSize: Int)(x: Int, y: Int) = y * xSize + x
-  def toX(xSize: Int)(pos: Int) = pos % xSize
-  def toY(xSize: Int)(pos: Int) = pos / xSize
-  def distance(from: Int, to: Int) = math.abs(from - to)
-  def sign(from: Int, to: Int) = math.signum(to - from)
-}
-
-abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_], R <: Rules](val grid: Vector[Option[P]], xSize: Int) {
+abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_], R <: Rules](val grid: Vector[Option[P]]) {
   type Cell = Option[P]
   type Location = Option[Cell]
 
-  def fromXY = Board.fromXY(xSize) _
-  def exists(x: Int, y: Int): Boolean = x >= 0 && y >= 0 && x < xSize && fromXY(x, y) < grid.size
-  def get(x: Int, y: Int): Location = if (exists(x, y)) Some(grid(fromXY(x, y))) else None
+  def get(point: Point)(implicit boardSize: BoardSize): Location = if (point.exists) Some(grid(point.toPos)) else None
   def isPiece(l: Location): Boolean = l.flatten.nonEmpty
   def isEmptyCell(l: Location): Boolean = l.nonEmpty && l.flatten.isEmpty
   def pieces = grid.flatten
 
-  protected def between(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int): Set[Location] = {
-    val distanceX = Board.distance(xFrom, xTo)
-    val distanceY = Board.distance(yFrom, yTo)
-    val deltaX = Board.sign(xFrom, xTo)
-    val deltaY = Board.sign(yFrom, yTo)
+  protected def between(from: Point, to: Point)(implicit boardSize: BoardSize): Set[Location] = {
+    val distance = from.distance(to)
+    val delta = from.sign(to)
 
-    if ((deltaX != 0 && deltaY != 0 && distanceX == distanceY && distanceX >= 2) ||
-      (deltaX == 0 && deltaY != 0 && distanceY >= 2) ||
-      (deltaX != 0 && deltaY == 0 && distanceX >= 2))
-      betweenInclusive(xFrom + deltaX, yFrom + deltaY, xTo - deltaX, yTo - deltaY, deltaX, deltaY)
+    if ((delta.x != 0 && delta.y != 0 && distance.x == distance.y && distance.x >= 2) ||
+      (delta.x == 0 && delta.y != 0 && distance.y >= 2) ||
+      (delta.x != 0 && delta.y == 0 && distance.x >= 2))
+      betweenInclusive(from + delta, to - delta, delta)
     else
       Set()
   }
 
-  private def betweenInclusive(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int, deltaX: Int, deltaY: Int): Set[Location] = {
-    if ((xFrom, yFrom) == (xTo, yTo))
-      Set(get(xFrom, yFrom))
+  private def betweenInclusive(from: Point, to: Point, delta: Point)(implicit boardSize: BoardSize): Set[Location] = {
+    if (from == to)
+      Set(get(from))
     else
-      Set(get(xFrom, yFrom)) ++ betweenInclusive(xFrom + deltaX, yFrom + deltaY, xTo, yTo, deltaX, deltaY)
+      Set(get(from)) ++ betweenInclusive(from + delta, to, delta)
   }
 
-  def movement(fromX: Int, fromY: Int, dx: Int, dy: Int)(implicit rules: R): Option[M]
+  def movement(from: Point, delta: Point)(implicit rules: R): Option[M]
 
   def move(m: M)(implicit rules: R): B
 }
 
-abstract class Piece[P <: Player[B,M, _, _], M <: Movement[_], B <: Board[_,M,B,R], R <: Rules](val x: Int, val y: Int, val owner: P) {
+object Piece {
+  def pointsOf(points: Set[(Int, Int)]): Set[Point] = points map (p => Point(p._1, p._2))
+}
+
+abstract class Piece[P <: Player[B,M, _, _], M <: Movement[_], B <: Board[_,M,B,R], R <: Rules](val point: Point, val owner: P) {
   def movements(board: B)(implicit rules: R): Set[M]
 
-  protected def allMovementsOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: B, inc: Int = 1)(implicit rules: R): Set[M] = {
+  protected def allMovementsOfDelta(from: Point, delta: Point, board: B, inc: Int = 1)(implicit rules: R): Set[M] = {
     Set.empty[M]
-    val a: Option[M] = board.movement(fromX, fromY, dx * inc, dy * inc)
-    val b: Option[Set[M]] = a map { m: M ⇒ Set(m) ++ allMovementsOfDelta(fromX, fromY, dx, dy, board, inc + 1) }
+    val a: Option[M] = board.movement(from, delta * inc)
+    val b: Option[Set[M]] = a map { m: M ⇒ Set(m) ++ allMovementsOfDelta(from, delta, board, inc + 1) }
     val c: Set[M] = b getOrElse Set.empty[M]
     c
   }
 
-  protected def movementOfDelta(fromX: Int, fromY: Int, dx: Int, dy: Int, board: B)(implicit rules: R): Option[M] = {
-    board.movement(fromX, fromY, dx, dy)
+  protected def movementOfDelta(from: Point, delta: Point, board: B)(implicit rules: R): Option[M] = {
+    board.movement(from, delta)
   }
 }
 
-class Movement[P <: Piece[_,_,_,_]](fromPiece: P, dx: Int, dy: Int)
+class Movement[P <: Piece[_,_,_,_]](fromPiece: P, delta: Point)
 
+// TODO either implement movements or remove the M type parameter
 abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_], PL <: Player[_,_,_,_]](val name: String) {
-  def equals(that: Player[_,_,_,_]): Boolean
+  def equals(that: Player[_,_,_,_]): Boolean // TODO wtf why doesn't this return a PL
 
   def pieces(board: B): Set[P] = {
     board.pieces.filter { a: P => a.owner.equals(this)}.toSet
@@ -75,3 +68,23 @@ abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_
 }
 
 class Rules {}
+
+object Point {
+  def fromPos(pos: Int)(implicit boardSize: BoardSize) = {
+    Point(pos % boardSize.x, pos / boardSize.x)
+  }
+}
+
+case class Point(x: Int, y: Int) {
+  def toPos(implicit boardSize: BoardSize): Int = y * boardSize.x + x
+  def +(that: Point) = Point(x + that.x, y + that.y)
+  def -(that: Point) = Point(x - that.x, y - that.y)
+  def *(factor: Int) = Point(x * factor, y * factor)
+  def exists(implicit boardSize: BoardSize) = x >= 0 && y >= 0 && x < boardSize.x && y < boardSize.y
+  lazy val sign = Point(math.signum(x), math.signum(y))
+  lazy val abs = Point(math.abs(x), math.abs(y))
+  def distance(that: Point) = (this - that).abs
+  def sign(that: Point): Point = (that - this).sign
+}
+
+case class BoardSize(x: Int, y: Int)
