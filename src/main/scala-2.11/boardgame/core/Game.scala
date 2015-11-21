@@ -60,12 +60,11 @@ abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_
   def equals(that: PL): Boolean = { that.name == name }
 
   def pieces(board: B): Set[P] = {
-    board.pieces.filter { a: P => a.owner.equals(this)}.toSet
+    board.pieces.filter { a: P => a.owner.equals(this) }.toSet
   }
-
 }
 
-class Rules {}
+class Rules {} // TODO this should be abstract... and thought about
 
 object XY {
   def fromI(i: Int)(implicit boardSize: BoardSize) = {
