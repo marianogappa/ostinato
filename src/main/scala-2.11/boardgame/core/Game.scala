@@ -1,8 +1,8 @@
 package boardgame.core
 
-abstract class Game[B <: Board[_,_,_,_], P <: Player[B,_,_, _]](board: B, players: List[P], rules: Rules)
+abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](board: B, players: List[P], rules: Rules)
 
-abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_], R <: Rules](val grid: Vector[Option[P]]) {
+abstract class Board[P <: Piece[_, _, _, _], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
   type Cell = Option[P]
   type Location = Option[Cell]
 
@@ -34,10 +34,10 @@ abstract class Board[P <: Piece[_,_,_,_], M <: Movement[P], B <: Board[P,M,_,_],
 }
 
 object Piece {
-  def toXYs(points: Set[(Int, Int)]): Set[XY] = points map (p => XY(p._1, p._2))
+  def toXYs(points: Set[(Int, Int)]): Set[XY] = points map (p ⇒ XY(p._1, p._2))
 }
 
-abstract class Piece[P <: Player[B,M, _, _], M <: Movement[_], B <: Board[_,M,B,R], R <: Rules](val pos: XY, val owner: P) {
+abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M, B, R], R <: Rules](val pos: XY, val owner: P) {
   def movements(board: B)(implicit rules: R): Set[M]
 
   protected def allMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1)(implicit rules: R): Set[M] = {
@@ -53,14 +53,14 @@ abstract class Piece[P <: Player[B,M, _, _], M <: Movement[_], B <: Board[_,M,B,
   }
 }
 
-class Movement[P <: Piece[_,_,_,_]](fromPiece: P, delta: XY)
+class Movement[P <: Piece[_, _, _, _]](fromPiece: P, delta: XY)
 
 // TODO either implement movements or remove the M type parameter
-abstract class Player[B <: Board[P,_,_,_], M <: Movement[_], P <: Piece[PL,_,_,_], PL <: Player[_,_,_,_]](val name: String) {
+abstract class Player[B <: Board[P, _, _, _], M <: Movement[_], P <: Piece[PL, _, _, _], PL <: Player[_, _, _, _]](val name: String) {
   def equals(that: PL): Boolean = { that.name == name }
 
   def pieces(board: B): Set[P] = {
-    board.pieces.filter { a: P => a.owner.equals(this) }.toSet
+    board.pieces.filter { a: P ⇒ a.owner.equals(this) }.toSet
   }
 }
 
