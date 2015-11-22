@@ -480,7 +480,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
 
       game.board.get(XY(2, 0)).get.get match {
-        case p: Pawn => p.isPromoting shouldBe false
+        case p: ♟ => p.isPromoting shouldBe false
         case _ => fail
       }
     }
@@ -498,7 +498,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
 
       game.board.get(XY(2, 7)).get.get match {
-        case p: Pawn => p.isPromoting shouldBe true
+        case p: ♟ => p.isPromoting shouldBe true
         case _ => fail
       }
     }
@@ -516,7 +516,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
 
       game.board.get(XY(2, 7)).get.get match {
-        case p: Pawn => p.isPromoting shouldBe false
+        case p: ♟ => p.isPromoting shouldBe false
         case _ => fail
       }
     }
@@ -534,7 +534,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
 
       game.board.get(XY(2, 0)).get.get match {
-        case p: Pawn => p.isPromoting shouldBe true
+        case p: ♟ => p.isPromoting shouldBe true
         case _ => fail
       }
     }
@@ -604,7 +604,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         implicit val rules = game.rules
 
         game.blackPlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe true
+          case Some(k: ♚) => k.isInInitialPosition shouldBe true
           case _ => fail
         }
     }
@@ -622,7 +622,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
 
         game.blackPlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe false
+          case Some(k: ♚) => k.isInInitialPosition shouldBe false
           case _ => fail
         }
     }
@@ -640,7 +640,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
 
       game.blackPlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe false
+          case Some(k: ♚) => k.isInInitialPosition shouldBe false
           case _ => fail
         }
     }
@@ -657,7 +657,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         implicit val rules = game.rules
 
         game.whitePlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe true
+          case Some(k: ♚) => k.isInInitialPosition shouldBe true
           case _ => fail
         }
     }
@@ -675,7 +675,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
 
         game.whitePlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe false
+          case Some(k: ♚) => k.isInInitialPosition shouldBe false
           case _ => fail
         }
     }
@@ -693,7 +693,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
 
       game.whitePlayer.kingPiece(game.board) match {
-          case Some(k: King) => k.isInInitialPosition shouldBe false
+          case Some(k: ♚) => k.isInInitialPosition shouldBe false
           case _ => fail
         }
     }
