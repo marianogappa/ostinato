@@ -186,9 +186,7 @@ movements map board.move foreach (b => println(b + "\n"))
 
 - Research repositories
 - Optimise canMoveTo
-- Implement castling
 - Remove players property from Game
-- Change pieces' class names to unicode characters
 
 ## Long term TODO
 
