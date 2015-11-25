@@ -22,9 +22,6 @@ class ChessBoard(
       case CastlingMovement(_, _, rook, rookDelta) ⇒
         List((rook.pos.toI, None), ((rook.pos + rookDelta).toI, Some(rook.movedTo(rook.pos + rookDelta))))
 
-      case PromoteMovement(_, toPiece) ⇒
-        List((toPiece.pos.toI, Some(toPiece)))
-
       case _ ⇒ List()
     }
 
@@ -62,7 +59,7 @@ class ChessBoard(
         Some(EnPassantMovement(p, delta))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
-        Some(ReachPromoteMovement(p, delta))
+        Some(PromoteMovement(p, delta))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 ⇒
         Some(MoveMovement(p, delta))

@@ -35,17 +35,11 @@ case class EnPassantMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves forward twice (en passant)"
 }
 
-case class ReachPromoteMovement(
+case class PromoteMovement(
   override val fromPiece: ♟,
   override val delta: XY) extends ChessMovement(fromPiece, delta) {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} reaches promote position"
-}
-
-case class PromoteMovement(
-  override val fromPiece: ♟, toPiece: ChessPiece) extends ChessMovement(fromPiece, XY(0, 0)) {
-
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes to a ${toPiece.pieceName}"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
 }
 
 case class CastlingMovement(
