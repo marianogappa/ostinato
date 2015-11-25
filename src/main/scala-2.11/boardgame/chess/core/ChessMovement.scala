@@ -37,8 +37,8 @@ case class EnPassantMovement(
 
 case class PromoteMovement(
     override val fromPiece: ♟,
-    override val delta: XY
-    /*toPiece: ChessPiece*/) extends ChessMovement(fromPiece, delta) {
+    override val delta: XY,
+    toPiece: ChessPiece) extends ChessMovement(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
 }
