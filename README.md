@@ -5,22 +5,8 @@ A helper library for board games.
 
 ## Status
 
-- Chess implementation still not feature complete: only castling remains! Some tidy up outstanding.
+- Chess implementation is feature complete! But AI, UI & API have not been started yet. Some tidy up outstanding.
 - Highly experimental at the moment; implementation might change drastically at any time
-
-## Classes
-
-- Game: a Game has a Board, some Players and some Rules
-- A Board has a collection of Cells (which can have Pieces) and a Horizontal width
-- Pieces have an owner (a Player) and a location within the Board
-- Pieces can move within the Board. A Movement has a Piece and a pair of Deltas.
-
-```
-abstract class Game(board: Board, players: List[Player], rules: Rules)
-abstract class Board(val grid: Vector[Option[Piece]], xSize: Int)
-abstract class Piece(val x: Int, val y: Int, val owner: Player)
-case class Movement(fromPiece: Piece, dx: Int, dy: Int)
-```
 
 ## Chess
 
