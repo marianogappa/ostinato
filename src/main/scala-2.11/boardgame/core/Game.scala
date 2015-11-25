@@ -28,7 +28,7 @@ abstract class Board[P <: Piece[_, _, _, _], M <: Movement[P], B <: Board[P, M, 
   private def betweenInclusive(from: XY, to: XY, delta: XY)(implicit boardSize: BoardSize): Set[XY] =
     Set(from) ++ (if (from == to) Set() else betweenInclusive(from + delta, to, delta))
 
-  def movement(from: XY, delta: XY)(implicit rules: R): Option[M]
+  def movement(from: XY, delta: XY)(implicit rules: R): Set[M]
 
   def move(m: M)(implicit rules: R): B
 }
@@ -40,17 +40,11 @@ object Piece {
 abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M, B, R], R <: Rules](val pos: XY, val owner: P) {
   def movements(board: B)(implicit rules: R): Set[M]
 
-  protected def allMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1)(implicit rules: R): Set[M] = {
-    Set.empty[M]
-    val a: Option[M] = board.movement(from, delta * inc)
-    val b: Option[Set[M]] = a map { m: M ⇒ Set(m) ++ allMovementsOfDelta(from, delta, board, inc + 1) }
-    val c: Set[M] = b getOrElse Set.empty[M]
-    c
-  }
+  protected def allMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1)(implicit rules: R): Set[M] =
+    movementOfDelta(from, delta * inc, board) flatMap { Set(_) ++ allMovementsOfDelta(from, delta, board, inc + 1) }
 
-  protected def movementOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Option[M] = {
+  protected def movementOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[M] =
     board.movement(from, delta)
-  }
 }
 
 class Movement[P <: Piece[_, _, _, _]](fromPiece: P, delta: XY)

@@ -15,35 +15,36 @@ case class TakeMovement(
 }
 
 case class MoveMovement(
-  override val fromPiece: ChessPiece,
-  override val delta: XY) extends ChessMovement(fromPiece, delta) {
+    override val fromPiece: ChessPiece,
+    override val delta: XY) extends ChessMovement(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
 }
 
 case class EnPassantTakeMovement(
-  fromPawn: ♟,
-  override val delta: XY, toPawn: ♟) extends ChessMovement(fromPawn, delta) {
+    fromPawn: ♟,
+    override val delta: XY, toPawn: ♟) extends ChessMovement(fromPawn, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} takes ${toPawn.owner.name}'s en passant"
 }
 
 case class EnPassantMovement(
-  fromPawn: ♟,
-  override val delta: XY) extends ChessMovement(fromPawn, delta) {
+    fromPawn: ♟,
+    override val delta: XY) extends ChessMovement(fromPawn, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves forward twice (en passant)"
 }
 
 case class PromoteMovement(
-  override val fromPiece: ♟,
-  override val delta: XY) extends ChessMovement(fromPiece, delta) {
+    override val fromPiece: ♟,
+    override val delta: XY
+    /*toPiece: ChessPiece*/) extends ChessMovement(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
 }
 
 case class CastlingMovement(
-  override val fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovement(fromPiece, kingDelta) {
+    override val fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovement(fromPiece, kingDelta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} castles"
 }
@@ -53,8 +54,8 @@ object CheckMateMovement {
 }
 
 case class CheckMateMovement(
-  override val fromPiece: ChessPiece,
-  override val delta: XY) extends ChessMovement(fromPiece, delta) {
+    override val fromPiece: ChessPiece,
+    override val delta: XY) extends ChessMovement(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} does checkmate"
 }

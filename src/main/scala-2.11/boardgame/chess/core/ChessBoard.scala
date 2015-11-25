@@ -36,7 +36,7 @@ class ChessBoard(
     new ChessBoard(updates.foldLeft(grid)(applyUpdate), resultingEnPassants)
   }
 
-  def movement(from: XY, delta: XY)(implicit rules: ChessRules): Option[ChessMovement] = {
+  def movement(from: XY, delta: XY)(implicit rules: ChessRules): Set[ChessMovement] = {
     val to = from + delta
     val fromPiece = get(from)
     val toPiece = get(to)
@@ -51,47 +51,47 @@ class ChessBoard(
       case _                                      ⇒ None
     }
 
-    val validateMovement: Option[ChessMovement] = (fromPiece, toPiece, enPassantPawn) match {
+    val validateMovement: Set[ChessMovement] = (fromPiece, toPiece, enPassantPawn) match {
       case (Some(Some(p: ♟)), Some(None), Some(epp: EnPassantPawn)) if delta.x != 0 && isEnPassantPawn(to) && epp.pawn.owner != p.owner ⇒
-        Some(EnPassantTakeMovement(p, delta, epp.pawn))
+        Set(EnPassantTakeMovement(p, delta, epp.pawn))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree ⇒
-        Some(EnPassantMovement(p, delta))
+        Set(EnPassantMovement(p, delta))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
-        Some(PromoteMovement(p, delta))
+        Set(PromoteMovement(p, delta))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 ⇒
-        Some(MoveMovement(p, delta))
+        Set(MoveMovement(p, delta))
 
       case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
-        Some(TakeMovement(p, delta, toP))
+        Set(TakeMovement(p, delta, toP))
 
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
           case (Some(None), Some(r: ♜)) if k.isInInitialPosition && canCastle(k.owner) && !k.isThreatened(this) &&
             betweenLocationsFree && betweenLocationsNotThreatenedBy(k.owner.enemy) ⇒
 
-            Some(CastlingMovement(k, delta, r, ♚.rookDeltaFor(delta)))
+            Set(CastlingMovement(k, delta, r, ♚.rookDeltaFor(delta)))
 
-          case _ ⇒ None
+          case _ ⇒ Set()
         }
 
       case (Some(Some(p: ChessPiece)), Some(None), _) if !p.isPawn && betweenLocationsFree ⇒
-        Some(MoveMovement(p, delta))
+        Set(MoveMovement(p, delta))
 
       case (Some(Some(p: ChessPiece)), Some(Some(toP: ChessPiece)), _) if !p.isPawn && betweenLocationsFree && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
-        Some(TakeMovement(p, delta, toP))
+        Set(TakeMovement(p, delta, toP))
 
-      case _ ⇒ None
+      case _ ⇒ Set()
     }
 
-    def validateAfterMovement(m: ChessMovement): Option[ChessMovement] = {
+    def validateAfterMovement(m: ChessMovement): Set[ChessMovement] = {
       val newBoard = move(m)
       val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true)
       lazy val isCheckMate = rules.checkForCheckmates && newBoard.isLossFor(m.fromPiece.owner.enemy)
 
-      Some(m) filter (_ ⇒ isPlayersKingThreatened) map (m ⇒ if (isCheckMate) CheckMateMovement.from(m) else m)
+      Set(m) filter (_ ⇒ isPlayersKingThreatened) map (m ⇒ if (isCheckMate) CheckMateMovement.from(m) else m)
     }
 
     validateMovement flatMap validateAfterMovement
