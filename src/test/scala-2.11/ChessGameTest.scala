@@ -385,7 +385,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
       val board = game.board
 
       board.get(XY(5, 4)).get.get.owner.movements(board).filter {
-        case m: CheckMateMovement => true
+        case m: ChessMovement => m.isCheckmate
         case _ => false
       }.size shouldBe 7
     }

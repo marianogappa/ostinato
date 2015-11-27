@@ -9,20 +9,20 @@ class ChessBoard(
 
   def move(m: ChessMovement)(implicit rules: ChessRules) = {
     val resultingEnPassants = m match {
-      case EnPassantMovement(pawn, delta) ⇒
+      case EnPassantMovement(pawn, delta, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
       case _ ⇒
         None
     }
 
     val specialUpdates = m match {
-      case EnPassantTakeMovement(_, _, toPawn) ⇒
+      case EnPassantTakeMovement(_, _, toPawn, _) ⇒
         List((toPawn.pos.toI, None))
 
-      case CastlingMovement(_, _, rook, rookDelta) ⇒
+      case CastlingMovement(_, _, rook, rookDelta, _) ⇒
         List((rook.pos.toI, None), ((rook.pos + rookDelta).toI, Some(rook.movedTo(rook.pos + rookDelta))))
 
-      case PromoteMovement(_, _, toPiece) ⇒
+      case PromoteMovement(_, _, toPiece, _) ⇒
         List((toPiece.pos.toI, Some(toPiece)))
 
       case _ ⇒ List()
@@ -54,49 +54,50 @@ class ChessBoard(
       case _                                      ⇒ None
     }
 
-    val validateMovement: Set[ChessMovement] = (fromPiece, toPiece, enPassantPawn) match {
+    val validateMovement: Set[ChessMovementFactory] = (fromPiece, toPiece, enPassantPawn) match {
       case (Some(Some(p: ♟)), Some(None), Some(epp: EnPassantPawn)) if delta.x != 0 && isEnPassantPawn(to) && epp.pawn.owner != p.owner ⇒
-        Set(EnPassantTakeMovement(p, delta, epp.pawn))
+        Set(EnPassantTakeMovementFactory(p, delta, epp.pawn))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree ⇒
-        Set(EnPassantMovement(p, delta))
+        Set(EnPassantMovementFactory(p, delta))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
         Set(
           new ♜(from + delta, p.owner), new ♝(from + delta, p.owner),
-          new ♞(from + delta, p.owner), new ♛(from + delta, p.owner)) map (PromoteMovement(p, delta, _))
+          new ♞(from + delta, p.owner), new ♛(from + delta, p.owner)) map (PromoteMovementFactory(p, delta, _))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 ⇒
-        Set(MoveMovement(p, delta))
+        Set(MoveMovementFactory(p, delta))
 
       case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
-        Set(TakeMovement(p, delta, toP))
+        Set(TakeMovementFactory(p, delta, toP))
 
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
           case (Some(None), Some(r: ♜)) if k.isInInitialPosition && canCastle(k.owner) && !k.isThreatened(this) &&
             betweenLocationsFree && betweenLocationsNotThreatenedBy(k.owner.enemy) ⇒
 
-            Set(CastlingMovement(k, delta, r, ♚.rookDeltaFor(delta)))
+            Set(CastlingMovementFactory(k, delta, r, ♚.rookDeltaFor(delta)))
 
           case _ ⇒ Set()
         }
 
       case (Some(Some(p: ChessPiece)), Some(None), _) if !p.isPawn && betweenLocationsFree ⇒
-        Set(MoveMovement(p, delta))
+        Set(MoveMovementFactory(p, delta))
 
       case (Some(Some(p: ChessPiece)), Some(Some(toP: ChessPiece)), _) if !p.isPawn && betweenLocationsFree && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
-        Set(TakeMovement(p, delta, toP))
+        Set(TakeMovementFactory(p, delta, toP))
 
       case _ ⇒ Set()
     }
 
-    def validateAfterMovement(m: ChessMovement): Set[ChessMovement] = {
+    def validateAfterMovement(mf: ChessMovementFactory): Set[ChessMovement] = {
+      val m = mf.complete()
       val newBoard = move(m)
       val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true)
       lazy val isCheckMate = rules.checkForCheckmates && newBoard.isLossFor(m.fromPiece.owner.enemy)
 
-      Set(m) filter (_ ⇒ isPlayersKingThreatened) map (m ⇒ if (isCheckMate) CheckMateMovement.from(m) else m)
+      Set(m) filter (_ ⇒ isPlayersKingThreatened) map (_ ⇒ if (isCheckMate) mf.complete(true) else mf.complete(false))
     }
 
     validateMovement flatMap validateAfterMovement
