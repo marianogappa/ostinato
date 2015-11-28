@@ -892,7 +892,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
         implicit val rules = game.rules
 
-        An.fromXY(game.whitePlayer.pieces(board).head.pos) shouldBe An('h', 8)
+        game.whitePlayer.pieces(board).head.pos.toAn shouldBe An('h', 8)
       }
       it("should find rook at a1 if white pawn moves upwards") {
         val game = ChessGame.fromString(
@@ -907,7 +907,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
         implicit val rules = game.rules.copy(whitePawnDirection = -1)
 
-        An.fromXY(game.whitePlayer.pieces(board).head.pos) shouldBe An('a', 1)
+        game.whitePlayer.pieces(board).head.pos.toAn shouldBe An('a', 1)
       }
       it("should find black rook at e4 if white pawn moves downwards") {
         val game = ChessGame.fromString(
@@ -922,7 +922,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         val board = game.board
         implicit val rules = game.rules
 
-        An.fromXY(game.blackPlayer.pieces(board).head.pos) shouldBe An('e', 4)
+        game.blackPlayer.pieces(board).head.pos.toAn shouldBe An('e', 4)
       }
     }
   }

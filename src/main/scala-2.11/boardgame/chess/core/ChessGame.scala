@@ -51,14 +51,3 @@ class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules
   val whitePlayer = players.filter(_ == WhiteChessPlayer).head
   val blackPlayer = players.filter(_ == BlackChessPlayer).head
 }
-
-object An {
-  lazy val chars = "abcdefgh"
-
-  def fromXY(pos: XY)(implicit rules: ChessRules, chessBoardSize: BoardSize) =
-    if (rules.whitePawnDirection == 1)
-      An(chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
-    else
-      An(chars(pos.x), chessBoardSize.y - pos.y)
-}
-case class An(x: Char, y: Int)
