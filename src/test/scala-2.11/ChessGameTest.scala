@@ -389,6 +389,54 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
         case _ => false
       }.size shouldBe 7
     }
+
+    it("lower queen moving to the right should be a check but not a checkmate") {
+      val game = ChessGame.fromString(
+        """........
+          |........
+          |........
+          |........
+          |.....♛..
+          |......♛.
+          |........
+          |.......♔""".stripMargin)
+      implicit val rules = game.rules
+
+      game.board.movement(XY(6, 5), XY(1, 0)) shouldBe
+        Set(MoveMovement(new ♛(XY(6, 5), WhiteChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
+    }
+
+    it("upper queen moving to the right should be a check and a checkmate") {
+      val game = ChessGame.fromString(
+        """........
+          |........
+          |........
+          |........
+          |.....♛..
+          |......♛.
+          |........
+          |.......♔""".stripMargin)
+      implicit val rules = game.rules
+
+      game.board.movement(XY(5, 4), XY(2, 0)) shouldBe
+        Set(MoveMovement(new ♛(XY(5, 4), WhiteChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
+    }
+
+    it("upper queen moving to the left should not be a check nor a checkmate") {
+      val game = ChessGame.fromString(
+        """........
+          |........
+          |........
+          |........
+          |.....♛..
+          |......♛.
+          |........
+          |.......♔""".stripMargin)
+      implicit val rules = game.rules
+
+      game.board.movement(XY(5, 4), XY(-5, 0)) shouldBe
+        Set(MoveMovement(new ♛(XY(5, 4), WhiteChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
+    }
   }
 
   describe("Pawns") {

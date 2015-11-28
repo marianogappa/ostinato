@@ -9,20 +9,20 @@ class ChessBoard(
 
   def move(m: ChessMovement)(implicit rules: ChessRules) = {
     val resultingEnPassants = m match {
-      case EnPassantMovement(pawn, delta, _) ⇒
+      case EnPassantMovement(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
       case _ ⇒
         None
     }
 
     val specialUpdates = m match {
-      case EnPassantTakeMovement(_, _, toPawn, _) ⇒
+      case EnPassantTakeMovement(_, _, toPawn, _, _) ⇒
         List((toPawn.pos.toI, None))
 
-      case CastlingMovement(_, _, rook, rookDelta, _) ⇒
+      case CastlingMovement(_, _, rook, rookDelta, _, _) ⇒
         List((rook.pos.toI, None), ((rook.pos + rookDelta).toI, Some(rook.movedTo(rook.pos + rookDelta))))
 
-      case PromoteMovement(_, _, toPiece, _) ⇒
+      case PromoteMovement(_, _, toPiece, _, _) ⇒
         List((toPiece.pos.toI, Some(toPiece)))
 
       case _ ⇒ List()
@@ -75,7 +75,7 @@ class ChessBoard(
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
           case (Some(None), Some(r: ♜)) if k.isInInitialPosition && canCastle(k.owner) && !k.isThreatened(this) &&
-            betweenLocationsFree && betweenLocationsNotThreatenedBy(k.owner.enemy) ⇒
+            betweenLocationsFree && betweenLocationsNotThreatenedBy(k.enemy) ⇒
 
             Set(CastlingMovementFactory(k, delta, r, ♚.rookDeltaFor(delta)))
 
@@ -95,9 +95,15 @@ class ChessBoard(
       val m = mf.complete()
       val newBoard = move(m)
       val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true)
-      lazy val isCheckMate = rules.checkForCheckmates && newBoard.isLossFor(m.fromPiece.owner.enemy)
+      lazy val isCheckMate = rules.checkForThreatens && newBoard.isLossFor(m.fromPiece.enemy)
+      lazy val isCheck = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
 
-      Set(m) filter (_ ⇒ isPlayersKingThreatened) map (_ ⇒ if (isCheckMate) mf.complete(true) else mf.complete(false))
+      Set(m) filter (_ ⇒ isPlayersKingThreatened) map { _ ⇒
+        val mate = isCheckMate
+        val check = mate || isCheck
+
+        mf.complete(check, mate)
+      }
     }
 
     validateMovement flatMap validateAfterMovement
@@ -105,7 +111,7 @@ class ChessBoard(
 
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
-    val noCheckForMates = rules.copy(checkForCheckmates = false)
+    val noCheckForMates = rules.copy(checkForThreatens = false)
     lazy val allNewBoards = player.movements(this)(noCheckForMates) map move
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 

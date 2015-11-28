@@ -8,14 +8,14 @@ object ChessRules {
     kingIsTakeable = false,
     allowImpossibleBoards = false,
     noKingMeansLoss = false,
-    checkForCheckmates = true
+    checkForThreatens = true
   )
 }
 
 case class ChessRules(
-  whitePawnDirection: Int,
-  kingIsTakeable: Boolean,
-  allowImpossibleBoards: Boolean,
-  noKingMeansLoss: Boolean,
-  checkForCheckmates: Boolean) extends Rules
+                       whitePawnDirection: Int,
+                       kingIsTakeable: Boolean,
+                       allowImpossibleBoards: Boolean,
+                       noKingMeansLoss: Boolean,
+                       checkForThreatens: Boolean) extends Rules
 
