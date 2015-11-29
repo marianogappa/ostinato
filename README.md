@@ -1,5 +1,5 @@
 # board-game-helper
-A modular, fully tested, very comprehensive helper library for board games with a focus on Chess written in Scala.
+A modular, fully tested, very comprehensive helper library for board games, with a focus on Chess, written in Scala.
 
 [![Build Status](https://travis-ci.org/MarianoGappa/board-game-helper.png)](https://travis-ci.org/MarianoGappa/board-game-helper)
 
