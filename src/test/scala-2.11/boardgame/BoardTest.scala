@@ -1,3 +1,5 @@
+package boardgame
+
 import org.scalatest.{FunSpec, ShouldMatchers}
 
 import boardgame.core._

@@ -63,8 +63,8 @@ class ChessBoard(
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
         Set(
-          new ♜(from + delta, p.owner), new ♝(from + delta, p.owner),
-          new ♞(from + delta, p.owner), new ♛(from + delta, p.owner)) map (PromoteMovementFactory(p, delta, _))
+          ♜(from + delta, p.owner), ♝(from + delta, p.owner),
+          ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (PromoteMovementFactory(p, delta, _))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 ⇒
         Set(MoveMovementFactory(p, delta))

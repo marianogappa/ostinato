@@ -4,11 +4,13 @@ import boardgame.core.{ Movement, XY }
 
 // TODO it's easy to implement threatens: Set[ChessPiece]
 // TODO override toString
-class ChessMovement(
+abstract class ChessMovement(
     val fromPiece: ChessPiece,
     val delta: XY,
     val isCheck: Boolean = false,
     val isCheckmate: Boolean = false) extends Movement[ChessPiece](fromPiece, delta) {
+
+  def toAn(implicit rules: ChessRules): String
 }
 
 abstract class ChessMovementFactory {
@@ -30,6 +32,8 @@ case class TakeMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} takes ${toPiece.owner.name}'s ${toPiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) =
+    fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class MoveMovementFactory(fromPiece: ChessPiece, delta: XY) extends ChessMovementFactory {
@@ -46,6 +50,7 @@ case class MoveMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class EnPassantTakeMovementFactory(fromPawn: ♟, delta: XY, toPawn: ♟) extends ChessMovementFactory {
@@ -62,6 +67,8 @@ case class EnPassantTakeMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} takes ${toPawn.owner.name}'s en passant"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) =
+    fromPiece.pos.toAn.x.toString + 'x' + (fromPiece.pos + delta).toAn + "e.p." + (if (isCheck) Fan.check else "")
 }
 
 case class EnPassantMovementFactory(fromPawn: ♟, delta: XY) extends ChessMovementFactory {
@@ -78,6 +85,7 @@ case class EnPassantMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves forward twice (en passant)"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class PromoteMovementFactory(fromPiece: ♟, delta: XY, toPiece: ChessPiece) extends ChessMovementFactory {
@@ -95,6 +103,8 @@ case class PromoteMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) =
+    (fromPiece.pos + delta).toAn + toPiece.toAn + (if (isCheck) Fan.check else "")
 }
 
 case class CastlingMovementFactory(fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovementFactory {
@@ -110,4 +120,6 @@ case class CastlingMovement(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} castles"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules) =
+    if (kingDelta.sign.x == 1) Fan.kingSideCastle else Fan.queenSideCastle
 }

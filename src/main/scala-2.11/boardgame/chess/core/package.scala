@@ -15,5 +15,14 @@ package object core {
         An(chars(pos.x), chessBoardSize.y - pos.y)
   }
 
-  case class An(x: Char, y: Int)
+  case class An(x: Char, y: Int) {
+    override def toString = s"$x$y"
+  }
+
+  object Fan {
+    def checkmate(winner: ChessPlayer) = if (winner == WhiteChessPlayer) "1-0" else "0-1"
+    def check(implicit rules: ChessRules) = "+"
+    def kingSideCastle(implicit rules: ChessRules) = "0-0"
+    def queenSideCastle(implicit rules: ChessRules) = "0-0-0"
+  }
 }

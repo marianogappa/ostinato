@@ -1,7 +1,8 @@
-import boardgame.core.XY
-import org.scalatest.{ShouldMatchers, FunSpec}
+package boardgame.chess
 
 import boardgame.chess.core._
+import boardgame.core.XY
+import org.scalatest.{FunSpec, ShouldMatchers}
 
 class ChessGameTest extends FunSpec with ShouldMatchers {
   describe("ChessGame movements") {

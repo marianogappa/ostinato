@@ -6,6 +6,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
   val isKing = false
   val isPawn = false
   val isRook = false
+  val toAn: String
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules): Boolean = defendedBy(board).nonEmpty
 
@@ -13,7 +14,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
     enemy.pieces(board).filter(_.canMoveTo(pos, board)(rules.copy(kingIsTakeable = true, checkForThreatens = false)))
 
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules): Set[ChessPiece] =
-    owner.pieces(board).filter(_.canMoveTo(pos, board.move(new ChessMovement(withOwner(enemy), XY(0, 0)))))
+    owner.pieces(board).filter(_.canMoveTo(pos, board.move(MoveMovement(withOwner(enemy), XY(0, 0)))))
 
   def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules) = movements(board).exists {
     m ⇒ (pos + m.delta) == to
@@ -83,6 +84,7 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   }
   val toChar = ♜.char(owner)
   val pieceName = "Rook"
+  val toAn = "R"
   override val isRook = true
   def withOwner(newOwner: ChessPlayer) = ♜(pos, newOwner)
   def movedTo(newXY: XY) = ♜(newXY, owner)
@@ -94,6 +96,7 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
   }
   val toChar = ♝.char(owner)
   val pieceName = "Bishop"
+  val toAn = "B"
   def withOwner(newOwner: ChessPlayer) = ♝(pos, newOwner)
   def movedTo(newXY: XY) = ♝(newXY, owner)
 }
@@ -104,6 +107,7 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
   }
   val toChar = ♞.char(owner)
   val pieceName = "Knight"
+  val toAn = "N"
   def withOwner(newOwner: ChessPlayer) = ♞(pos, newOwner)
   def movedTo(newXY: XY) = ♞(newXY, owner)
 }
@@ -114,6 +118,7 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
   }
   val toChar = ♛.char(owner)
   val pieceName = "Queen"
+  val toAn = "Q"
   def withOwner(newOwner: ChessPlayer) = ♛(pos, newOwner)
   def movedTo(newXY: XY) = ♛(newXY, owner)
 }
@@ -135,6 +140,7 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
   def isInInitialPosition(implicit rules: ChessRules) = pos.x == 4 && pos.y == initialY
   val toChar = ♚.char(owner)
   val pieceName = "King"
+  val toAn = "K"
   override val isKing = true
   def withOwner(newOwner: ChessPlayer) = ♚(pos, newOwner)
   def movedTo(newXY: XY) = ♚(newXY, owner)
@@ -147,6 +153,7 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   val isPromoting = pos.y == ♟.promotingPosition(dy)
   val toChar = ♟.char(owner)
   val pieceName = "Pawn"
+  val toAn = ""
   override val isPawn = true
   def withOwner(newOwner: ChessPlayer) = ♟(pos, newOwner, dy)
   def movedTo(newXY: XY) = ♟(newXY, owner, dy)
