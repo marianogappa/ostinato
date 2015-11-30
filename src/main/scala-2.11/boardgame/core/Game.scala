@@ -75,6 +75,8 @@ case class XY(x: Int, y: Int) {
   lazy val sign = XY(math.signum(x), math.signum(y))
   lazy val abs = XY(math.abs(x), math.abs(y))
   def distance(that: XY) = (this - that).abs
+  def chebyshevDistance(that: XY) = math.max(math.abs(this.x - that.x), math.abs(this.y - that.y))
+  lazy val subtractXY = x - y
   def sign(that: XY): XY = (that - this).sign
 }
 

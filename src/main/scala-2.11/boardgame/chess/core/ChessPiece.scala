@@ -16,9 +16,11 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules): Set[ChessPiece] =
     owner.pieces(board).filter(_.canMoveTo(pos, board.move(MoveMovement(withOwner(enemy), XY(0, 0)))))
 
-  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules) = movements(board).exists {
+  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules) = !cantMove(to) && movements(board).exists {
     m ⇒ (pos + m.delta) == to
   }
+
+  def cantMove(to: XY)(implicit rules: ChessRules) = false
 
   def enemy: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
@@ -88,6 +90,7 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isRook = true
   def withOwner(newOwner: ChessPlayer) = ♜(pos, newOwner)
   def movedTo(newXY: XY) = ♜(newXY, owner)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = pos.x != to.x && pos.y != to.y
 }
 
 case class ♝(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
@@ -99,6 +102,7 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toAn = "B"
   def withOwner(newOwner: ChessPlayer) = ♝(pos, newOwner)
   def movedTo(newXY: XY) = ♝(newXY, owner)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = (pos - to).abs.subtractXY != 0
 }
 
 case class ♞(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
@@ -110,6 +114,7 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toAn = "N"
   def withOwner(newOwner: ChessPlayer) = ♞(pos, newOwner)
   def movedTo(newXY: XY) = ♞(newXY, owner)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = ♞.deltas.forall(pos + _ != to)
 }
 
 case class ♛(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
@@ -121,6 +126,7 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toAn = "Q"
   def withOwner(newOwner: ChessPlayer) = ♛(pos, newOwner)
   def movedTo(newXY: XY) = ♛(newXY, owner)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = (pos - to).abs.subtractXY != 0 && pos.x != to.x && pos.y != to.y
 }
 
 case class ♚(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
@@ -144,6 +150,7 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isKing = true
   def withOwner(newOwner: ChessPlayer) = ♚(pos, newOwner)
   def movedTo(newXY: XY) = ♚(newXY, owner)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = pos.chebyshevDistance(to) > 1
 }
 case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) {
   def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] = {
@@ -157,6 +164,7 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   override val isPawn = true
   def withOwner(newOwner: ChessPlayer) = ♟(pos, newOwner, dy)
   def movedTo(newXY: XY) = ♟(newXY, owner, dy)
+  override def cantMove(to: XY)(implicit rules: ChessRules) = pos.chebyshevDistance(to) > 1
 }
 
 object EnPassantPawn {
