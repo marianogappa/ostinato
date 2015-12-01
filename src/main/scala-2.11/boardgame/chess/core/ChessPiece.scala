@@ -164,7 +164,7 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   override val isPawn = true
   def withOwner(newOwner: ChessPlayer) = ♟(pos, newOwner, dy)
   def movedTo(newXY: XY) = ♟(newXY, owner, dy)
-  override def cantMove(to: XY)(implicit rules: ChessRules) = pos.chebyshevDistance(to) > 1
+  override def cantMove(to: XY)(implicit rules: ChessRules) = ♟.deltas(dy, isInInitialPosition).forall(pos + _ != to)
 }
 
 object EnPassantPawn {
