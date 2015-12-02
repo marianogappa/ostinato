@@ -20,7 +20,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
     m ⇒ (pos + m.delta) == to
   }
 
-  def cantMove(to: XY)(implicit rules: ChessRules) = false
+  def cantMove(to: XY)(implicit rules: ChessRules): Boolean
 
   def enemy: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
