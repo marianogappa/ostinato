@@ -18,7 +18,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(2, 2)) shouldBe 1
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 1
     }
 
     it("should find 2 possible moves for white pawn") {
@@ -33,7 +34,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(2, 1)) shouldBe 2
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 2
     }
 
     it("should find 4 possible moves for white pawn") {
@@ -48,7 +50,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(2, 1)) shouldBe 4
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 4
     }
 
     it("should find 3 possible moves for white pawn") {
@@ -63,7 +66,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(2, 2)) shouldBe 3
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 3
     }
 
     it("should find 0 possible moves for white pawn") {
@@ -78,7 +82,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(2, 1), true) shouldBe 0
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 0
     }
 
     it("should not find white pawn in promoting position") {
@@ -93,7 +98,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(XY(2, 0)).get.get match {
+      game.whitePlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe false
         case _ => fail
       }
@@ -111,7 +116,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |..♟.....""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(XY(2, 7)).get.get match {
+      game.whitePlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe true
         case _ => fail
       }
@@ -129,7 +134,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |..♙.....""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(XY(2, 7)).get.get match {
+      game.blackPlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe false
         case _ => fail
       }
@@ -147,7 +152,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      game.board.get(XY(2, 0)).get.get match {
+      game.blackPlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe true
         case _ => fail
       }
@@ -163,19 +168,11 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........""".stripMargin)
+
       implicit val rules = game.rules
+      val board = game.board
 
-      movementCount(game, XY(2, 1)) shouldBe 4
+      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 4
     }
-  }
-
-  private def movementCount(game: ChessGame, point: XY, show: Boolean = false) = {
-    val board = game.board
-    implicit val rules = game.rules
-
-    val movements = board.get(point).get.get.movements(board)
-    if (show) movements map board.move foreach (b => println(b + "\n"))
-
-    movements.size
   }
 }

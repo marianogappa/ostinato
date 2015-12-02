@@ -19,8 +19,7 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
       implicit val rules = game.rules
 
       val board = game.board
-
-      val movements = board.get(XY(2,5)).get.get.movements(board)
+      val movements = game.whitePlayer.pieces(board).head.movements(board)
 
       movements.size shouldBe 1
       movements.toList.head shouldBe a [EnPassantTakeMovement]
@@ -37,31 +36,23 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........""".stripMargin)
       implicit val rules = game.rules
 
-      movementCount(game, XY(4, 3)) shouldBe 2
+      val board = game.board
+      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 2
     }
     it("should not find en passant take move for black pawn, since king would be threatened") {
       val game = ChessGame.fromString(
-        """....♜...
+        """....♖...
           |........
           |...↓....
           |...♙♟...
           |........
           |........
-          |....♔...
+          |....♚...
           |........""".stripMargin)
-      implicit val rules = game.rules
+      implicit val rules = game.rules.copy(whitePawnDirection = -1)
 
-      movementCount(game, XY(4, 3)) shouldBe 1
+      val board = game.board
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 1
     }
-  }
-
-  private def movementCount(game: ChessGame, point: XY, show: Boolean = false) = {
-    val board = game.board
-    implicit val rules = game.rules
-
-    val movements = board.get(point).get.get.movements(board)
-    if (show) movements map board.move foreach (b => println(b + "\n"))
-
-    movements.size
   }
 }
