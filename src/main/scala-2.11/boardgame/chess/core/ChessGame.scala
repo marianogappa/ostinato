@@ -7,18 +7,18 @@ object ChessGame {
     val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
     val charVector = string.split('\n').mkString.zipWithIndex.toVector
     val grid = charVector map {
-      case ('♜', i) ⇒ Some(new ♜(XY.fromI(i), white))
-      case ('♞', i) ⇒ Some(new ♞(XY.fromI(i), white))
-      case ('♝', i) ⇒ Some(new ♝(XY.fromI(i), white))
-      case ('♛', i) ⇒ Some(new ♛(XY.fromI(i), white))
-      case ('♚', i) ⇒ Some(new ♚(XY.fromI(i), white))
-      case ('♟', i) ⇒ Some(new ♟(XY.fromI(i), white, rules.whitePawnDirection))
-      case ('♖', i) ⇒ Some(new ♜(XY.fromI(i), black))
-      case ('♘', i) ⇒ Some(new ♞(XY.fromI(i), black))
-      case ('♗', i) ⇒ Some(new ♝(XY.fromI(i), black))
-      case ('♕', i) ⇒ Some(new ♛(XY.fromI(i), black))
-      case ('♔', i) ⇒ Some(new ♚(XY.fromI(i), black))
-      case ('♙', i) ⇒ Some(new ♟(XY.fromI(i), black, rules.whitePawnDirection * -1))
+      case ('♜', i) ⇒ Some(♜(XY.fromI(i), white))
+      case ('♞', i) ⇒ Some(♞(XY.fromI(i), white))
+      case ('♝', i) ⇒ Some(♝(XY.fromI(i), white))
+      case ('♛', i) ⇒ Some(♛(XY.fromI(i), white))
+      case ('♚', i) ⇒ Some(♚(XY.fromI(i), white))
+      case ('♟', i) ⇒ Some(♟(XY.fromI(i), white, rules.whitePawnDirection))
+      case ('♖', i) ⇒ Some(♜(XY.fromI(i), black))
+      case ('♘', i) ⇒ Some(♞(XY.fromI(i), black))
+      case ('♗', i) ⇒ Some(♝(XY.fromI(i), black))
+      case ('♕', i) ⇒ Some(♛(XY.fromI(i), black))
+      case ('♔', i) ⇒ Some(♚(XY.fromI(i), black))
+      case ('♙', i) ⇒ Some(♟(XY.fromI(i), black, rules.whitePawnDirection * -1))
       case _        ⇒ None
     }
 
