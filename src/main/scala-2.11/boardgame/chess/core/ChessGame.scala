@@ -29,7 +29,7 @@ object ChessGame {
     }
 
     // TODO: headOption means keep only the first; this is incorrect: if there's 2 there's a problem!
-    new ChessGame(new ChessBoard(grid, enPassantPawns.headOption), List(white, black), rules)
+    new ChessGame(new ChessBoard(grid, enPassantPawns.headOption), rules)
   }
 
   val defaultGame: ChessGame = fromString(
@@ -44,10 +44,13 @@ object ChessGame {
       |""".stripMargin)
 }
 
-class ChessGame(val board: ChessBoard, val players: List[ChessPlayer], val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](board, players, rules) {
+class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](
+  board, List(WhiteChessPlayer, BlackChessPlayer), rules) {
+
+  val whitePlayer = WhiteChessPlayer
+  val blackPlayer = BlackChessPlayer
+
   def isGameOver(implicit rules: ChessRules): Boolean = isDraw || lossFor.nonEmpty
   def lossFor(implicit rules: ChessRules): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
   def isDraw(implicit rules: ChessRules): Boolean = players exists board.isDrawFor
-  val whitePlayer = players.filter(_ == WhiteChessPlayer).head
-  val blackPlayer = players.filter(_ == BlackChessPlayer).head
 }

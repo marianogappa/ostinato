@@ -1,6 +1,6 @@
 package boardgame.core
 
-abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](board: B, players: List[P], rules: Rules)
+abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](val board: B, val players: List[P], val rules: Rules)
 
 abstract class Board[P <: Piece[_, _, _, _], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
   type Cell = Option[P]
