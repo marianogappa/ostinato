@@ -87,8 +87,6 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 ## Short term TODO
 
 - Research repositories
-- Optimise canMoveTo
-- Remove players property from Game
 - Implement minimum Algebraic Notation support to enable simple UI use cases (in progress)
 
 ## Long term TODO
