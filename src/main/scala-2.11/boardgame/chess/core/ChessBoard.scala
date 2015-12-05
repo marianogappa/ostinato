@@ -15,28 +15,7 @@ class ChessBoard(
         None
     }
 
-    val specialUpdates = m match {
-      case EnPassantTakeMovement(_, _, toPawn, _, _) ⇒
-        List((toPawn.pos.toI, None))
-
-      case CastlingMovement(_, _, rook, rookDelta, _, _) ⇒
-        List((rook.pos.toI, None), ((rook.pos + rookDelta).toI, Some(rook.movedTo(rook.pos + rookDelta))))
-
-      case PromoteMovement(_, _, toPiece, _, _) ⇒
-        List((toPiece.pos.toI, Some(toPiece)))
-
-      case _ ⇒ List()
-    }
-
-    val normalUpdates = List(
-      (m.fromPiece.pos.toI, None),
-      ((m.fromPiece.pos + m.delta).toI, Some(m.fromPiece.movedTo(m.fromPiece.pos + m.delta)))
-    )
-
-    val updates = normalUpdates ++ specialUpdates
-    def applyUpdate(grid: Vector[Option[ChessPiece]], update: (Int, Option[ChessPiece])) = grid.updated(update._1, update._2)
-
-    new ChessBoard(updates.foldLeft(grid)(applyUpdate), resultingEnPassants)
+    new ChessBoard(m.gridUpdates.foldLeft(grid)(applyUpdate), resultingEnPassants)
   }
 
   def movement(from: XY, delta: XY)(implicit rules: ChessRules): Set[ChessMovement] = {

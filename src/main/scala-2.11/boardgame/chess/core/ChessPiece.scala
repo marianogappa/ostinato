@@ -2,7 +2,7 @@ package boardgame.chess.core
 
 import boardgame.core.{ BoardSize, XY, Piece }
 
-abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules](pos, owner) {
+abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules, ChessPiece](pos, owner) {
   val isKing = false
   val isPawn = false
   val isRook = false
@@ -26,7 +26,6 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
   def withOwner(newOwner: ChessPlayer): ChessPiece
   def equals(that: ChessPiece) = pos == that.pos && owner == that.owner
   override def toString = s"${owner.name}'s $pieceName on (${pos.x}, ${pos.y})"
-  def movedTo(pos: XY): ChessPiece // N.B. unsafe (doesn't check bounds)
   def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement]
   val toChar: Char
   val pieceName: String

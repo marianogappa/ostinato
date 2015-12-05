@@ -2,7 +2,7 @@ package boardgame.core
 
 abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](val board: B, val players: List[P], val rules: Rules)
 
-abstract class Board[P <: Piece[_, _, _, _], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
+abstract class Board[P <: Piece[_, _, _, _, P], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
   type Cell = Option[P]
   type Location = Option[Cell]
 
@@ -10,6 +10,7 @@ abstract class Board[P <: Piece[_, _, _, _], M <: Movement[P], B <: Board[P, M, 
   def isPiece(l: Location): Boolean = l.flatten.nonEmpty
   def isEmptyCell(l: Location): Boolean = l.nonEmpty && l.flatten.isEmpty
   def pieces = grid.flatten
+  def applyUpdate(grid: Vector[Option[P]], update: (Int, Option[P])) = grid.updated(update._1, update._2)
 
   protected def between(from: XY, to: XY)(implicit boardSize: BoardSize): Set[Location] = xyBetween(from, to) map get
 
@@ -37,8 +38,9 @@ object Piece {
   def toXYs(points: Set[(Int, Int)]): Set[XY] = points map (p ⇒ XY(p._1, p._2))
 }
 
-abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M, B, R], R <: Rules](val pos: XY, val owner: P) {
+abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M, B, R], R <: Rules, PC <: Piece[_, _, _, _, _]](val pos: XY, val owner: P) {
   def movements(board: B)(implicit rules: R): Set[M]
+  def movedTo(pos: XY): PC // N.B. unsafe (doesn't check bounds)
 
   protected def allMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1)(implicit rules: R): Set[M] =
     movementOfDelta(from, delta * inc, board) flatMap { Set(_) ++ allMovementsOfDelta(from, delta, board, inc + 1) }
@@ -47,10 +49,12 @@ abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M,
     board.movement(from, delta)
 }
 
-class Movement[P <: Piece[_, _, _, _]](fromPiece: P, delta: XY)
+abstract class Movement[P <: Piece[_, _, _, _, P]](fromPiece: P, delta: XY) {
+  def gridUpdates: List[(Int, Option[P])]
+}
 
 // TODO either implement movements or remove the M type parameter
-abstract class Player[B <: Board[P, _, _, _], M <: Movement[_], P <: Piece[PL, _, _, _], PL <: Player[_, _, _, _]](val name: String) {
+abstract class Player[B <: Board[P, _, _, _], M <: Movement[_], P <: Piece[PL, _, _, _, P], PL <: Player[_, _, _, _]](val name: String) {
   def equals(that: PL): Boolean = { that.name == name }
 
   def pieces(board: B): Set[P] = {

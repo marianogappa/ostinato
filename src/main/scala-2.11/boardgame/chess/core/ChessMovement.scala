@@ -2,8 +2,6 @@ package boardgame.chess.core
 
 import boardgame.core.{ Movement, XY }
 
-// TODO it's easy to implement threatens: Set[ChessPiece]
-// TODO override toString
 abstract class ChessMovement(
     val fromPiece: ChessPiece,
     val delta: XY,
@@ -11,6 +9,12 @@ abstract class ChessMovement(
     val isCheckmate: Boolean = false) extends Movement[ChessPiece](fromPiece, delta) {
 
   def toAn(implicit rules: ChessRules): String
+  def gridUpdates = {
+    List(
+      fromPiece.pos.toI -> None,
+      (fromPiece.pos + delta).toI -> Some(fromPiece.movedTo(fromPiece.pos + delta))
+    )
+  }
 }
 
 abstract class ChessMovementFactory {
@@ -69,6 +73,7 @@ case class EnPassantTakeMovement(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules) =
     fromPiece.pos.toAn.x.toString + 'x' + (fromPiece.pos + delta).toAn + "e.p." + (if (isCheck) Fan.check else "")
+  override def gridUpdates = super.gridUpdates ++ List(toPawn.pos.toI -> None)
 }
 
 case class EnPassantMovementFactory(fromPawn: ♟, delta: XY) extends ChessMovementFactory {
@@ -105,6 +110,7 @@ case class PromoteMovement(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules) =
     (fromPiece.pos + delta).toAn + toPiece.toAn + (if (isCheck) Fan.check else "")
+  override def gridUpdates = List(toPiece.pos.toI -> Some(toPiece))
 }
 
 case class CastlingMovementFactory(fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovementFactory {
@@ -122,4 +128,10 @@ case class CastlingMovement(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules) =
     if (kingDelta.sign.x == 1) Fan.kingSideCastle else Fan.queenSideCastle
+  override def gridUpdates =
+    super.gridUpdates ++
+      List(
+        targetRook.pos.toI -> None,
+        (targetRook.pos + rookDelta).toI -> Some(targetRook.movedTo(targetRook.pos + rookDelta))
+      )
 }
