@@ -86,8 +86,10 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Start UI implementation with D3 and ScalaJS
+- Start AI basic random implementation
+- Make trivial "screensaver" Chess implementation to showcase the library
 - Research repositories
-- Implement minimum Algebraic Notation support to enable simple UI use cases (in progress)
 
 ## Long term TODO
 
