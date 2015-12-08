@@ -104,4 +104,9 @@ class ChessBoard(
 
     linesOfCells map (_ map cellToChar) map (_.mkString) mkString "\n"
   }
+
+  def toFen: String = grid.map {
+    case Some(c) => c.toFen
+    case _ => ' '
+  }.foldLeft(Fen(""))(Fen.+).toString
 }

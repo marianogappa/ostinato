@@ -25,4 +25,29 @@ package object core {
     def kingSideCastle(implicit rules: ChessRules) = "0-0"
     def queenSideCastle(implicit rules: ChessRules) = "0-0-0"
   }
+
+  // TODO do complete Fen with active position, etc
+  object Fen {
+    def +(f: Fen, char: Char) = {
+      val isNewLine = (f.cellCount + 1) % 8 == 0
+      val newLine = if (isNewLine && f.cellCount < 63) "/" else ""
+
+      char match {
+        case ' ' =>
+          Fen(
+            f.partialString + (if (isNewLine) (f.emptyCells + 1).toString else "") + newLine,
+            f.cellCount + 1,
+            if (isNewLine) 0 else f.emptyCells + 1)
+        case c =>
+          Fen(
+            f.partialString + (if (f.emptyCells != 0) f.emptyCells.toString else "") + c + newLine,
+            f.cellCount + 1,
+            0
+          )
+      }
+    }
+  }
+  case class Fen(partialString: String = "", cellCount: Int = 0, emptyCells: Int = 0) {
+    override def toString = partialString
+  }
 }
