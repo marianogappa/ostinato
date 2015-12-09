@@ -1,11 +1,12 @@
 package boardgame.chess
 
-import boardgame.chess.core.{CastlingMovement, ChessGame}
+import boardgame.chess.core.{ChessRules, CastlingMovement, ChessGame}
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 class CastlingTest extends FunSpec with ShouldMatchers {
   describe("Castling") {
-    it("should determine that white king can castle") {
+    it("should determine that black king can castle") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """....♚..♜
           |........
@@ -14,16 +15,15 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      implicit val rules = game.rules
+          |........""".stripMargin, rules)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true
     }
-    it("should determine that white king can't castle because it's not in initial position") {
+    it("should determine that black king can't castle because it's not in initial position") {
       val game = ChessGame.fromString(
         """...♚...♜
           |........
@@ -36,12 +36,12 @@ class CastlingTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
       val board = game.board
 
-      game.whitePlayer.movements(board).forall {
+      game.blackPlayer.movements(board).forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
     }
-    it("should determine that white king can't castle because target rook is not in initial position") {
+    it("should determine that black king can't castle because target rook is not in initial position") {
       val game = ChessGame.fromString(
         """....♚.♜.
           |........
@@ -54,12 +54,12 @@ class CastlingTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
       val board = game.board
 
-      game.whitePlayer.movements(board).forall {
+      game.blackPlayer.movements(board).forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
     }
-    it("should determine that white king can't castle because white is on top unless otherwise specified") {
+    it("should determine that black king can't castle because black is on top unless otherwise specified") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -72,12 +72,12 @@ class CastlingTest extends FunSpec with ShouldMatchers {
       implicit val rules = game.rules
       val board = game.board
 
-      game.whitePlayer.movements(board).forall {
+      game.blackPlayer.movements(board).forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
     }
-    it("should determine that white king can castle because white is specified to be on the bottom") {
+    it("should determine that black king can castle because white is specified to be on the top") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -87,15 +87,15 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |....♚..♜""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+      implicit val rules = game.rules.copy(whitePawnDirection = 1)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true
     }
-    it("should determine that white king can't castle because the king is threatened") {
+    it("should determine that black king can't castle because the king is threatened") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -105,15 +105,15 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |....♖...
           |....♚..♜""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+      implicit val rules = game.rules.copy(whitePawnDirection = 1)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
     }
-    it("should determine that white king can't castle because a piece the king will pass through is threatened") {
+    it("should determine that black king can't castle because a piece the king will pass through is threatened") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -123,15 +123,15 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |.....♖..
           |....♚..♜""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+      implicit val rules = game.rules.copy(whitePawnDirection = 1)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
     }
-    it("should determine that white king can't long castle because a piece the king will pass through is threatened") {
+    it("should determine that black king can't long castle because a piece the king will pass through is threatened") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -141,15 +141,15 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |..♖.....
           |♜...♚...""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+      implicit val rules = game.rules.copy(whitePawnDirection = 1)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
     }
-    it("should determine that white king can long castle") {
+    it("should determine that black king can long castle") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -159,10 +159,10 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |.....♖..
           |♜...♚...""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+      implicit val rules = game.rules.copy(whitePawnDirection = 1)
       val board = game.board
 
-      game.whitePlayer.movements(board).exists {
+      game.blackPlayer.movements(board).exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true

@@ -35,22 +35,22 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
 object ♜ {
   val deltas = Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1)))
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♜'
-    case BlackChessPlayer ⇒ '♖'
+    case BlackChessPlayer ⇒ '♜'
+    case WhiteChessPlayer ⇒ '♖'
   }
 }
 object ♝ {
   val deltas = Piece.toXYs(Set((-1, -1), (1, 1), (-1, 1), (1, -1)))
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♝'
-    case BlackChessPlayer ⇒ '♗'
+    case BlackChessPlayer ⇒ '♝'
+    case WhiteChessPlayer ⇒ '♗'
   }
 }
 object ♞ {
   val deltas = Piece.toXYs(Set((-1, -2), (1, -2), (-1, 2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)))
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♞'
-    case BlackChessPlayer ⇒ '♘'
+    case BlackChessPlayer ⇒ '♞'
+    case WhiteChessPlayer ⇒ '♘'
   }
 }
 object ♚ {
@@ -58,15 +58,15 @@ object ♚ {
   def normalDeltas = ♜.deltas ++ ♝.deltas
   def rookDeltaFor(kingDelta: XY) = XY(if (kingDelta.x < 0) 3 else -2, 0)
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♚'
-    case BlackChessPlayer ⇒ '♔'
+    case BlackChessPlayer ⇒ '♚'
+    case WhiteChessPlayer ⇒ '♔'
   }
 }
 object ♛ {
   val deltas = ♚.normalDeltas
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♛'
-    case BlackChessPlayer ⇒ '♕'
+    case BlackChessPlayer ⇒ '♛'
+    case WhiteChessPlayer ⇒ '♕'
   }
 }
 object ♟ {
@@ -74,8 +74,8 @@ object ♟ {
     Piece.toXYs(Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set()))
 
   def char(owner: ChessPlayer) = owner match {
-    case WhiteChessPlayer ⇒ '♟'
-    case BlackChessPlayer ⇒ '♙'
+    case BlackChessPlayer ⇒ '♟'
+    case WhiteChessPlayer ⇒ '♙'
   }
   def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.x - 1))(dy)
 }

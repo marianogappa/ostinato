@@ -4,7 +4,7 @@ import boardgame.core.Rules
 
 object ChessRules {
   def default = ChessRules(
-    whitePawnDirection = 1,
+    whitePawnDirection = -1,
     kingIsTakeable = false,
     allowImpossibleBoards = false,
     noKingMeansLoss = false,

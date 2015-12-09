@@ -5,7 +5,8 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 
 class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
   describe("King's initial position") {
-    it("should determine that black king is in initial position, if white is on top") {
+    it("should determine that white king is in initial position, if white is on bottom") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -14,15 +15,15 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |....♔...""".stripMargin)
-      implicit val rules = game.rules
+          |....♔...""".stripMargin, rules)
 
-      game.blackPlayer.kingPiece(game.board) match {
+      game.whitePlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe true
         case _ => fail
       }
     }
-    it("should determine that black king is NOT in initial position, if white is on top") {
+    it("should determine that white king is NOT in initial position") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -31,16 +32,15 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |....♔...
-          |........""".stripMargin)
-      implicit val rules = game.rules
-      val board = game.board
+          |........""".stripMargin, rules)
 
-      game.blackPlayer.kingPiece(game.board) match {
+      game.whitePlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe false
         case _ => fail
       }
     }
-    it("should determine that black king is NOT in initial position if it's in white's initial position, if white is on top") {
+    it("should determine that white king is NOT in initial position if it's in black's initial position, if white is on bottom") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """....♔...
           |........
@@ -49,16 +49,15 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      implicit val rules = game.rules
-      val board = game.board
+          |........""".stripMargin, rules)
 
-      game.blackPlayer.kingPiece(game.board) match {
+      game.whitePlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe false
         case _ => fail
       }
     }
-    it("should determine that white king is in initial position, if black is on top") {
+    it("should determine that black king is in initial position, if black is on top") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """....♚...
           |........
@@ -67,15 +66,15 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      implicit val rules = game.rules
+          |........""".stripMargin, rules)
 
-      game.whitePlayer.kingPiece(game.board) match {
+      game.blackPlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe true
         case _ => fail
       }
     }
-    it("should determine that white king is NOT in initial position, if black is on top") {
+    it("should determine that black king is NOT in initial position, if black is on top") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -84,16 +83,15 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      implicit val rules = game.rules
-      val board = game.board
+          |........""".stripMargin, rules)
 
-      game.whitePlayer.kingPiece(game.board) match {
+      game.blackPlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe false
         case _ => fail
       }
     }
-    it("should determine that white king is NOT in initial position if it's in white's initial position, if black is on top") {
+    it("should determine that black king is NOT in initial position if it's in white's initial position, if black is on top") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -102,63 +100,11 @@ class KingsInitialPositionTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |....♚...""".stripMargin)
-      implicit val rules = game.rules
-      val board = game.board
+          |....♚...""".stripMargin, rules)
 
-      game.whitePlayer.kingPiece(game.board) match {
+      game.blackPlayer.kingPiece(game.board) match {
         case Some(k: ♚) => k.isInInitialPosition shouldBe false
         case _ => fail
-      }
-    }
-
-
-
-    describe("Algebraic notation") {
-      it("should find rook at h8 if white pawn moves downwards") {
-        val game = ChessGame.fromString(
-          """........
-            |........
-            |........
-            |........
-            |........
-            |........
-            |........
-            |♜.......""".stripMargin)
-        val board = game.board
-        implicit val rules = game.rules
-
-        game.whitePlayer.pieces(board).head.pos.toAn shouldBe An('h', 8)
-      }
-      it("should find rook at a1 if white pawn moves upwards") {
-        val game = ChessGame.fromString(
-          """........
-            |........
-            |........
-            |........
-            |........
-            |........
-            |........
-            |♜.......""".stripMargin)
-        val board = game.board
-        implicit val rules = game.rules.copy(whitePawnDirection = -1)
-
-        game.whitePlayer.pieces(board).head.pos.toAn shouldBe An('a', 1)
-      }
-      it("should find black rook at e4 if white pawn moves downwards") {
-        val game = ChessGame.fromString(
-          """........
-            |........
-            |........
-            |...♖....
-            |........
-            |........
-            |........
-            |........""".stripMargin)
-        val board = game.board
-        implicit val rules = game.rules
-
-        game.blackPlayer.pieces(board).head.pos.toAn shouldBe An('e', 4)
       }
     }
   }

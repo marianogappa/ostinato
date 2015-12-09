@@ -6,7 +6,8 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 
 class EnPassantTest extends FunSpec with ShouldMatchers{
   describe("En Passant") {
-    it("should find only en passant take movement for white pawn") {
+    it("should find only en passant take movement for black pawn") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -15,16 +16,16 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........
           |..♟♙....
           |..♟↑....
-          |........""".stripMargin)
-      implicit val rules = game.rules
+          |........""".stripMargin, rules)
 
       val board = game.board
-      val movements = game.whitePlayer.pieces(board).head.movements(board)
+      val movements = game.blackPlayer.pieces(board).head.movements(board)
 
       movements.size shouldBe 1
       movements.toList.head shouldBe a [EnPassantTakeMovement]
     }
-    it("should find 2 moves including en passant for black pawn") {
+    it("should find 2 moves including en passant for white pawn") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -33,13 +34,13 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........
           |........
           |........
-          |........""".stripMargin)
-      implicit val rules = game.rules
+          |........""".stripMargin, rules)
 
       val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 2
+      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 2
     }
     it("should not find en passant take move for black pawn, since king would be threatened") {
+      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """....♖...
           |........
@@ -48,11 +49,10 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........
           |........
           |....♚...
-          |........""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
+          |........""".stripMargin, rules)
 
       val board = game.board
-      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 1
+      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 1
     }
   }
 }
