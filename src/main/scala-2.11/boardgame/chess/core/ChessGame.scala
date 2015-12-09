@@ -3,7 +3,7 @@ package boardgame.chess.core
 import boardgame.core._
 
 object ChessGame {
-  def fromString(string: String, rules: ChessRules = ChessRules.default): ChessGame = {
+  def fromString(string: String)(implicit rules: ChessRules = ChessRules.default): ChessGame = {
     val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
     val charVector = string.split('\n').mkString.zipWithIndex.toVector
     val grid = charVector map {
@@ -50,7 +50,7 @@ class ChessGame(override val board: ChessBoard, override val rules: ChessRules) 
   val whitePlayer = WhiteChessPlayer
   val blackPlayer = BlackChessPlayer
 
-  def isGameOver(implicit rules: ChessRules): Boolean = isDraw || lossFor.nonEmpty
-  def lossFor(implicit rules: ChessRules): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
-  def isDraw(implicit rules: ChessRules): Boolean = players exists board.isDrawFor
+  def isGameOver(implicit rules: ChessRules = ChessRules.default): Boolean = isDraw || lossFor.nonEmpty
+  def lossFor(implicit rules: ChessRules = ChessRules.default): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
+  def isDraw(implicit rules: ChessRules = ChessRules.default): Boolean = players exists board.isDrawFor
 }

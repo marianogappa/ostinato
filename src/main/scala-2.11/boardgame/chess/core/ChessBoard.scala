@@ -7,7 +7,7 @@ class ChessBoard(
     val enPassantPawn: Option[EnPassantPawn],
     val canCastle: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> true, BlackChessPlayer -> true)) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
-  def move(m: ChessMovement)(implicit rules: ChessRules) = {
+  def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
     val resultingEnPassants = m match {
       case EnPassantMovement(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
@@ -18,7 +18,7 @@ class ChessBoard(
     new ChessBoard(m.gridUpdates.foldLeft(grid)(applyUpdate), resultingEnPassants)
   }
 
-  def movement(from: XY, delta: XY)(implicit rules: ChessRules): Set[ChessMovement] = {
+  def movement(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
     val to = from + delta
     val fromPiece = get(from)
     val toPiece = get(to)
@@ -88,8 +88,8 @@ class ChessBoard(
     validateMovement flatMap validateAfterMovement
   }
 
-  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules) = player.movements(this).isEmpty && !isLossFor(player)
-  def isLossFor(player: ChessPlayer)(implicit rules: ChessRules): Boolean = {
+  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = player.movements(this).isEmpty && !isLossFor(player)
+  def isLossFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default): Boolean = {
     val noCheckForMates = rules.copy(checkForThreatens = false)
     lazy val allNewBoards = player.movements(this)(noCheckForMates) map move
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))

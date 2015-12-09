@@ -13,6 +13,6 @@ case object BlackChessPlayer extends ChessPlayer("Black") {
 abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece, ChessPlayer](name) {
   def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
   def enemy: ChessPlayer
-  def movements(board: ChessBoard)(implicit rules: ChessRules): Set[ChessMovement] =
+  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] =
     pieces(board) flatMap (_.movements(board))
 }

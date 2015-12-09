@@ -16,12 +16,11 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |♜.......""".stripMargin, rules)
+          |♜.......""".stripMargin)
 
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe An('h', 8)
     }
     it("should find black rook at a1 if white pawn moves upwards") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -30,7 +29,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |♜.......""".stripMargin, rules)
+          |♜.......""".stripMargin)
 
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe An('a', 1)
     }
@@ -44,7 +43,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin, rules)
+          |........""".stripMargin)
 
       game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe An('e', 4)
     }
@@ -52,7 +51,6 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
 
   describe("Algebraic notation for movements") {
     it("should encode basic movements to algebraic notation") {
-      implicit val rules = ChessRules.default
       MoveMovement(♟(XY(0, 6), WhiteChessPlayer, -1), XY(0, -1)).toAn shouldBe "a3"
       EnPassantMovement(♟(XY(0, 6), WhiteChessPlayer, -1), XY(0, -2)).toAn shouldBe "a4"
       MoveMovement(♚(XY(4, 4), WhiteChessPlayer), XY(-1, -1)).toAn shouldBe "Kd5"
@@ -63,7 +61,6 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
     }
 
     it("should encode castling to algebraic notation when white is on bottom") {
-      implicit val rules = ChessRules.default
       CastlingMovement(♚(XY(4, 7), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 7), WhiteChessPlayer), XY(-2, 0)).toAn shouldBe "0-0"
       CastlingMovement(♚(XY(4, 7), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 7), WhiteChessPlayer), XY(3, 0)).toAn shouldBe "0-0-0"
       CastlingMovement(♚(XY(4, 0), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 0), WhiteChessPlayer), XY(-2, 0)).toAn shouldBe "0-0"
@@ -79,18 +76,15 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
     }
 
     it("should encode promoting to algebraic notation") {
-      implicit val rules = ChessRules.default
       PromoteMovement(♟(XY(4,1), WhiteChessPlayer, -1), XY(0, -1), ♛(XY(4, 0), WhiteChessPlayer)).toAn shouldBe "e8Q"
       PromoteMovement(♟(XY(6,6), BlackChessPlayer, 1), XY(0, 1), ♜(XY(6, 7), BlackChessPlayer)).toAn shouldBe "g1R"
     }
 
     it("should encode taking pieces to algebraic notation") {
-      implicit val rules = ChessRules.default
       TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChessPlayer)).toAn shouldBe "Bxc6"
     }
 
     it("should encode en passant take") {
-      implicit val rules = ChessRules.default
       EnPassantTakeMovement(♟(XY(1, 3), WhiteChessPlayer, -1), XY(1, -1), ♟(XY(2, 2), BlackChessPlayer, 1)).toAn shouldBe "bxc6e.p."
     }
   }

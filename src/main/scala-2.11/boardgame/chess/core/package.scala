@@ -8,7 +8,7 @@ package object core {
   implicit class ChessXY(pos: XY) {
     lazy val chars = "abcdefgh"
 
-    def toAn(implicit rules: ChessRules, chessBoardSize: BoardSize) =
+    def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
       if (rules.whitePawnDirection == 1)
         An(chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
       else
@@ -21,9 +21,9 @@ package object core {
 
   object Fan {
     def checkmate(winner: ChessPlayer) = if (winner == WhiteChessPlayer) "1-0" else "0-1"
-    def check(implicit rules: ChessRules) = "+"
-    def kingSideCastle(implicit rules: ChessRules) = "0-0"
-    def queenSideCastle(implicit rules: ChessRules) = "0-0-0"
+    def check(implicit rules: ChessRules = ChessRules.default) = "+"
+    def kingSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0"
+    def queenSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0-0"
   }
 
   // TODO do complete Fen with active position, etc

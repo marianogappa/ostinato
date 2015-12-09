@@ -7,7 +7,6 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 class GameEndingTest extends FunSpec with ShouldMatchers {
   describe("Game ending") {
     it("should find game over but not draw") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -16,13 +15,12 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |.....♛♛.
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
       game.isGameOver shouldBe true
       game.isDraw shouldBe false
     }
 
     it("should find draw and game over") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -31,13 +29,12 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |......♛.
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
       game.isDraw shouldBe true
       game.isGameOver shouldBe true
     }
 
     it("should not find draw nor game over") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -46,13 +43,12 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |......♛.
           |........
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
       game.isDraw shouldBe false
       game.isGameOver shouldBe false
     }
 
     it("should not find game over even if threatened") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -61,12 +57,11 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |......♛.
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
       game.isGameOver shouldBe false
     }
 
     it("black should have seven CheckMateMovements available") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -75,7 +70,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
 
       game.blackPlayer.movements(game.board).count {
         case m: ChessMovement => m.isCheckmate
@@ -84,7 +79,6 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
     }
 
     it("lower queen moving to the right should be a check but not a checkmate") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -93,14 +87,13 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
 
       game.board.movement(XY(6, 5), XY(1, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
     }
 
     it("upper queen moving to the right should be a check and a checkmate") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -109,14 +102,13 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
 
       game.board.movement(XY(5, 4), XY(2, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
     }
 
     it("upper queen moving to the left should not be a check nor a checkmate") {
-      implicit val rules = ChessRules.default
       val game = ChessGame.fromString(
         """........
           |........
@@ -125,7 +117,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, rules)
+          |.......♔""".stripMargin)
 
       game.board.movement(XY(5, 4), XY(-5, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
