@@ -15,10 +15,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 1
+      game.board.movements.size shouldBe 1
     }
 
     it("should find 2 possible moves for black pawn") {
@@ -30,10 +29,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 2
+      game.board.movements.size shouldBe 2
     }
 
     it("should find 4 possible moves for black pawn") {
@@ -45,10 +43,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 4
+      game.board.movements.size shouldBe 4
     }
 
     it("should find 3 possible moves for black pawn") {
@@ -60,10 +57,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 3
+      game.board.movements.size shouldBe 3
     }
 
     it("should find 0 possible moves for black pawn") {
@@ -75,10 +71,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 0
+      game.board.movements.size shouldBe 0
     }
 
     it("should not find black pawn in promoting position") {
@@ -90,7 +85,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe false
@@ -107,7 +102,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |..♟.....""".stripMargin)
+          |..♟.....""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe true
@@ -124,7 +119,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |..♙.....""".stripMargin)
+          |..♙.....""".stripMargin, turn = WhiteChessPlayer)
 
       game.whitePlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe false
@@ -141,7 +136,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = WhiteChessPlayer)
 
       game.whitePlayer.pieces(game.board).head match {
         case p: ♟ => p.isPromoting shouldBe true
@@ -158,10 +153,9 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      val board = game.board
+          |........""".stripMargin, turn = WhiteChessPlayer)
 
-      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 4
+      game.board.movements.size shouldBe 4
     }
   }
 }

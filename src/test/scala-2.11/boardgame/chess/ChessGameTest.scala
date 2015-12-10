@@ -27,37 +27,37 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 14
+      game.board.movements.size shouldBe 14
     }
 
     it("should find 0 possible movements for a Rook") {
       val game = ChessGame.fromString(
         """........
           |........
-          |...♜....
-          |..♜♜♜...
-          |...♜....
+          |...♞....
+          |..♞♜♞...
+          |...♞....
           |........
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(3, 3)) shouldBe 0
+      game.board.rooks.head.movements(game.board).size shouldBe 0
     }
 
     it("should find 1 possible movements for a Rook") {
       val game = ChessGame.fromString(
         """........
           |........
-          |...♜....
-          |..♜♜♜...
+          |...♞....
+          |..♞♜♞...
           |...♖....
           |........
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(3, 3)) shouldBe 1
+      game.board.rooks.head.movements(game.board).size shouldBe 1
     }
 
     it("should find 13 possible movements for a Bishop") {
@@ -69,9 +69,9 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 13
+      game.board.movements.size shouldBe 13
     }
 
     it("should find 0 possible movements for a Bishop") {
@@ -83,9 +83,9 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |..♞♞♞...
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 0
+      game.board.bishops.head.movements(game.board).size shouldBe 0
     }
 
     it("should find 0 possible movements for a Bishop (diagonally trapped)") {
@@ -99,7 +99,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(3, 3)) shouldBe 0
+      game.board.bishops.head.movements(game.board).size shouldBe 0
     }
 
     it("should find 0 possible movements for a Bishop (one diagonal free)") {
@@ -113,7 +113,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(3, 3)) shouldBe 3
+      game.board.bishops.head.movements(game.board).size shouldBe 3
     }
 
     it("should find 1 possible movements for a Bishop (take)") {
@@ -127,7 +127,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(3, 3)) shouldBe 1
+      game.board.bishops.head.movements(game.board).size shouldBe 1
     }
 
     it("should find 8 possible movements for a Knight") {
@@ -139,29 +139,29 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 8
+      game.board.movements.size shouldBe 8
     }
 
     it("should find 0 possible movements for a Knight") {
       val game = ChessGame.fromString(
         """♞.......
-          |..♞.....
-          |.♞......
+          |..♝.....
+          |.♝......
           |........
           |........
           |........
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(0, 0)) shouldBe 0
+      game.board.knights.head.movements(game.board).size shouldBe 0
     }
 
     it("should find 1 possible movements for a Knight") {
       val game = ChessGame.fromString(
         """♞.......
-          |..♞.....
+          |..♝.....
           |.♗......
           |........
           |........
@@ -169,7 +169,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(0, 0)) shouldBe 1
+      game.board.knights.head.movements(game.board).size shouldBe 1
     }
 
     it("should find 27 possible movements for a Queen") {
@@ -181,15 +181,15 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 27
+      game.board.movements.size shouldBe 27
     }
 
     it("should find 7 possible movements for a Queen") {
       val game = ChessGame.fromString(
-        """......♛♛
-          |......♛.
+        """......♝♛
+          |......♝.
           |........
           |........
           |........
@@ -197,13 +197,13 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(7, 0)) shouldBe 7
+      game.board.queens.head.movements(game.board).size shouldBe 7
     }
 
     it("should find 1 possible movements for a Queen") {
       val game = ChessGame.fromString(
-        """......♛♛
-          |......♛♗
+        """......♝♛
+          |......♝♗
           |........
           |........
           |........
@@ -211,13 +211,13 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(7, 0)) shouldBe 1
+      game.board.queens.head.movements(game.board).size shouldBe 1
     }
 
     it("should find 0 possible movements for a Queen; can't take King") {
       val game = ChessGame.fromString(
-        """......♛♛
-          |......♛♔
+        """......♝♛
+          |......♝♔
           |........
           |........
           |........
@@ -225,7 +225,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      movementCount(game, XY(7, 0)) shouldBe 0
+      game.board.queens.head.movements(game.board).size shouldBe 0
     }
 
     it("should find 8 possible movements for a King") {
@@ -237,21 +237,9 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = WhiteChessPlayer)
 
-      movementCount(game, XY(3, 3)) shouldBe 8
+      game.board.movements.size shouldBe 8
     }
-
   }
-
-  private def movementCount(game: ChessGame, point: XY, show: Boolean = false) = {
-    val board = game.board
-    implicit val rules = game.rules
-
-    val movements = board.get(point).get.get.movements(board)
-    if (show) movements map board.move foreach (b => println(b + "\n"))
-
-    movements.size
-  }
-
 }

@@ -15,13 +15,9 @@ class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
           |.......♛
           |........
           |........
-          |....♛...""".stripMargin)
+          |....♛...""".stripMargin, turn = WhiteChessPlayer)
 
-      val board = game.board
-
-      implicit val rules = game.rules
-
-      movementCount(game, XY(3, 3)) shouldBe 0
+      game.board.movements.size shouldBe 0
     }
     it("should find that the Queen is defended") {
       val game = ChessGame.fromString(
@@ -33,10 +29,8 @@ class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........""".stripMargin)
-      val board = game.board
-      implicit val rules = game.rules
 
-      board.get(XY(2,2)).get.get.isDefended(board) shouldBe true
+      game.board.queens.head.isDefended(game.board) shouldBe true
     }
 
     it("should find that the Queen is threatened") {
@@ -49,10 +43,8 @@ class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........""".stripMargin)
-      val board = game.board
-      implicit val rules = game.rules
 
-      board.get(XY(2,2)).get.get.isThreatened(board) shouldBe true
+      game.board.queens.head.isThreatened(game.board) shouldBe true
     }
 
     it("should find that the Queen is not threatened") {
@@ -65,21 +57,8 @@ class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........""".stripMargin)
-      val board = game.board
-      implicit val rules = game.rules
-      val pieces = board.get(XY(2,2)).get.get.owner.pieces(board).toList
 
-      board.get(XY(2,2)).get.get.isThreatened(board) shouldBe false
+      game.board.queens.head.isThreatened(game.board) shouldBe false
     }
-  }
-
-  private def movementCount(game: ChessGame, point: XY, show: Boolean = false) = {
-    val board = game.board
-    implicit val rules = game.rules
-
-    val movements = board.get(point).get.get.movements(board)
-    if (show) movements map board.move foreach (b => println(b + "\n"))
-
-    movements.size
   }
 }

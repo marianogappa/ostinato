@@ -3,13 +3,12 @@ package boardgame.chess.core
 import boardgame.core.{ XY, Board }
 
 class ChessBoard(
-                  grid: Vector[Option[ChessPiece]],
-                  val enPassantPawn: Option[EnPassantPawn] = None,
-                  val hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
-                  val nextMove: ChessPlayer = WhiteChessPlayer,
-                  val fullMoveNumber: Int = 1,
-                  val halfMoveClock: Int = 0
-                ) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
+    grid: Vector[Option[ChessPiece]],
+    val turn: ChessPlayer = WhiteChessPlayer,
+    val enPassantPawn: Option[EnPassantPawn] = None,
+    val hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
+    val fullMoveNumber: Int = 1,
+    val halfMoveClock: Int = 0) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
     val resultingEnPassants = m match {
@@ -19,7 +18,7 @@ class ChessBoard(
         None
     }
 
-    new ChessBoard(m.gridUpdates.foldLeft(grid)(applyUpdate), resultingEnPassants)
+    new ChessBoard(m.gridUpdates.foldLeft(grid)(applyUpdate), turn.enemy, resultingEnPassants)
   }
 
   def movement(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
@@ -110,7 +109,15 @@ class ChessBoard(
   }
 
   def toFen: String = grid.map {
-    case Some(c) => c.toFen
-    case _ => ' '
+    case Some(c) ⇒ c.toFen
+    case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
+
+  def movements = turn.movements(this)
+  def rooks = pieces filter (_.isRook)
+  def knights = pieces filter (_.isKnight)
+  def bishops = pieces filter (_.isBishop)
+  def queens = pieces filter (_.isQueen)
+  def kings = pieces filter (_.isKing)
+  def pawns = pieces filter (_.isPawn)
 }

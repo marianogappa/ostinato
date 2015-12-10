@@ -3,9 +3,7 @@ package boardgame.chess.core
 import boardgame.core.{ BoardSize, XY, Piece }
 
 abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules, ChessPiece](pos, owner) {
-  val isKing = false
-  val isPawn = false
-  val isRook = false
+  val (isRook, isKnight, isBishop, isQueen, isKing, isPawn) = (false, false, false, false, false, false)
   val toAn: String
   val toFen: Char
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = threatenedBy(board).nonEmpty
@@ -102,6 +100,7 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val pieceName = "Bishop"
   val toAn = "B"
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
+  override val isBishop = true
   def withOwner(newOwner: ChessPlayer) = ♝(pos, newOwner)
   def movedTo(newXY: XY) = ♝(newXY, owner)
   override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = (pos - to).abs.subtractXY != 0
@@ -115,6 +114,7 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val pieceName = "Knight"
   val toAn = "N"
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
+  override val isKnight = true
   def withOwner(newOwner: ChessPlayer) = ♞(pos, newOwner)
   def movedTo(newXY: XY) = ♞(newXY, owner)
   override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = ♞.deltas.forall(pos + _ != to)
@@ -128,6 +128,7 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val pieceName = "Queen"
   val toAn = "Q"
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
+  override val isQueen = true
   def withOwner(newOwner: ChessPlayer) = ♛(pos, newOwner)
   def movedTo(newXY: XY) = ♛(newXY, owner)
   override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = (pos - to).abs.subtractXY != 0 && pos.x != to.x && pos.y != to.y
