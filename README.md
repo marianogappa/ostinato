@@ -25,8 +25,6 @@ val game = ChessGame.fromString(
 - Get all movements from the black Rook
 ```
 val board = game.board
-implicit val rules = game.rules
-
 val movements = game.blackPlayer.pieces(board).head.movements(board)
 ```
 - Print them out! (outlined horizontally for brevity)
@@ -55,6 +53,7 @@ movements map board.move foreach (b => println(b + "\n"))
 - Fully featured; supporting en passant, castling, promoting, check & checkmate detection with proper testing
 ```
     it("should not find en passant take move for black pawn, since king would be threatened") {
+      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """....♖...
           |........
@@ -64,7 +63,6 @@ movements map board.move foreach (b => println(b + "\n"))
           |........
           |....♚...
           |........""".stripMargin)
-      implicit val rules = game.rules.copy(whitePawnDirection = -1)
 
       val board = game.board
       game.whitePlayer.pieces(board).head.movements(board).size shouldBe 1
