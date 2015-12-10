@@ -74,6 +74,21 @@ movements map board.move foreach (b => println(b + "\n"))
 TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChessPlayer)).toAn shouldBe "Bxc6"
 ```
 
+- Support for FEN Notation (WIP)
+```
+    it("should encode this board") {
+      ChessGame.fromString(
+        """.......♔
+          |........
+          |♚.♙.....
+          |.......♟
+          |........
+          |........
+          |........
+          |........
+          |""".stripMargin).board.toFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
+    }
+```
 
 ## Use cases
 
