@@ -1,4 +1,4 @@
-# board-game-helper
+# ostinato
 A modular, fully tested, very comprehensive helper library for board games, with a focus on Chess, written in Scala.
 
 [![Build Status](https://travis-ci.org/MarianoGappa/board-game-helper.png)](https://travis-ci.org/MarianoGappa/board-game-helper)
@@ -96,3 +96,9 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 - Implement Chess Game as proof of concept
 - Implement partial/complete algebraic chess notation to Game: can display and practice from there
 - Invent awesome game using this library
+
+## Anyway; why "ostinato"?
+
+The author is a musician of sorts and deeply loves music.
+
+"Ostinato" stands for something like: "a short melody or rhythm that is repeated by the same voice or instrument during a musical composition"; although it comes from "stubborn" (italian). The author is a very stubborn (がんこ) man of italian descent who came up with this idea of making a board game based on a chess board and chess pieces but with different rules, as a team project for his company's FedEx day. He persisted on his unpopular idea and kept repeating how great it was even though no one agreed. So.
