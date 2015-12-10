@@ -3,7 +3,15 @@ package boardgame.chess.core
 import boardgame.core._
 
 object ChessGame {
-  def fromString(string: String)(implicit rules: ChessRules = ChessRules.default): ChessGame = {
+  def fromString(
+    string: String,
+    hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
+    nextMove: ChessPlayer = WhiteChessPlayer,
+    enPassantTargetSquare: Option[XY] = None,
+    fullMoveNumber: Int = 1,
+    halfMoveClock: Int = 0)(
+      implicit rules: ChessRules = ChessRules.default): ChessGame = {
+
     val (white, black) = (WhiteChessPlayer, BlackChessPlayer)
     val charVector = string.split('\n').mkString.zipWithIndex.toVector
     val grid = charVector map {

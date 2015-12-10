@@ -3,9 +3,13 @@ package boardgame.chess.core
 import boardgame.core.{ XY, Board }
 
 class ChessBoard(
-    grid: Vector[Option[ChessPiece]],
-    val enPassantPawn: Option[EnPassantPawn],
-    val canCastle: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> true, BlackChessPlayer -> true)) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
+                  grid: Vector[Option[ChessPiece]],
+                  val enPassantPawn: Option[EnPassantPawn] = None,
+                  val hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
+                  val nextMove: ChessPlayer = WhiteChessPlayer,
+                  val fullMoveNumber: Int = 1,
+                  val halfMoveClock: Int = 0
+                ) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
     val resultingEnPassants = m match {
@@ -53,7 +57,7 @@ class ChessBoard(
 
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
-          case (Some(None), Some(r: ♜)) if k.isInInitialPosition && canCastle(k.owner) && !k.isThreatened(this) &&
+          case (Some(None), Some(r: ♜)) if k.isInInitialPosition && !hasCastled(k.owner) && !k.isThreatened(this) &&
             betweenLocationsFree && betweenLocationsNotThreatenedBy(k.enemy) ⇒
 
             Set(CastlingMovementFactory(k, delta, r, ♚.rookDeltaFor(delta)))
