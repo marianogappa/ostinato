@@ -1,6 +1,8 @@
-name := "board-game-helper"
+name := "ostinato"
 
-version := "1.0"
+version := "0.1-SNAPSHOT"
+
+organization := "org.gappa"
 
 scalaVersion := "2.11.7"
 
