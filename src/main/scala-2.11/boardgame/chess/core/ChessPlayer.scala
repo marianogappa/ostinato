@@ -15,4 +15,11 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovemen
   def enemy: ChessPlayer
   def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] =
     pieces(board) flatMap (_.movements(board))
+
+  def rooks(board: ChessBoard) = pieces(board) filter (_.isRook)
+  def knights(board: ChessBoard) = pieces(board) filter (_.isKnight)
+  def bishops(board: ChessBoard) = pieces(board) filter (_.isBishop)
+  def queens(board: ChessBoard) = pieces(board) filter (_.isQueen)
+  def kings(board: ChessBoard) = pieces(board) filter (_.isKing)
+  def pawns(board: ChessBoard) = pieces(board) filter (_.isPawn)
 }
