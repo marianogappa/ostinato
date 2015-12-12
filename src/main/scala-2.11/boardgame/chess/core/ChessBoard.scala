@@ -18,7 +18,27 @@ class ChessBoard(
         None
     }
 
-    new ChessBoard(m.gridUpdates.foldLeft(grid)(applyUpdate), turn.enemy, resultingEnPassants)
+    // TODO this is implemented wrong because K/Q side castling has to be considered
+    val resultingHasCastled = hasCastled
+
+    // TODO DrawMovement should be implemented!
+    val resultingHalfMoveClock = m match {
+      case MoveMovement(p: ♟, _, _, _)          ⇒ 0
+      case EnPassantMovement(_, _, _, _)        ⇒ 0
+      case EnPassantTakeMovement(_, _, _, _, _) ⇒ 0
+      case TakeMovement(_, _, _, _, _)          ⇒ 0
+      case PromoteMovement(_, _, _, _, _)       ⇒ 0
+      case _                                    ⇒ halfMoveClock + 1
+    }
+
+    new ChessBoard(
+      m.gridUpdates.foldLeft(grid)(applyUpdate),
+      turn.enemy,
+      resultingEnPassants,
+      resultingHasCastled,
+      if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
+      resultingHalfMoveClock
+    )
   }
 
   def movement(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
