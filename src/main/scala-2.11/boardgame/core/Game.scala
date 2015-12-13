@@ -49,7 +49,7 @@ abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M,
     implicit rules: R): Set[M] =
     movementOfDelta(from, delta * inc, board) match {
       case ms if ms.isEmpty ⇒ acc
-      case ms               ⇒ doAllMovementsOfDelta(from, delta, board, inc + 1, ms)
+      case ms               ⇒ doAllMovementsOfDelta(from, delta, board, inc + 1, acc ++ ms)
     }
 
   // N.B. this proxy serves no purpose other than enabling the tailrec optimisation

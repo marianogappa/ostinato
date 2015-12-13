@@ -61,7 +61,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
       game.isGameOver shouldBe false
     }
 
-    it("black should have seven CheckMateMovements available") {
+    it("black should have five CheckMateMovements available") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -75,7 +75,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
       game.blackPlayer.movements(game.board).count {
         case m: ChessMovement => m.isCheckmate
         case _ => false
-      } shouldBe 7
+      } shouldBe 5
     }
 
     it("lower queen moving to the right should be a check but not a checkmate") {
