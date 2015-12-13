@@ -1,5 +1,7 @@
 package boardgame.core
 
+import scala.annotation.tailrec
+
 abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](val board: B, val players: List[P], val rules: Rules)
 
 abstract class Board[P <: Piece[_, _, _, _, P], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
@@ -42,8 +44,17 @@ abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M,
   def movements(board: B)(implicit rules: R): Set[M]
   def movedTo(pos: XY): PC // N.B. unsafe (doesn't check bounds)
 
-  protected def allMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1)(implicit rules: R): Set[M] =
-    movementOfDelta(from, delta * inc, board) flatMap { Set(_) ++ allMovementsOfDelta(from, delta, board, inc + 1) }
+  @tailrec
+  private final def doAllMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1, acc: Set[M] = Set())(
+    implicit rules: R): Set[M] =
+    movementOfDelta(from, delta * inc, board) match {
+      case ms if ms.isEmpty ⇒ acc
+      case ms               ⇒ doAllMovementsOfDelta(from, delta, board, inc + 1, ms)
+    }
+
+  // N.B. this proxy serves no purpose other than enabling the tailrec optimisation
+  protected def allMovementsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R) =
+    doAllMovementsOfDelta(from, delta, board)
 
   protected def movementOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[M] =
     board.movement(from, delta)
