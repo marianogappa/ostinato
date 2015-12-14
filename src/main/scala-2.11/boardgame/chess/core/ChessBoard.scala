@@ -2,13 +2,13 @@ package boardgame.chess.core
 
 import boardgame.core.{ XY, Board }
 
-class ChessBoard(
-    grid: Vector[Option[ChessPiece]],
-    val turn: ChessPlayer = WhiteChessPlayer,
-    val enPassantPawn: Option[EnPassantPawn] = None,
-    val hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
-    val fullMoveNumber: Int = 1,
-    val halfMoveClock: Int = 0) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
+case class ChessBoard(
+    override val grid: Vector[Option[ChessPiece]],
+    turn: ChessPlayer = WhiteChessPlayer,
+    enPassantPawn: Option[EnPassantPawn] = None,
+    hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
+    fullMoveNumber: Int = 1,
+    halfMoveClock: Int = 0) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
     val resultingEnPassants = m match {

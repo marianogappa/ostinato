@@ -110,7 +110,7 @@ case class PromoteMovement(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =
     (fromPiece.pos + delta).toAn + toPiece.toAn + (if (isCheck) Fan.check else "")
-  override def gridUpdates = List(toPiece.pos.toI -> Some(toPiece))
+  override def gridUpdates = super.gridUpdates ++ List(toPiece.pos.toI -> Some(toPiece))
 }
 
 case class CastlingMovementFactory(fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovementFactory {

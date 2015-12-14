@@ -2,7 +2,7 @@ package boardgame.chess
 
 import boardgame.chess.core._
 import boardgame.core.XY
-import org.scalatest.{ShouldMatchers, FunSpec}
+import org.scalatest.{ ShouldMatchers, FunSpec }
 
 class PawnsTest extends FunSpec with ShouldMatchers {
   describe("Pawns") {
@@ -88,8 +88,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.pieces(game.board).head match {
-        case p: ♟ => p.isPromoting shouldBe false
-        case _ => fail
+        case p: ♟ ⇒ p.isPromoting shouldBe false
+        case _    ⇒ fail
       }
     }
 
@@ -105,8 +105,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |..♟.....""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.pieces(game.board).head match {
-        case p: ♟ => p.isPromoting shouldBe true
-        case _ => fail
+        case p: ♟ ⇒ p.isPromoting shouldBe true
+        case _    ⇒ fail
       }
     }
 
@@ -122,8 +122,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |..♙.....""".stripMargin, turn = WhiteChessPlayer)
 
       game.whitePlayer.pieces(game.board).head match {
-        case p: ♟ => p.isPromoting shouldBe false
-        case _ => fail
+        case p: ♟ ⇒ p.isPromoting shouldBe false
+        case _    ⇒ fail
       }
     }
 
@@ -139,8 +139,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin, turn = WhiteChessPlayer)
 
       game.whitePlayer.pieces(game.board).head match {
-        case p: ♟ => p.isPromoting shouldBe true
-        case _ => fail
+        case p: ♟ ⇒ p.isPromoting shouldBe true
+        case _    ⇒ fail
       }
     }
 
@@ -156,6 +156,38 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin, turn = WhiteChessPlayer)
 
       game.board.movements.size shouldBe 4
+    }
+
+    Map(
+      ♛(XY(2, 0), WhiteChessPlayer) -> '♕',
+      ♞(XY(2, 0), WhiteChessPlayer) -> '♘',
+      ♝(XY(2, 0), WhiteChessPlayer) -> '♗',
+      ♜(XY(2, 0), WhiteChessPlayer) -> '♖'
+    ) foreach {
+      case (piece, char) ⇒
+        it(s"should promote to $char") {
+          val game = ChessGame.fromString(
+            """........
+              |..♙.....
+              |........
+              |........
+              |........
+              |........
+              |........
+              |........""".stripMargin, turn = WhiteChessPlayer, fullMoveNumber = 40, halfMoveClock = 0)
+
+          game.board.move(PromoteMovement(♟(XY(2, 1), WhiteChessPlayer, -1), XY(0, -1), piece)) should equal(
+            ChessGame.fromString(
+              """..x.....
+                |........
+                |........
+                |........
+                |........
+                |........
+                |........
+                |........""".stripMargin.replace('x', char), turn = BlackChessPlayer, fullMoveNumber = 40, halfMoveClock = 0).board
+          )
+        }
     }
   }
 }
