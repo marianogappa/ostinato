@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>core - Ostinato Documentation - ostinato.core</title>
+          <meta name="description" content="core - Ostinato Documentation - ostinato.core" />
+          <meta name="keywords" content="core Ostinato Documentation ostinato.core" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'ostinato.core.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="ostinato">ostinato</a></p>
+        <h1>core</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">core</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="ostinato.core.Board" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Board[P&lt;:ostinato.core.Piece[_,_,_,_,P],M&lt;:ostinato.core.Movement[P],B&lt;:ostinato.core.Board[P,M,_,_],R&lt;:ostinato.core.Rules]extendsAnyRef"></a>
+      <a id="Board[P&lt;:Piece[_,_,_,_,P],M&lt;:Movement[P],B&lt;:Board[P,M,_,_],R&lt;:Rules]:Board[P,M,B,R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Board.html"><span class="name">Board</span></a><span class="tparams">[<span name="P">P &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[_, _, _, _, <span class="extype" name="ostinato.core.Board.P">P</span>]</span>, <span name="M">M &lt;: <a href="Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[<span class="extype" name="ostinato.core.Board.P">P</span>]</span>, <span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Board.P">P</span>, <span class="extype" name="ostinato.core.Board.M">M</span>, _, _]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.BoardSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BoardSizeextendsProductwithSerializable"></a>
+      <a id="BoardSize:BoardSize"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BoardSize.html"><span class="name">BoardSize</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Game" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Game[B&lt;:ostinato.core.Board[_,_,_,_],P&lt;:ostinato.core.Player[B,_,_,_]]extendsAnyRef"></a>
+      <a id="Game[B&lt;:Board[_,_,_,_],P&lt;:Player[B,_,_,_]]:Game[B,P]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Game.html"><span class="name">Game</span></a><span class="tparams">[<span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[_, _, _, _]</span>, <span name="P">P &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, _, _, _]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Movement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Movement[P&lt;:ostinato.core.Piece[_,_,_,_,P]]extendsAnyRef"></a>
+      <a id="Movement[P&lt;:Piece[_,_,_,_,P]]:Movement[P]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Movement.html"><span class="name">Movement</span></a><span class="tparams">[<span name="P">P &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[_, _, _, _, <span class="extype" name="ostinato.core.Movement.P">P</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Piece" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Piece[P&lt;:ostinato.core.Player[B,M,_,_],M&lt;:ostinato.core.Movement[_],B&lt;:ostinato.core.Board[_,M,B,R],R&lt;:ostinato.core.Rules,PC&lt;:ostinato.core.Piece[_,_,_,_,_]]extendsAnyRef"></a>
+      <a id="Piece[P&lt;:Player[B,M,_,_],M&lt;:Movement[_],B&lt;:Board[_,M,B,R],R&lt;:Rules,PC&lt;:Piece[_,_,_,_,_]]:Piece[P,M,B,R,PC]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Piece.html"><span class="name">Piece</span></a><span class="tparams">[<span name="P">P &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.M">M</span>, _, _]</span>, <span name="M">M &lt;: <a href="Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[_]</span>, <span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[_, <span class="extype" name="ostinato.core.Piece.M">M</span>, <span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>, <span name="PC">PC &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[_, _, _, _, _]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Player" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Player[B&lt;:ostinato.core.Board[P,_,_,_],M&lt;:ostinato.core.Movement[_],P&lt;:ostinato.core.Piece[PL,_,_,_,P],PL&lt;:ostinato.core.Player[_,_,_,_]]extendsAnyRef"></a>
+      <a id="Player[B&lt;:Board[P,_,_,_],M&lt;:Movement[_],P&lt;:Piece[PL,_,_,_,P],PL&lt;:Player[_,_,_,_]]:Player[B,M,P,PL]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Player.html"><span class="name">Player</span></a><span class="tparams">[<span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Player.P">P</span>, _, _, _]</span>, <span name="M">M &lt;: <a href="Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[_]</span>, <span name="P">P &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[<span class="extype" name="ostinato.core.Player.PL">PL</span>, _, _, _, <span class="extype" name="ostinato.core.Player.P">P</span>]</span>, <span name="PL">PL &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[_, _, _, _]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Rules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RulesextendsAnyRef"></a>
+      <a id="Rules:Rules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Rules.html"><span class="name">Rules</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.XY" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XYextendsProductwithSerializable"></a>
+      <a id="XY:XY"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="XY.html"><span class="name">XY</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="ostinato.core.Piece" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Piece"></a>
+      <a id="Piece:Piece"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Piece$.html"><span class="name">Piece</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.XY" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XY"></a>
+      <a id="XY:XY"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="XY$.html"><span class="name">XY</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+    </body>
+      </html>

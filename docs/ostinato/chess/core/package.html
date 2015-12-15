@@ -1,0 +1,681 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>core - Ostinato Documentation - ostinato.chess.core</title>
+          <meta name="description" content="core - Ostinato Documentation - ostinato.chess.core" />
+          <meta name="keywords" content="core Ostinato Documentation ostinato.chess.core" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'ostinato.chess.core.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="ostinato">ostinato</a>.<a href="../package.html" class="extype" name="ostinato.chess">chess</a></p>
+        <h1>core</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">core</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="ostinato.chess.core"><span>core</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="ostinato.chess.core.An" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnextendsProductwithSerializable"></a>
+      <a id="An:An"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$An.html"><span class="name">An</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Char">Char</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.CastlingMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CastlingMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="CastlingMovement:CastlingMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CastlingMovement.html"><span class="name">CastlingMovement</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="$u265A.html" class="extype" name="ostinato.chess.core.♚">♚</a></span>, <span name="kingDelta">kingDelta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="targetRook">targetRook: <a href="$u265C.html" class="extype" name="ostinato.chess.core.♜">♜</a></span>, <span name="rookDelta">rookDelta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.CastlingMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CastlingMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="CastlingMovementFactory:CastlingMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CastlingMovementFactory.html"><span class="name">CastlingMovementFactory</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="$u265A.html" class="extype" name="ostinato.chess.core.♚">♚</a></span>, <span name="kingDelta">kingDelta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="targetRook">targetRook: <a href="$u265C.html" class="extype" name="ostinato.chess.core.♜">♜</a></span>, <span name="rookDelta">rookDelta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessBoardextendsBoard[ostinato.chess.core.ChessPiece,ostinato.chess.core.ChessMovement,ostinato.chess.core.ChessBoard,ostinato.chess.core.ChessRules]withProductwithSerializable"></a>
+      <a id="ChessBoard:ChessBoard"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessBoard.html"><span class="name">ChessBoard</span></a><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]]</span>, <span name="turn">turn: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> = <span class="symbol">WhiteChessPlayer</span></span>, <span name="enPassantPawn">enPassantPawn: <span class="extype" name="scala.Option">Option</span>[<a href="EnPassantPawn.html" class="extype" name="ostinato.chess.core.EnPassantPawn">EnPassantPawn</a>] = <span class="symbol">scala.None</span></span>, <span name="hasCastled">hasCastled: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <span class="extype" name="scala.Boolean">Boolean</span>] = <span class="defval" name="scala.this.Predef.Map.apply[ostinato.chess.core.ChessPlayer, Boolean](scala.this.Predef.ArrowAssoc[ostinato.chess.core.WhiteChessPlayer.type](WhiteChessPlayer).-&gt;[Boolean](false), scala.this.Predef.ArrowAssoc[ostinato.chess.core.BlackChessPlayer.type](BlackChessPlayer).-&gt;[Boolean](false))">...</span></span>, <span name="fullMoveNumber">fullMoveNumber: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="halfMoveClock">halfMoveClock: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessGame" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessGameextendsGame[ostinato.chess.core.ChessBoard,ostinato.chess.core.ChessPlayer]"></a>
+      <a id="ChessGame:ChessGame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessGame.html"><span class="name">ChessGame</span></a><span class="result"> extends <a href="../../core/Game.html" class="extype" name="ostinato.core.Game">Game</a>[<a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessMovement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ChessMovementextendsMovement[ostinato.chess.core.ChessPiece]"></a>
+      <a id="ChessMovement:ChessMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessMovement.html"><span class="name">ChessMovement</span></a><span class="result"> extends <a href="../../core/Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessMovementFactory" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ChessMovementFactoryextendsAnyRef"></a>
+      <a id="ChessMovementFactory:ChessMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessMovementFactory.html"><span class="name">ChessMovementFactory</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessPiece" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ChessPieceextendsPiece[ostinato.chess.core.ChessPlayer,ostinato.chess.core.ChessMovement,ostinato.chess.core.ChessBoard,ostinato.chess.core.ChessRules,ostinato.chess.core.ChessPiece]"></a>
+      <a id="ChessPiece:ChessPiece"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessPiece.html"><span class="name">ChessPiece</span></a><span class="result"> extends <a href="../../core/Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>, <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessPlayer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ChessPlayerextendsPlayer[ostinato.chess.core.ChessBoard,ostinato.chess.core.ChessMovement,ostinato.chess.core.ChessPiece,ostinato.chess.core.ChessPlayer]"></a>
+      <a id="ChessPlayer:ChessPlayer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessPlayer.html"><span class="name">ChessPlayer</span></a><span class="result"> extends <a href="../../core/Player.html" class="extype" name="ostinato.core.Player">Player</a>[<a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessRulesextendsRuleswithProductwithSerializable"></a>
+      <a id="ChessRules:ChessRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessRules.html"><span class="name">ChessRules</span></a><span class="params">(<span name="whitePawnDirection">whitePawnDirection: <span class="extype" name="scala.Int">Int</span></span>, <span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="allowImpossibleBoards">allowImpossibleBoards: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noKingMeansLoss">noKingMeansLoss: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../core/Rules.html" class="extype" name="ostinato.core.Rules">Rules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessXY" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessXYextendsAnyRef"></a>
+      <a id="ChessXY:ChessXY"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$ChessXY.html"><span class="name">ChessXY</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="EnPassantMovement:EnPassantMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantMovement.html"><span class="name">EnPassantMovement</span></a><span class="params">(<span name="fromPawn">fromPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="EnPassantMovementFactory:EnPassantMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantMovementFactory.html"><span class="name">EnPassantMovementFactory</span></a><span class="params">(<span name="fromPawn">fromPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantPawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantPawnextendsProductwithSerializable"></a>
+      <a id="EnPassantPawn:EnPassantPawn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantPawn.html"><span class="name">EnPassantPawn</span></a><span class="params">(<span name="from">from: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="pawn">pawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantTakeMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantTakeMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="EnPassantTakeMovement:EnPassantTakeMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantTakeMovement.html"><span class="name">EnPassantTakeMovement</span></a><span class="params">(<span name="fromPawn">fromPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPawn">toPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantTakeMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantTakeMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="EnPassantTakeMovementFactory:EnPassantTakeMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantTakeMovementFactory.html"><span class="name">EnPassantTakeMovementFactory</span></a><span class="params">(<span name="fromPawn">fromPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPawn">toPawn: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.Fen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FenextendsProductwithSerializable"></a>
+      <a id="Fen:Fen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Fen.html"><span class="name">Fen</span></a><span class="params">(<span name="partialString">partialString: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="cellCount">cellCount: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="emptyCells">emptyCells: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.MoveMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MoveMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="MoveMovement:MoveMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MoveMovement.html"><span class="name">MoveMovement</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.MoveMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MoveMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="MoveMovementFactory:MoveMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MoveMovementFactory.html"><span class="name">MoveMovementFactory</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.PromoteMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PromoteMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="PromoteMovement:PromoteMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PromoteMovement.html"><span class="name">PromoteMovement</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.PromoteMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PromoteMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="PromoteMovementFactory:PromoteMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PromoteMovementFactory.html"><span class="name">PromoteMovementFactory</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.TakeMovement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TakeMovementextendsChessMovementwithProductwithSerializable"></a>
+      <a id="TakeMovement:TakeMovement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TakeMovement.html"><span class="name">TakeMovement</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="isCheck">isCheck: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCheckmate">isCheckmate: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.TakeMovementFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TakeMovementFactoryextendsChessMovementFactorywithProductwithSerializable"></a>
+      <a id="TakeMovementFactory:TakeMovementFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TakeMovementFactory.html"><span class="name">TakeMovementFactory</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>)</span><span class="result"> extends <a href="ChessMovementFactory.html" class="extype" name="ostinato.chess.core.ChessMovementFactory">ChessMovementFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♚" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♚extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♚:♚"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265A.html"><span title="gt4s: $u265A" class="name">♚</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♛" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♛extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♛:♛"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265B.html"><span title="gt4s: $u265B" class="name">♛</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♜" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♜extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♜:♜"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265C.html"><span title="gt4s: $u265C" class="name">♜</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♝" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♝extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♝:♝"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265D.html"><span title="gt4s: $u265D" class="name">♝</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♞" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♞extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♞:♞"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265E.html"><span title="gt4s: $u265E" class="name">♞</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♟" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♟extendsChessPiecewithProductwithSerializable"></a>
+      <a id="♟:♟"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265F.html"><span title="gt4s: $u265F" class="name">♟</span></a><span class="params">(<span name="pos">pos: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>, <span name="dy">dy: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="ostinato.chess.core.BlackChessPlayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BlackChessPlayer"></a>
+      <a id="BlackChessPlayer:BlackChessPlayer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BlackChessPlayer$.html"><span class="name">BlackChessPlayer</span></a><span class="result"> extends <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessGame" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessGame"></a>
+      <a id="ChessGame:ChessGame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessGame$.html"><span class="name">ChessGame</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChessRules"></a>
+      <a id="ChessRules:ChessRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ChessRules$.html"><span class="name">ChessRules</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.EnPassantPawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnPassantPawn"></a>
+      <a id="EnPassantPawn:EnPassantPawn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EnPassantPawn$.html"><span class="name">EnPassantPawn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.Fan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Fan"></a>
+      <a id="Fan:Fan"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Fan$.html"><span class="name">Fan</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.Fen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Fen"></a>
+      <a id="Fen:Fen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Fen$.html"><span class="name">Fen</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.WhiteChessPlayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WhiteChessPlayer"></a>
+      <a id="WhiteChessPlayer:WhiteChessPlayer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="WhiteChessPlayer$.html"><span class="name">WhiteChessPlayer</span></a><span class="result"> extends <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.package#chessBoardSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="chessBoardSize:ostinato.core.BoardSize"></a>
+      <a id="chessBoardSize:BoardSize"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chessBoardSize</span><span class="result">: <a href="../../core/BoardSize.html" class="extype" name="ostinato.core.BoardSize">BoardSize</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♚" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♚"></a>
+      <a id="♚:♚"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265A$.html"><span title="gt4s: $u265A" class="name">♚</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♛" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♛"></a>
+      <a id="♛:♛"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265B$.html"><span title="gt4s: $u265B" class="name">♛</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♜" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♜"></a>
+      <a id="♜:♜"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265C$.html"><span title="gt4s: $u265C" class="name">♜</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♝" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♝"></a>
+      <a id="♝:♝"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265D$.html"><span title="gt4s: $u265D" class="name">♝</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♞" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♞"></a>
+      <a id="♞:♞"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265E$.html"><span title="gt4s: $u265E" class="name">♞</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.♟" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="♟"></a>
+      <a id="♟:♟"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="$u265F$.html"><span title="gt4s: $u265F" class="name">♟</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
+    </body>
+      </html>
