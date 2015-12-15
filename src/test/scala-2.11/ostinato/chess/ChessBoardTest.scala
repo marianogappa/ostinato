@@ -1,6 +1,6 @@
 package ostinato.chess
 
-import ostinato.chess.core.{ WhiteChessPlayer, BlackChessPlayer, ChessGame }
+import ostinato.chess.core.{ChessBoard, WhiteChessPlayer, BlackChessPlayer, ChessGame}
 import org.scalatest._
 
 import scala.util.Random
@@ -61,24 +61,16 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
       game.board.move(game.board.movements.head).turn shouldBe WhiteChessPlayer
     }
 
-    ignore("should play a lot and still work") {
-      val game = ChessGame.fromString("""♜♞♝♛.♝♞♜
-                                        |♟♟♟♟♟♟♟♟
-                                        |........
-                                        |........
-                                        |........
-                                        |........
-                                        |♙♙♙♙♙♙♙♙
-                                        |♖♘♗♕.♗♘♖""".stripMargin)
-      var board = game.board
-
-      (1 to 100).foreach { _ =>
+    it("should play a lot and not stack overflow") {
+      def moveUntilLockedOrNMoves(board: ChessBoard = ChessGame.defaultGame.board, n: Int = 200): Unit = {
         val movements = board.movements
-        println(movements.size)
-        board = board.move(movements.toList(Random.nextInt(movements.size)))
-        println(board)
-        println
+        if (n > 0 && movements.nonEmpty)
+          moveUntilLockedOrNMoves(board.move(movements.head), n - 1)
+        else
+          ()
       }
+
+      moveUntilLockedOrNMoves()
     }
   }
 }
