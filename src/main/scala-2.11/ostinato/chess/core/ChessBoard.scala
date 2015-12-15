@@ -96,11 +96,11 @@ case class ChessBoard(
     def validateAfterMovement(mf: ChessMovementFactory): Set[ChessMovement] = {
       val m = mf.complete()
       val newBoard = move(m)
-      val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).map(!_.isThreatened(newBoard)).getOrElse(true)
+      val isPlayersKingThreatened = m.fromPiece.owner.kingPiece(newBoard).exists(_.isThreatened(newBoard))
       lazy val isCheckMate = rules.checkForThreatens && newBoard.isLossFor(m.fromPiece.enemy)
       lazy val isCheck = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
 
-      Set(m) filter (_ ⇒ isPlayersKingThreatened) map { _ ⇒
+      Set(m) filter (_ ⇒ !isPlayersKingThreatened) map { _ ⇒
         val mate = isCheckMate
         val check = mate || isCheck
 
