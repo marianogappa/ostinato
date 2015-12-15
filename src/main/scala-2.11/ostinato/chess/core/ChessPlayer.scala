@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core.Player
+import ostinato.core.Player
 
 case object WhiteChessPlayer extends ChessPlayer("White") {
   def enemy = BlackChessPlayer

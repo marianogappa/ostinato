@@ -1,4 +1,4 @@
-package boardgame.core
+package ostinato.core
 
 import scala.annotation.tailrec
 

@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core.{ BoardSize, XY, Piece }
+import ostinato.core.{ BoardSize, XY, Piece }
 
 abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules, ChessPiece](pos, owner) {
   val (isRook, isKnight, isBishop, isQueen, isKing, isPawn) = (false, false, false, false, false, false)

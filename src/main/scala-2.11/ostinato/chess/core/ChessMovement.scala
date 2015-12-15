@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core.{ Movement, XY }
+import ostinato.core.{ Movement, XY }
 
 abstract class ChessMovement(
     val fromPiece: ChessPiece,

@@ -1,6 +1,6 @@
-package boardgame.chess
+package ostinato.chess
 
-import boardgame.chess.core.{ChessRules, CastlingMovement, ChessGame}
+import ostinato.chess.core.{ChessRules, CastlingMovement, ChessGame}
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 class CastlingTest extends FunSpec with ShouldMatchers {

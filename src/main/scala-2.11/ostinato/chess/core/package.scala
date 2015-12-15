@@ -1,6 +1,6 @@
-package boardgame.chess
+package ostinato.chess
 
-import boardgame.core.{XY, BoardSize}
+import ostinato.core.{XY, BoardSize}
 
 package object core {
   implicit val chessBoardSize = BoardSize(8, 8)

@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core.Rules
+import ostinato.core.Rules
 
 object ChessRules {
   def default = ChessRules(

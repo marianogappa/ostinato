@@ -1,6 +1,6 @@
-package boardgame.chess
+package ostinato.chess
 
-import boardgame.chess.core.{ WhiteChessPlayer, BlackChessPlayer, ChessGame }
+import ostinato.chess.core.{ WhiteChessPlayer, BlackChessPlayer, ChessGame }
 import org.scalatest._
 
 import scala.util.Random

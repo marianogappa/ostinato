@@ -1,7 +1,7 @@
-package boardgame.chess
+package ostinato.chess
 
-import boardgame.chess.core._
-import boardgame.core.XY
+import ostinato.chess.core._
+import ostinato.core.XY
 import org.scalatest.{FunSpec, ShouldMatchers}
 
 class ChessGameTest extends FunSpec with ShouldMatchers {

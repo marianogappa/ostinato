@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core.{ XY, Board }
+import ostinato.core.{ XY, Board }
 
 case class ChessBoard(
     override val grid: Vector[Option[ChessPiece]],

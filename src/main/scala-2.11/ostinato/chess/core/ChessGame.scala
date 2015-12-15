@@ -1,6 +1,6 @@
-package boardgame.chess.core
+package ostinato.chess.core
 
-import boardgame.core._
+import ostinato.core._
 
 object ChessGame {
   def fromString(

@@ -1,6 +1,6 @@
-package boardgame.chess
+package ostinato.chess
 
-import boardgame.chess.core._
+import ostinato.chess.core._
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 class KingsInitialPositionTest extends FunSpec with ShouldMatchers {

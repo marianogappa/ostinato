@@ -1,8 +1,8 @@
-package boardgame
+package ostinato
 
 import org.scalatest.{FunSpec, ShouldMatchers}
 
-import boardgame.core._
+import ostinato.core._
 
 class BoardTest extends FunSpec with ShouldMatchers {
   describe("Board") {
