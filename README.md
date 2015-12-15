@@ -3,9 +3,13 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [![Build Status](https://travis-ci.org/MarianoGappa/ostinato.png)](https://travis-ci.org/MarianoGappa/ostinato)
 
+[Basic UI demo using ChessBoardJS](http://marianogappa.github.io/ostinato-example/)
+
+[Scaladoc](http://marianogappa.github.io/ostinato/docs)
+
 ## Status
 
-- Chess implementation is feature complete! But AI, UI & API have not been started yet. Some tidy up outstanding.
+- Chess implementation is feature complete! But AI & API have not been started yet. Some tidy up outstanding.
 - Highly experimental at the moment; implementation might change drastically at any time
 
 ## Chess
@@ -20,12 +24,11 @@ val game = ChessGame.fromString(
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 ```
 - Get all movements from the black Rook
 ```
-val board = game.board
-val movements = game.blackPlayer.pieces(board).head.movements(board)
+val movements = game.board.movements
 ```
 - Print them out! (outlined horizontally for brevity)
 ```
@@ -64,8 +67,7 @@ movements map board.move foreach (b => println(b + "\n"))
           |....♚...
           |........""".stripMargin)
 
-      val board = game.board
-      game.whitePlayer.pieces(board).head.movements(board).size shouldBe 1
+      game.whitePlayer.pawns.head.movements(game.board).size shouldBe 1
     }
 ```
 
@@ -99,9 +101,8 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Start UI implementation with D3 and ScalaJS
+- Fix "King threatened"-related stack overflow
 - Start AI basic random implementation
-- Make trivial "screensaver" Chess implementation to showcase the library
 - Research repositories
 
 ## Long term TODO
