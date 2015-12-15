@@ -13,7 +13,8 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
     enemy.pieces(board).filter(_.canMoveTo(pos, board)(rules.copy(kingIsTakeable = true, checkForThreatens = false)))
 
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
-    owner.pieces(board).filter(_.canMoveTo(pos, board.move(MoveMovement(withOwner(enemy), XY(0, 0)))))
+    owner.pieces(board).filter(_.canMoveTo(pos, board.move(MoveMovement(withOwner(enemy), XY(0, 0))))(
+      rules.copy(checkForThreatens = false)))
 
   def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) = !cantMove(to) && movements(board).exists {
     m ⇒ (pos + m.delta) == to
