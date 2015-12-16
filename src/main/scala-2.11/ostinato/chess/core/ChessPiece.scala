@@ -83,6 +83,15 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
     ♜.deltas.flatMap { case delta ⇒ allMovementsOfDelta(pos, delta, board) }
   }
+
+  lazy val castlingSide =
+    if (pos.x == 0)
+      Some(CastlingSide.Queenside)
+    else if (pos.x == implicitly[BoardSize].x - 1)
+      Some(CastlingSide.Kingside)
+    else
+      None
+
   val toChar = ♜.char(owner)
   val pieceName = "Rook"
   val toAn = "R"

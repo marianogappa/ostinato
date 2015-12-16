@@ -6,11 +6,13 @@ case class ChessBoard(
     override val grid: Vector[Option[ChessPiece]],
     turn: ChessPlayer = WhiteChessPlayer,
     enPassantPawn: Option[EnPassantPawn] = None,
-    hasCastled: Map[ChessPlayer, Boolean] = Map(WhiteChessPlayer -> false, BlackChessPlayer -> false),
+    castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
     halfMoveClock: Int = 0) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
+    // TODO there is no check that turn == fromPiece.owner
+
     val resultingEnPassants = m match {
       case EnPassantMovement(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
@@ -18,8 +20,12 @@ case class ChessBoard(
         None
     }
 
-    // TODO this is implemented wrong because K/Q side castling has to be considered
-    val resultingHasCastled = hasCastled
+    val resultingCastlingAvailable = m match {
+      case CastlingMovement(_, _, _, _, _, _) ⇒
+        castlingAvailable.updated((turn, CastlingSide.Queenside), false).updated((turn, CastlingSide.Kingside), false)
+      case _ ⇒
+        castlingAvailable
+    }
 
     // TODO DrawMovement should be implemented!
     val resultingHalfMoveClock = m match {
@@ -35,7 +41,7 @@ case class ChessBoard(
       m.gridUpdates.foldLeft(grid)(applyUpdate),
       turn.enemy,
       resultingEnPassants,
-      resultingHasCastled,
+      resultingCastlingAvailable,
       if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
       resultingHalfMoveClock
     )
@@ -52,8 +58,8 @@ case class ChessBoard(
     def isEnPassantPawn(pos: XY) = enPassantPawn.exists(epp ⇒ epp.from == pos)
 
     def targetRook(k: ♚) = get(k.targetRookPosition(delta.x)) match {
-      case Some(Some(r: ♜)) if r.owner == k.owner ⇒ Some(r)
-      case _                                      ⇒ None
+      case Some(Some(r: ♜)) if r.owner == k.owner && r.castlingSide.nonEmpty ⇒ Some((r, r.castlingSide))
+      case _ ⇒ None
     }
 
     val validateMovement: Set[ChessMovementFactory] = (fromPiece, toPiece, enPassantPawn) match {
@@ -76,8 +82,9 @@ case class ChessBoard(
 
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
-          case (Some(None), Some(r: ♜)) if k.isInInitialPosition && !hasCastled(k.owner) && !k.isThreatened(this) &&
-            betweenLocationsFree && betweenLocationsNotThreatenedBy(k.enemy) ⇒
+          case (Some(None), Some((r: ♜, Some(cs: CastlingSide.Value)))) if k.isInInitialPosition &&
+            castlingAvailable((k.owner, cs)) && betweenLocationsFree && !k.isThreatened(this) &&
+            betweenLocationsNotThreatenedBy(k.enemy) ⇒
 
             Set(CastlingMovementFactory(k, delta, r, ♚.rookDeltaFor(delta)))
 

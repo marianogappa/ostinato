@@ -5,6 +5,19 @@ import ostinato.core.{XY, BoardSize}
 package object core {
   implicit val chessBoardSize = BoardSize(8, 8)
 
+  object CastlingSide extends Enumeration {
+    type CastlingSide = Value
+    val Queenside, Kingside = Value
+  }
+
+  lazy val chessPlayers: List[ChessPlayer] = List(WhiteChessPlayer, BlackChessPlayer)
+  lazy val castlingSides = List(CastlingSide.Queenside, CastlingSide.Kingside)
+
+  lazy val castlingFullyAvailable = (for {
+    chessPlayer <- chessPlayers
+    castlingSide <- castlingSides
+  }  yield (chessPlayer, castlingSide) -> true).toMap
+
   implicit class ChessXY(pos: XY) {
     lazy val chars = "abcdefgh"
 

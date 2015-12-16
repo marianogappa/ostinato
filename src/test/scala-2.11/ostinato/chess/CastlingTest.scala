@@ -1,7 +1,8 @@
 package ostinato.chess
 
-import ostinato.chess.core.{ChessRules, CastlingMovement, ChessGame}
+import ostinato.chess.core._
 import org.scalatest.{ShouldMatchers, FunSpec}
+import ostinato.core.XY
 
 class CastlingTest extends FunSpec with ShouldMatchers {
   describe("Castling") {
@@ -154,6 +155,46 @@ class CastlingTest extends FunSpec with ShouldMatchers {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true
+    }
+    it("should disable ability for black to castle after castling") {
+      val game = ChessGame.fromString(
+        """♜...♚...
+          |........
+          |........
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin, turn = BlackChessPlayer)
+
+      game.board.move(
+        CastlingMovement(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0))
+      ).castlingAvailable shouldBe Map(
+        (WhiteChessPlayer, CastlingSide.Queenside) -> true,
+        (WhiteChessPlayer, CastlingSide.Kingside) -> true,
+        (BlackChessPlayer, CastlingSide.Queenside) -> false,
+        (BlackChessPlayer, CastlingSide.Kingside) -> false
+      )
+    }
+    it("should disable ability for white to castle after castling") {
+      val game = ChessGame.fromString(
+        """........
+          |........
+          |........
+          |........
+          |........
+          |........
+          |........
+          |♖...♕...""".stripMargin, turn = WhiteChessPlayer)
+
+      game.board.move(
+        CastlingMovement(♚(XY(4, 7), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 7), WhiteChessPlayer), XY(3, 0))
+      ).castlingAvailable shouldBe Map(
+        (WhiteChessPlayer, CastlingSide.Queenside) -> false,
+        (WhiteChessPlayer, CastlingSide.Kingside) -> false,
+        (BlackChessPlayer, CastlingSide.Queenside) -> true,
+        (BlackChessPlayer, CastlingSide.Kingside) -> true
+      )
     }
   }
 }
