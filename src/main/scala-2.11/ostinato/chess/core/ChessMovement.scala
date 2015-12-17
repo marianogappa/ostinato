@@ -135,3 +135,19 @@ case class CastlingMovement(
         (targetRook.pos + rookDelta).toI -> Some(targetRook.movedTo(targetRook.pos + rookDelta))
       )
 }
+
+case class DrawMovementFactory(fromPlayer: ChessPlayer) extends ChessMovementFactory {
+  def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
+    DrawMovement(fromPlayer, isCheck, isCheckmate)
+}
+
+case class DrawMovement(
+    fromPlayer: ChessPlayer,
+    override val isCheck: Boolean = false,
+    override val isCheckmate: Boolean = false) extends ChessMovement(♚(XY(0, 0), fromPlayer), XY(0, 0)) {
+  override def toString = s"${fromPiece.owner.name}'s claims draw"
+  def withCheck = this.copy(isCheck = true)
+  def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.draw
+  override def gridUpdates = List()
+}

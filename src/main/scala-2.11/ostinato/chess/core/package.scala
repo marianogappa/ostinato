@@ -37,6 +37,7 @@ package object core {
     def check(implicit rules: ChessRules = ChessRules.default) = "+"
     def kingSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0"
     def queenSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0-0"
+    def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
   }
 
   // TODO do complete Fen with active position, etc
