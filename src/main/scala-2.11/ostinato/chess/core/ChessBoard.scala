@@ -147,5 +147,5 @@ case class ChessBoard(
   def queens = pieces filter (_.isQueen)
   def kings = pieces filter (_.isKing)
   def pawns = pieces filter (_.isPawn)
-  def game(implicit rules: ChessRules) = ChessGame(this, rules)
+  def game(implicit rules: ChessRules = ChessRules.default) = ChessGame(this, rules)
 }
