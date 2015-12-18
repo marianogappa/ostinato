@@ -37,7 +37,7 @@ case class ChessBoard(
       case _                                    ⇒ halfMoveClock + 1
     }
 
-    new ChessBoard(
+    ChessBoard(
       m.gridUpdates.foldLeft(grid)(applyUpdate),
       turn.enemy,
       resultingEnPassants,
@@ -147,4 +147,5 @@ case class ChessBoard(
   def queens = pieces filter (_.isQueen)
   def kings = pieces filter (_.isKing)
   def pawns = pieces filter (_.isPawn)
+  def game(implicit rules: ChessRules) = ChessGame(this, rules)
 }

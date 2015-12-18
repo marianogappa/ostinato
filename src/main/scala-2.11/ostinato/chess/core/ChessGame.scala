@@ -36,7 +36,7 @@ object ChessGame {
     }
 
     // TODO: headOption means keep only the first; this is incorrect: if there's 2 there's a problem!
-    new ChessGame(new ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock), rules)
+    ChessGame(new ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock), rules)
   }
 
   val defaultGame: ChessGame = fromString(
@@ -51,7 +51,7 @@ object ChessGame {
       |""".stripMargin)
 }
 
-class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](
+case class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](
   board, chessPlayers, rules) {
 
   val whitePlayer = WhiteChessPlayer
