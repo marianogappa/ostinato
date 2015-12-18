@@ -9,7 +9,7 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 ## Status
 
-- Chess implementation is feature complete! But AI & API have not been started yet. Some tidy up outstanding.
+- Chess implementation is feature complete! But API has not been started yet. Some tidy up outstanding.
 - Highly experimental at the moment; implementation might change drastically at any time
 
 ## Chess
@@ -101,8 +101,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Fix "King threatened"-related stack overflow
-- Start AI basic random implementation
+- Change 'Movement' to 'Action'
 - Research repositories
 
 ## Long term TODO
