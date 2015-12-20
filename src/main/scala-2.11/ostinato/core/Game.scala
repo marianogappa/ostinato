@@ -32,9 +32,9 @@ abstract class Board[P <: Piece[_, _, _, _, P], M <: Movement[P], B <: Board[P, 
   private def betweenInclusive(from: XY, to: XY, delta: XY)(implicit boardSize: BoardSize): Set[XY] =
     Set(from) ++ (if (from == to) Set() else betweenInclusive(from + delta, to, delta))
 
-  def movements: Set[M]
+  def movements(implicit rules: R): Set[M]
   def movement(from: XY, delta: XY)(implicit rules: R): Set[M]
-  def move(m: M)(implicit rules: R): B
+  def move(m: M)(implicit rules: R): Option[B]
 }
 
 object Piece {
@@ -99,15 +99,15 @@ case class XY(x: Int, y: Int) {
 
 case class BoardSize(x: Int, y: Int) // N.B. implementation defines an implicit BoardSize -> wouldn't make this a Point
 
-abstract class Ai[B <: Board[_, _, _, _], P <: Player[_, M, _, _], G <: Game[_, _], M <: Movement[_]](player: P, seed: Option[Long] = None) {
+abstract class Ai[B <: Board[_, _, _, R], P <: Player[_, M, _, _], G <: Game[_, _], M <: Movement[_], R <: Rules](player: P, seed: Option[Long] = None) {
   lazy val random = seed map (new Random(_)) getOrElse new Random()
-  def move(game: G): M
+  def move(game: G)(implicit rules: R): M
   def cantMoveMovement: M = player.cantMoveMovement
 }
 
-abstract class RandomAi[B <: Board[_, M, _, _], P <: Player[_, M, _, _], G <: Game[B, _], M <: Movement[_]](player: P, seed: Option[Long] = None)
-    extends Ai[B, P, G, M](player, seed) {
+abstract class RandomAi[B <: Board[_, M, _, R], P <: Player[_, M, _, _], G <: Game[B, _], M <: Movement[_], R <: Rules](player: P, seed: Option[Long] = None)
+    extends Ai[B, P, G, M, R](player, seed) {
 
   def randomMovement(movements: Set[M]): Option[M] = random.shuffle(movements.toList).headOption
-  def move(game: G): M = randomMovement(game.board.movements) getOrElse cantMoveMovement
+  def move(game: G)(implicit rules: R): M = randomMovement(game.board.movements) getOrElse cantMoveMovement
 }

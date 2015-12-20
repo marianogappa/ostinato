@@ -13,7 +13,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
 
       board.halfMoveClock shouldBe 0
 
-      val board2 = board.move(game.whitePlayer.knights(board).head.movements(board).head)
+      val board2 = board.move(game.whitePlayer.knights(board).head.movements(board).head).get
 
       board2.halfMoveClock shouldBe 1
     }
@@ -24,7 +24,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
 
       board.halfMoveClock shouldBe 0
 
-      val board2 = board.move(game.whitePlayer.pawns(board).head.movements(board).head)
+      val board2 = board.move(game.whitePlayer.pawns(board).head.movements(board).head).get
 
       board2.halfMoveClock shouldBe 0
     }
@@ -34,18 +34,18 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
       board.turn shouldBe WhiteChessPlayer
       board.fullMoveNumber shouldBe 1
 
-      val board2 = board.move(board.movements.head)
+      val board2 = board.move(board.movements.head).get
       board2.turn shouldBe BlackChessPlayer
       board2.fullMoveNumber shouldBe 1
 
-      val board3 = board2.move(board.movements.head)
+      val board3 = board2.move(board2.movements.head).get
       board3.turn shouldBe WhiteChessPlayer
       board3.fullMoveNumber shouldBe 2
     }
 
     it("should change turn after a movement when on white's turn") {
       val board = ChessGame.defaultGame.board
-      board.move(board.movements.head).turn shouldBe BlackChessPlayer
+      board.move(board.movements.head).get.turn shouldBe BlackChessPlayer
     }
 
     it("should change turn after a movement when on blacks's turn") {
@@ -58,14 +58,14 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
                                         |♙♙♙♙♙♙♙♙
                                         |♖♘♗♕♔♗♘♖""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.move(game.board.movements.head).turn shouldBe WhiteChessPlayer
+      game.board.move(game.board.movements.head).get.turn shouldBe WhiteChessPlayer
     }
 
     it("should play a lot and not stack overflow") {
       def moveUntilLockedOrNMoves(board: ChessBoard = ChessGame.defaultGame.board, n: Int = 200): Unit = {
         val movements = board.movements
         if (n > 0 && movements.nonEmpty)
-          moveUntilLockedOrNMoves(board.move(movements.head), n - 1)
+          moveUntilLockedOrNMoves(board.move(movements.head).get, n - 1)
         else
           ()
       }

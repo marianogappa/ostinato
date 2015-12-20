@@ -15,11 +15,27 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
+      } shouldBe true
+    }
+    it("should determine that black king can't castle because it's white's turn") {
+      val game = ChessGame.fromString(
+        """....♚..♜
+          |........
+          |........
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin, turn = WhiteChessPlayer)
+
+      game.board.movements.forall {
+        case m: CastlingMovement => false
+        case _ => true
       } shouldBe true
     }
     it("should determine that black king can't castle because it's not in initial position") {
@@ -31,10 +47,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
-      val board = game.board
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(board).forall {
+      game.board.movements.forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
@@ -48,9 +63,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).forall {
+      game.board.movements.forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
@@ -64,9 +79,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |....♚..♜""".stripMargin)
+          |....♚..♜""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).forall {
+      game.board.movements.forall {
         case m: CastlingMovement => false
         case _ => true
       } shouldBe true
@@ -81,9 +96,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |....♚..♜""".stripMargin)
+          |....♚..♜""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true
@@ -98,9 +113,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |....♖...
-          |....♚..♜""".stripMargin)
+          |....♚..♜""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
@@ -115,9 +130,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |.....♖..
-          |....♚..♜""".stripMargin)
+          |....♚..♜""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
@@ -132,9 +147,9 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |..♖.....
-          |♜...♚...""".stripMargin)
+          |♜...♚...""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe false
@@ -149,9 +164,10 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |.....♖..
-          |♜...♚...""".stripMargin)
+          |♜...♚...""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).exists {
+      game.blackPlayer.kingPiece(game.board).get.movements(game.board)
+      game.board.movements.exists {
         case m: CastlingMovement => true
         case _ => false
       } shouldBe true
@@ -169,7 +185,7 @@ class CastlingTest extends FunSpec with ShouldMatchers {
 
       game.board.move(
         CastlingMovement(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0))
-      ).castlingAvailable shouldBe Map(
+      ).get.castlingAvailable shouldBe Map(
         (WhiteChessPlayer, CastlingSide.Queenside) -> true,
         (WhiteChessPlayer, CastlingSide.Kingside) -> true,
         (BlackChessPlayer, CastlingSide.Queenside) -> false,
@@ -185,11 +201,11 @@ class CastlingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |♖...♕...""".stripMargin, turn = WhiteChessPlayer)
+          |♖...♔...""".stripMargin, turn = WhiteChessPlayer)
 
       game.board.move(
         CastlingMovement(♚(XY(4, 7), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 7), WhiteChessPlayer), XY(3, 0))
-      ).castlingAvailable shouldBe Map(
+      ).get.castlingAvailable shouldBe Map(
         (WhiteChessPlayer, CastlingSide.Queenside) -> false,
         (WhiteChessPlayer, CastlingSide.Kingside) -> false,
         (BlackChessPlayer, CastlingSide.Queenside) -> true,

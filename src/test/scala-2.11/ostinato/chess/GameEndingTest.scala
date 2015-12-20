@@ -70,7 +70,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.movements(game.board).count {
         case m: ChessMovement => m.isCheckmate
@@ -87,7 +87,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin, turn = BlackChessPlayer)
 
       game.board.movement(XY(6, 5), XY(1, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
@@ -102,7 +102,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin, turn = BlackChessPlayer)
 
       game.board.movement(XY(5, 4), XY(2, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
@@ -117,7 +117,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin, turn = BlackChessPlayer)
 
       game.board.movement(XY(5, 4), XY(-5, 0)) shouldBe
         Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))

@@ -11,24 +11,21 @@ case class ChessBoard(
     halfMoveClock: Int = 0) extends Board[ChessPiece, ChessMovement, ChessBoard, ChessRules](grid) {
 
   def move(m: ChessMovement)(implicit rules: ChessRules = ChessRules.default) = {
-    // TODO there is no check that turn == fromPiece.owner
-
-    val resultingEnPassants = m match {
+    def calculateEnPassants = m match {
       case EnPassantMovement(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
       case _ ⇒
         None
     }
 
-    val resultingCastlingAvailable = m match {
+    def calculateCastlingAvailable = m match {
       case CastlingMovement(_, _, _, _, _, _) ⇒
         castlingAvailable.updated((turn, CastlingSide.Queenside), false).updated((turn, CastlingSide.Kingside), false)
       case _ ⇒
         castlingAvailable
     }
 
-    // TODO DrawMovement should be implemented!
-    val resultingHalfMoveClock = m match {
+    def calculateHalfMoveClock = m match {
       case MoveMovement(p: ♟, _, _, _)          ⇒ 0
       case EnPassantMovement(_, _, _, _)        ⇒ 0
       case EnPassantTakeMovement(_, _, _, _, _) ⇒ 0
@@ -37,14 +34,19 @@ case class ChessBoard(
       case _                                    ⇒ halfMoveClock + 1
     }
 
-    ChessBoard(
-      m.gridUpdates.foldLeft(grid)(applyUpdate),
-      turn.enemy,
-      resultingEnPassants,
-      resultingCastlingAvailable,
-      if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
-      resultingHalfMoveClock
-    )
+    get(m.fromPiece.pos) match {
+      case Some(Some(m.fromPiece)) if m.fromPiece.owner == turn ⇒
+        Some(ChessBoard(
+          m.gridUpdates.foldLeft(grid)(applyUpdate),
+          turn.enemy,
+          calculateEnPassants,
+          calculateCastlingAvailable,
+          if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
+          calculateHalfMoveClock
+        ))
+      case _ ⇒
+        None
+    }
   }
 
   def movement(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
@@ -53,7 +55,7 @@ case class ChessBoard(
     val toPiece = get(to)
     lazy val betweenLocationsFree = between(from, to) forall isEmptyCell
     def betweenLocationsNotThreatenedBy(player: ChessPlayer) =
-      xyBetween(from, to) forall (pos ⇒ player.pieces(this) forall (!_.canMoveTo(pos, this)))
+      xyBetween(from, to) forall (pos ⇒ player.pieces(this) forall (!_.canMoveTo(pos, this.copy(turn = player))))
 
     def isEnPassantPawn(pos: XY) = enPassantPawn.exists(epp ⇒ epp.from == pos)
 
@@ -100,9 +102,8 @@ case class ChessBoard(
       case _ ⇒ Set()
     }
 
-    def validateAfterMovement(mf: ChessMovementFactory): Set[ChessMovement] = {
+    def validateAfterMovement(mf: ChessMovementFactory): Set[ChessMovement] = move(mf.complete()).toSet.flatMap { newBoard: ChessBoard ⇒
       val m = mf.complete()
-      val newBoard = move(m)
       val isPlayersKingThreatened = rules.checkForThreatens && m.fromPiece.owner.kingPiece(newBoard).exists(_.isThreatened(newBoard))
       lazy val isCheckMate = rules.checkForThreatens && newBoard.isLossFor(m.fromPiece.enemy)
       lazy val isCheck = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
@@ -118,13 +119,15 @@ case class ChessBoard(
     validateMovement flatMap validateAfterMovement
   }
 
+  def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = player.movements(this).isEmpty && !isLossFor(player)
+  def isLoss(implicit rules: ChessRules = ChessRules.default) = isLossFor(turn)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default): Boolean = {
     val noCheckForMates = rules.copy(checkForThreatens = false)
     lazy val allNewBoards = player.movements(this)(noCheckForMates) map move
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 
-    player.kingPiece(this).map { _.isThreatened(this)(noCheckForMates) && (allNewBoards forall isKingThreatened) } getOrElse
+    player.kingPiece(this).map { _.isThreatened(this)(noCheckForMates) && (allNewBoards.flatten forall isKingThreatened) } getOrElse
       rules.noKingMeansLoss
   }
 
@@ -140,7 +143,7 @@ case class ChessBoard(
     case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
 
-  def movements = turn.movements(this)
+  def movements(implicit rules: ChessRules = ChessRules.default) = turn.movements(this)
   def rooks = pieces filter (_.isRook)
   def knights = pieces filter (_.isKnight)
   def bishops = pieces filter (_.isBishop)

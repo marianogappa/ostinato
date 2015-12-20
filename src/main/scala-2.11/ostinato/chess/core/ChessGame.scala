@@ -59,5 +59,5 @@ case class ChessGame(override val board: ChessBoard, override val rules: ChessRu
 
   def isGameOver(implicit rules: ChessRules = ChessRules.default): Boolean = isDraw || lossFor.nonEmpty
   def lossFor(implicit rules: ChessRules = ChessRules.default): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
-  def isDraw(implicit rules: ChessRules = ChessRules.default): Boolean = players exists board.isDrawFor
+  def isDraw(implicit rules: ChessRules = ChessRules.default): Boolean = board.isDraw
 }

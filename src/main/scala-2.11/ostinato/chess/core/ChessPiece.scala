@@ -10,15 +10,19 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
   def isDefended(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = defendedBy(board).nonEmpty
 
   def threatenedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
-    enemy.pieces(board).filter(_.canMoveTo(pos, board)(rules.copy(kingIsTakeable = true, checkForThreatens = false)))
+    enemy.pieces(board).filter(_.canMoveTo(pos, board.copy(turn = enemy))(
+      rules.copy(kingIsTakeable = true, checkForThreatens = false)))
 
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
-    owner.pieces(board).filter(_.canMoveTo(pos, board.move(MoveMovement(withOwner(enemy), XY(0, 0))))(
-      rules.copy(checkForThreatens = false)))
+    (owner.pieces(board) - this).filter(
+      _.canMoveTo(pos, board.copy(turn = owner, grid = board.grid.updated(pos.toI, Some(withOwner(enemy)))))(
+      rules.copy(checkForThreatens = false))
+    )
 
-  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) = !cantMove(to) && movements(board).exists {
-    m ⇒ (pos + m.delta) == to
-  }
+  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    !cantMove(to) && movements(board).exists {
+      m ⇒ (pos + m.delta) == to
+    }
 
   def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default): Boolean
 
