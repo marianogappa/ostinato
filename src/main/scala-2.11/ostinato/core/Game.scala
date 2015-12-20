@@ -3,17 +3,20 @@ package ostinato.core
 import scala.annotation.tailrec
 import scala.util.Random
 
-abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](val board: B, val players: List[P], val rules: Rules)
+abstract class Game[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
+  val board: B, val players: List[PL], val rules: Rules)
 
-abstract class Board[P <: Piece[_, _, _, _, P], A <: Action[P], B <: Board[P, A, _, _], R <: Rules](val grid: Vector[Option[P]]) {
-  type Cell = Option[P]
+abstract class Board[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
+    val grid: Vector[Option[PC]]) {
+
+  type Cell = Option[PC]
   type Location = Option[Cell]
 
   def get(pos: XY)(implicit boardSize: BoardSize): Location = if (pos.exists) Some(grid(pos.toI)) else None
   def isPiece(l: Location): Boolean = l.flatten.nonEmpty
   def isEmptyCell(l: Location): Boolean = l.nonEmpty && l.flatten.isEmpty
   def pieces = grid.flatten
-  def applyUpdate(grid: Vector[Option[P]], update: (Int, Option[P])) = grid.updated(update._1, update._2)
+  def applyUpdate(grid: Vector[Option[PC]], update: (Int, Option[PC])) = grid.updated(update._1, update._2)
 
   protected def between(from: XY, to: XY)(implicit boardSize: BoardSize): Set[Location] = xyBetween(from, to) map get
 
@@ -41,7 +44,9 @@ object Piece {
   def toXYs(points: Set[(Int, Int)]): Set[XY] = points map (p ⇒ XY(p._1, p._2))
 }
 
-abstract class Piece[P <: Player[B, A, _, _], A <: Action[_], B <: Board[_, A, B, R], R <: Rules, PC <: Piece[_, _, _, _, _]](val pos: XY, val owner: P) {
+abstract class Piece[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
+    val pos: XY, val owner: PL) {
+
   def actions(board: B)(implicit rules: R): Set[A]
   def movedTo(pos: XY): PC // N.B. unsafe (doesn't check bounds)
 
@@ -61,15 +66,19 @@ abstract class Piece[P <: Player[B, A, _, _], A <: Action[_], B <: Board[_, A, B
     board.action(from, delta)
 }
 
-abstract class Action[P <: Piece[_, _, _, _, P]](fromPiece: P, delta: XY) {
-  def gridUpdates: List[(Int, Option[P])]
+abstract class Action[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
+    fromPiece: PC, delta: XY) {
+
+  def gridUpdates: List[(Int, Option[PC])]
 }
 
-abstract class Player[B <: Board[P, _, _, _], A <: Action[_], P <: Piece[PL, _, _, _, P], PL <: Player[_, _, _, _]](val name: String) {
+abstract class Player[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
+    val name: String) {
+
   def equals(that: PL): Boolean = { that.name == name }
 
-  def pieces(board: B): Set[P] = {
-    board.pieces.filter { a: P ⇒ a.owner.equals(this) }.toSet
+  def pieces(board: B): Set[PC] = {
+    board.pieces.filter { a: PC ⇒ a.owner.equals(this) }.toSet
   }
 
   def cantMoveAction: A
@@ -99,14 +108,16 @@ case class XY(x: Int, y: Int) {
 
 case class BoardSize(x: Int, y: Int) // N.B. implementation defines an implicit BoardSize -> wouldn't make this a Point
 
-abstract class Ai[B <: Board[_, _, _, R], P <: Player[_, A, _, _], G <: Game[_, _], A <: Action[_], R <: Rules](player: P, seed: Option[Long] = None) {
+abstract class Ai[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules, G <: Game[B, A, PC, PL, R]](
+    player: PL, seed: Option[Long] = None) {
+
   lazy val random = seed map (new Random(_)) getOrElse new Random()
   def nextAction(game: G)(implicit rules: R): A
   def cantMoveAction: A = player.cantMoveAction
 }
 
-abstract class RandomAi[B <: Board[_, A, _, R], P <: Player[_, A, _, _], G <: Game[B, _], A <: Action[_], R <: Rules](player: P, seed: Option[Long] = None)
-    extends Ai[B, P, G, A, R](player, seed) {
+abstract class RandomAi[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules, G <: Game[B, A, PC, PL, R]](
+  player: PL, seed: Option[Long] = None) extends Ai[B, A, PC, PL, R, G](player, seed) {
 
   def randomAction(actions: Set[A]): Option[A] = random.shuffle(actions.toList).headOption
   def nextAction(game: G)(implicit rules: R): A = randomAction(game.board.actions) getOrElse cantMoveAction

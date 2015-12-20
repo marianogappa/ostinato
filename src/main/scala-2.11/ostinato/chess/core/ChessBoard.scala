@@ -8,7 +8,7 @@ case class ChessBoard(
     enPassantPawn: Option[EnPassantPawn] = None,
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
-    halfMoveClock: Int = 0) extends Board[ChessPiece, ChessAction, ChessBoard, ChessRules](grid) {
+    halfMoveClock: Int = 0) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](grid) {
 
   def doAction(m: ChessAction)(implicit rules: ChessRules = ChessRules.default) = {
     def calculateEnPassants = m match {

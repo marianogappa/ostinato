@@ -51,7 +51,7 @@ object ChessGame {
       |""".stripMargin)
 }
 
-case class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessPlayer](
+case class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](
   board, chessPlayers, rules) {
 
   val whitePlayer = WhiteChessPlayer

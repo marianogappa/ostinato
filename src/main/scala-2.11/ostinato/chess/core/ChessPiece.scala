@@ -2,7 +2,7 @@ package ostinato.chess.core
 
 import ostinato.core.{ BoardSize, XY, Piece }
 
-abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessAction, ChessBoard, ChessRules, ChessPiece](pos, owner) {
+abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](pos, owner) {
   val (isRook, isKnight, isBishop, isQueen, isKing, isPawn) = (false, false, false, false, false, false)
   val toAn: String
   val toFen: Char
