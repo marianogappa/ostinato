@@ -81,6 +81,8 @@ abstract class Player[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R],
     board.pieces.filter { a: PC ⇒ a.owner.equals(this) }.toSet
   }
 
+  def actions(board: B)(implicit rules: R): Set[A] = pieces(board) flatMap (_.actions(board))
+
   def cantMoveAction: A
 }
 
