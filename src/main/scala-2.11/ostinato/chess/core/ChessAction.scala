@@ -1,12 +1,12 @@
 package ostinato.chess.core
 
-import ostinato.core.{ Movement, XY }
+import ostinato.core.{ Action, XY }
 
-abstract class ChessMovement(
+abstract class ChessAction(
     val fromPiece: ChessPiece,
     val delta: XY,
     val isCheck: Boolean = false,
-    val isCheckmate: Boolean = false) extends Movement[ChessPiece](fromPiece, delta) {
+    val isCheckmate: Boolean = false) extends Action[ChessPiece](fromPiece, delta) {
 
   def toAn(implicit rules: ChessRules = ChessRules.default): String
   def gridUpdates = {
@@ -17,39 +17,39 @@ abstract class ChessMovement(
   }
 }
 
-abstract class ChessMovementFactory {
-  def complete(isCheck: Boolean = false, isCheckmate: Boolean = false): ChessMovement
+abstract class ChessActionFactory {
+  def complete(isCheck: Boolean = false, isCheckmate: Boolean = false): ChessAction
 }
 
-case class TakeMovementFactory(fromPiece: ChessPiece, delta: XY, toPiece: ChessPiece) extends ChessMovementFactory {
+case class CaptureActionFactory(fromPiece: ChessPiece, delta: XY, toPiece: ChessPiece) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    TakeMovement(fromPiece, delta, toPiece, isCheck, isCheckmate)
+    CaptureAction(fromPiece, delta, toPiece, isCheck, isCheckmate)
 }
 
-case class TakeMovement(
+case class CaptureAction(
     override val fromPiece: ChessPiece,
     override val delta: XY,
     toPiece: ChessPiece,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPiece, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} takes ${toPiece.owner.name}'s ${toPiece.pieceName}"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${toPiece.owner.name}'s ${toPiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =
     fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
-case class MoveMovementFactory(fromPiece: ChessPiece, delta: XY) extends ChessMovementFactory {
+case class MoveActionFactory(fromPiece: ChessPiece, delta: XY) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    MoveMovement(fromPiece, delta, isCheck, isCheckmate)
+    MoveAction(fromPiece, delta, isCheck, isCheckmate)
 }
 
-case class MoveMovement(
+case class MoveAction(
     override val fromPiece: ChessPiece,
     override val delta: XY,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPiece, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
   def withCheck = this.copy(isCheck = true)
@@ -57,18 +57,18 @@ case class MoveMovement(
   def toAn(implicit rules: ChessRules = ChessRules.default) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
-case class EnPassantTakeMovementFactory(fromPawn: ♟, delta: XY, toPawn: ♟) extends ChessMovementFactory {
+case class EnPassantTakeActionFactory(fromPawn: ♟, delta: XY, toPawn: ♟) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    EnPassantTakeMovement(fromPawn, delta, toPawn, isCheck, isCheckmate)
+    EnPassantCaptureAction(fromPawn, delta, toPawn, isCheck, isCheckmate)
 }
 
-case class EnPassantTakeMovement(
+case class EnPassantCaptureAction(
     fromPawn: ♟,
     override val delta: XY, toPawn: ♟,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPawn, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPawn, delta) {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} takes ${toPawn.owner.name}'s en passant"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${toPawn.owner.name}'s en passant"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =
@@ -76,16 +76,16 @@ case class EnPassantTakeMovement(
   override def gridUpdates = super.gridUpdates ++ List(toPawn.pos.toI -> None)
 }
 
-case class EnPassantMovementFactory(fromPawn: ♟, delta: XY) extends ChessMovementFactory {
+case class EnPassantActionFactory(fromPawn: ♟, delta: XY) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    EnPassantMovement(fromPawn, delta, isCheck, isCheckmate)
+    EnPassantAction(fromPawn, delta, isCheck, isCheckmate)
 }
 
-case class EnPassantMovement(
+case class EnPassantAction(
     fromPawn: ♟,
     override val delta: XY,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPawn, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPawn, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves forward twice (en passant)"
   def withCheck = this.copy(isCheck = true)
@@ -93,17 +93,17 @@ case class EnPassantMovement(
   def toAn(implicit rules: ChessRules = ChessRules.default) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
-case class PromoteMovementFactory(fromPiece: ♟, delta: XY, toPiece: ChessPiece) extends ChessMovementFactory {
+case class PromoteActionFactory(fromPiece: ♟, delta: XY, toPiece: ChessPiece) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    PromoteMovement(fromPiece, delta, toPiece, isCheck, isCheckmate)
+    PromoteAction(fromPiece, delta, toPiece, isCheck, isCheckmate)
 }
 
-case class PromoteMovement(
+case class PromoteAction(
     override val fromPiece: ♟,
     override val delta: XY,
     toPiece: ChessPiece,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPiece, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
   def withCheck = this.copy(isCheck = true)
@@ -113,15 +113,15 @@ case class PromoteMovement(
   override def gridUpdates = super.gridUpdates ++ List(toPiece.pos.toI -> Some(toPiece))
 }
 
-case class CastlingMovementFactory(fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessMovementFactory {
+case class CastlingActionFactory(fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    CastlingMovement(fromPiece, kingDelta, targetRook, rookDelta, isCheck, isCheckmate)
+    CastlingAction(fromPiece, kingDelta, targetRook, rookDelta, isCheck, isCheckmate)
 }
 
-case class CastlingMovement(
+case class CastlingAction(
     override val fromPiece: ♚, kingDelta: XY, targetRook: ♜, rookDelta: XY,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(fromPiece, kingDelta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, kingDelta) {
 
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} castles"
   def withCheck = this.copy(isCheck = true)
@@ -136,15 +136,15 @@ case class CastlingMovement(
       )
 }
 
-case class DrawMovementFactory(fromPlayer: ChessPlayer) extends ChessMovementFactory {
+case class DrawActionFactory(fromPlayer: ChessPlayer) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    DrawMovement(fromPlayer, isCheck, isCheckmate)
+    DrawAction(fromPlayer, isCheck, isCheckmate)
 }
 
-case class DrawMovement(
+case class DrawAction(
     fromPlayer: ChessPlayer,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessMovement(♚(XY(0, 0), fromPlayer), XY(0, 0)) {
+    override val isCheckmate: Boolean = false) extends ChessAction(♚(XY(0, 0), fromPlayer), XY(0, 0)) {
   override def toString = s"${fromPiece.owner.name}'s claims draw"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)

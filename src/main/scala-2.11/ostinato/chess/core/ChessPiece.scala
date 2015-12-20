@@ -2,7 +2,7 @@ package ostinato.chess.core
 
 import ostinato.core.{ BoardSize, XY, Piece }
 
-abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessMovement, ChessBoard, ChessRules, ChessPiece](pos, owner) {
+abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer, ChessAction, ChessBoard, ChessRules, ChessPiece](pos, owner) {
   val (isRook, isKnight, isBishop, isQueen, isKing, isPawn) = (false, false, false, false, false, false)
   val toAn: String
   val toFen: Char
@@ -20,7 +20,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
     )
 
   def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
-    !cantMove(to) && movements(board).exists {
+    !cantMove(to) && actions(board).exists {
       m ⇒ (pos + m.delta) == to
     }
 
@@ -30,7 +30,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessPlayer
   def withOwner(newOwner: ChessPlayer): ChessPiece
   def equals(that: ChessPiece) = pos == that.pos && owner == that.owner
   override def toString = s"${owner.name}'s $pieceName on (${pos.x}, ${pos.y})"
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement]
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction]
   val toChar: Char
   val pieceName: String
 }
@@ -84,8 +84,8 @@ object ♟ {
 }
 
 case class ♜(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♜.deltas.flatMap { case delta ⇒ allMovementsOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♜.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
   }
 
   lazy val castlingSide =
@@ -107,8 +107,8 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
 }
 
 case class ♝(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♝.deltas.flatMap { case delta ⇒ allMovementsOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♝.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
   }
   val toChar = ♝.char(owner)
   val pieceName = "Bishop"
@@ -121,8 +121,8 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
 }
 
 case class ♞(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♞.deltas.flatMap { case delta ⇒ movementOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♞.deltas.flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
   }
   val toChar = ♞.char(owner)
   val pieceName = "Knight"
@@ -135,8 +135,8 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
 }
 
 case class ♛(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♛.deltas.flatMap { case delta ⇒ allMovementsOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♛.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
   }
   val toChar = ♛.char(owner)
   val pieceName = "Queen"
@@ -149,8 +149,8 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
 }
 
 case class ♚(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♚.deltas(isInInitialPosition).flatMap { case delta ⇒ movementOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♚.deltas(isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
   }
 
   def initialY(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
@@ -173,8 +173,8 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = pos.chebyshevDistance(to) > 1
 }
 case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) {
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] = {
-    ♟.deltas(dy, isInInitialPosition).flatMap { case delta ⇒ movementOfDelta(pos, delta, board) }
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    ♟.deltas(dy, isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
   }
   val isInInitialPosition = dy == 1 && pos.y == 1 || dy == -1 && pos.y == chessBoardSize.y - 2
   val isPromoting = pos.y == ♟.promotingPosition(dy)

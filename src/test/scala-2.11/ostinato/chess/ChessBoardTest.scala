@@ -13,7 +13,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
 
       board.halfMoveClock shouldBe 0
 
-      val board2 = board.move(game.whitePlayer.knights(board).head.movements(board).head).get
+      val board2 = board.doAction(game.whitePlayer.knights(board).head.actions(board).head).get
 
       board2.halfMoveClock shouldBe 1
     }
@@ -24,7 +24,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
 
       board.halfMoveClock shouldBe 0
 
-      val board2 = board.move(game.whitePlayer.pawns(board).head.movements(board).head).get
+      val board2 = board.doAction(game.whitePlayer.pawns(board).head.actions(board).head).get
 
       board2.halfMoveClock shouldBe 0
     }
@@ -34,21 +34,21 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
       board.turn shouldBe WhiteChessPlayer
       board.fullMoveNumber shouldBe 1
 
-      val board2 = board.move(board.movements.head).get
+      val board2 = board.doAction(board.actions.head).get
       board2.turn shouldBe BlackChessPlayer
       board2.fullMoveNumber shouldBe 1
 
-      val board3 = board2.move(board2.movements.head).get
+      val board3 = board2.doAction(board2.actions.head).get
       board3.turn shouldBe WhiteChessPlayer
       board3.fullMoveNumber shouldBe 2
     }
 
-    it("should change turn after a movement when on white's turn") {
+    it("should change turn after an action when on white's turn") {
       val board = ChessGame.defaultGame.board
-      board.move(board.movements.head).get.turn shouldBe BlackChessPlayer
+      board.doAction(board.actions.head).get.turn shouldBe BlackChessPlayer
     }
 
-    it("should change turn after a movement when on blacks's turn") {
+    it("should change turn after a action when on blacks's turn") {
       val game = ChessGame.fromString("""♜♞♝♛♚♝♞♜
                                         |♟♟♟♟♟♟♟♟
                                         |........
@@ -58,19 +58,19 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
                                         |♙♙♙♙♙♙♙♙
                                         |♖♘♗♕♔♗♘♖""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.move(game.board.movements.head).get.turn shouldBe WhiteChessPlayer
+      game.board.doAction(game.board.actions.head).get.turn shouldBe WhiteChessPlayer
     }
 
     it("should play a lot and not stack overflow") {
-      def moveUntilLockedOrNMoves(board: ChessBoard = ChessGame.defaultGame.board, n: Int = 200): Unit = {
-        val movements = board.movements
-        if (n > 0 && movements.nonEmpty)
-          moveUntilLockedOrNMoves(board.move(movements.head).get, n - 1)
+      def doActionsUntilLockedOrNActions(board: ChessBoard = ChessGame.defaultGame.board, n: Int = 200): Unit = {
+        val actions = board.actions
+        if (n > 0 && actions.nonEmpty)
+          doActionsUntilLockedOrNActions(board.doAction(actions.head).get, n - 1)
         else
           ()
       }
 
-      moveUntilLockedOrNMoves()
+      doActionsUntilLockedOrNActions()
     }
   }
 }

@@ -6,7 +6,7 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 
 class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
   describe("ChessGame threatened/defended pieces") {
-    it("should find no moves for King if it's threatened in every direction") {
+    it("should find no actions for King if it's threatened in every direction") {
       val game = ChessGame.fromString(
         """..♛.....
           |........
@@ -17,7 +17,7 @@ class ThreatenedDefendedTest extends FunSpec with ShouldMatchers {
           |........
           |....♛...""".stripMargin, turn = WhiteChessPlayer)
 
-      game.board.movements.size shouldBe 0
+      game.board.actions.size shouldBe 0
     }
     it("should find that the Queen is defended") {
       val game = ChessGame.fromString(

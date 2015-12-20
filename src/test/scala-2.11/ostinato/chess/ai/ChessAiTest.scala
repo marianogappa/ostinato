@@ -8,35 +8,35 @@ import org.mockito.Matchers.any
 
 class ChessAiTest extends FunSpec with ShouldMatchers with MockitoSugar {
   describe("ChessRandomAi") {
-    it("should Draw if there are no movements available") {
+    it("should Draw if there are no actions available") {
       new Fixture {
-        when(board.movements(any[ChessRules])).thenReturn(Set.empty[ChessMovement])
-        ChessRandomAi(WhiteChessPlayer).move(game) shouldBe a[DrawMovement]
+        when(board.actions(any[ChessRules])).thenReturn(Set.empty[ChessAction])
+        ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe a[DrawAction]
       }
     }
-    it("should return the only available movement") {
+    it("should return the only available action") {
       new Fixture {
-        val movement = mock[ChessMovement]
-        when(board.movements(any[ChessRules])).thenReturn(Set(movement))
-        ChessRandomAi(WhiteChessPlayer).move(game) shouldBe movement
+        val action = mock[ChessAction]
+        when(board.actions(any[ChessRules])).thenReturn(Set(action))
+        ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe action
       }
     }
-    it("should return random movements") {
+    it("should return random actions") {
       new Fixture {
         val seed = 1234L
         val random = new util.Random(seed)
 
-        val movement1 = mock[ChessMovement]
-        val movement2 = mock[ChessMovement]
-        val movement3 = mock[ChessMovement]
+        val action1 = mock[ChessAction]
+        val action2 = mock[ChessAction]
+        val action3 = mock[ChessAction]
 
-        val movements = Set(movement1, movement2, movement3)
-        val randomMovement = random.shuffle(movements.toList).head
+        val actions = Set(action1, action2, action3)
+        val randomAction = random.shuffle(actions.toList).head
 
-        when(board.movements(any[ChessRules])).thenReturn(movements)
+        when(board.actions(any[ChessRules])).thenReturn(actions)
 
         val ai = ChessRandomAi(WhiteChessPlayer, Some(seed))
-        ai.move(game) shouldBe randomMovement
+        ai.nextAction(game) shouldBe randomAction
       }
     }
   }

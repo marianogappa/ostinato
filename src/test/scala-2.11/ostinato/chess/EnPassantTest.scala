@@ -6,7 +6,7 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 
 class EnPassantTest extends FunSpec with ShouldMatchers{
   describe("En Passant") {
-    it("should find only en passant take movement for black pawn") {
+    it("should find only en passant capture action for black pawn") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -17,10 +17,10 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |..♟↑....
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.pieces.head.movements(game.board).size shouldBe 1
-      game.board.pieces.head.movements(game.board).head shouldBe a [EnPassantTakeMovement]
+      game.board.pieces.head.actions(game.board).size shouldBe 1
+      game.board.pieces.head.actions(game.board).head shouldBe a [EnPassantCaptureAction]
     }
-    it("should find 2 moves including en passant for white pawn") {
+    it("should find 2 actions including en passant for white pawn") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -31,9 +31,9 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........
           |........""".stripMargin, turn = WhiteChessPlayer)
 
-      game.board.movements.size shouldBe 2
+      game.board.actions.size shouldBe 2
     }
-    it("should not find en passant take move for black pawn, since king would be threatened") {
+    it("should not find en passant capture action for black pawn, since king would be threatened") {
       val game = ChessGame.fromString(
         """....♖...
           |........
@@ -45,7 +45,7 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........""".stripMargin, turn = BlackChessPlayer)
 
       val board = game.board
-      game.blackPlayer.pieces(board).head.movements(board).size shouldBe 1
+      game.blackPlayer.pieces(board).head.actions(board).size shouldBe 1
     }
   }
 }

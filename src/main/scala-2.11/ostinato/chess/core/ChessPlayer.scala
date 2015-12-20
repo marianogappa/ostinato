@@ -10,13 +10,13 @@ case object BlackChessPlayer extends ChessPlayer("Black") {
   def enemy = WhiteChessPlayer
 }
 
-abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessMovement, ChessPiece, ChessPlayer](name) {
+abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction, ChessPiece, ChessPlayer](name) {
   def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
   def enemy: ChessPlayer
-  def movements(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessMovement] =
-    pieces(board) flatMap (_.movements(board))
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] =
+    pieces(board) flatMap (_.actions(board))
 
-  def cantMoveMovement = DrawMovement(this)
+  def cantMoveAction = DrawAction(this)
 
   def rooks(board: ChessBoard) = pieces(board) filter (_.isRook)
   def knights(board: ChessBoard) = pieces(board) filter (_.isKnight)

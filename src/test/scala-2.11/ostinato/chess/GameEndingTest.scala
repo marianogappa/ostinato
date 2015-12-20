@@ -61,7 +61,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
       game.isGameOver shouldBe false
     }
 
-    it("black should have seven CheckMateMovements available") {
+    it("black should have seven CheckMate actions available") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -72,8 +72,8 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.blackPlayer.movements(game.board).count {
-        case m: ChessMovement => m.isCheckmate
+      game.blackPlayer.actions(game.board).count {
+        case m: ChessAction => m.isCheckmate
         case _ => false
       } shouldBe 7
     }
@@ -89,8 +89,8 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.movement(XY(6, 5), XY(1, 0)) shouldBe
-        Set(MoveMovement(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
+      game.board.action(XY(6, 5), XY(1, 0)) shouldBe
+        Set(MoveAction(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
     }
 
     it("upper queen moving to the right should be a check and a checkmate") {
@@ -104,8 +104,8 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.movement(XY(5, 4), XY(2, 0)) shouldBe
-        Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
+      game.board.action(XY(5, 4), XY(2, 0)) shouldBe
+        Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
     }
 
     it("upper queen moving to the left should not be a check nor a checkmate") {
@@ -119,8 +119,8 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.movement(XY(5, 4), XY(-5, 0)) shouldBe
-        Set(MoveMovement(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
+      game.board.action(XY(5, 4), XY(-5, 0)) shouldBe
+        Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
     }
   }
 }

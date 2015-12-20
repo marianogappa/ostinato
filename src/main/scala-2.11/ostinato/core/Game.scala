@@ -5,7 +5,7 @@ import scala.util.Random
 
 abstract class Game[B <: Board[_, _, _, _], P <: Player[B, _, _, _]](val board: B, val players: List[P], val rules: Rules)
 
-abstract class Board[P <: Piece[_, _, _, _, P], M <: Movement[P], B <: Board[P, M, _, _], R <: Rules](val grid: Vector[Option[P]]) {
+abstract class Board[P <: Piece[_, _, _, _, P], A <: Action[P], B <: Board[P, A, _, _], R <: Rules](val grid: Vector[Option[P]]) {
   type Cell = Option[P]
   type Location = Option[Cell]
 
@@ -32,47 +32,47 @@ abstract class Board[P <: Piece[_, _, _, _, P], M <: Movement[P], B <: Board[P, 
   private def betweenInclusive(from: XY, to: XY, delta: XY)(implicit boardSize: BoardSize): Set[XY] =
     Set(from) ++ (if (from == to) Set() else betweenInclusive(from + delta, to, delta))
 
-  def movements(implicit rules: R): Set[M]
-  def movement(from: XY, delta: XY)(implicit rules: R): Set[M]
-  def move(m: M)(implicit rules: R): Option[B]
+  def actions(implicit rules: R): Set[A]
+  def action(from: XY, delta: XY)(implicit rules: R): Set[A]
+  def doAction(a: A)(implicit rules: R): Option[B]
 }
 
 object Piece {
   def toXYs(points: Set[(Int, Int)]): Set[XY] = points map (p ⇒ XY(p._1, p._2))
 }
 
-abstract class Piece[P <: Player[B, M, _, _], M <: Movement[_], B <: Board[_, M, B, R], R <: Rules, PC <: Piece[_, _, _, _, _]](val pos: XY, val owner: P) {
-  def movements(board: B)(implicit rules: R): Set[M]
+abstract class Piece[P <: Player[B, A, _, _], A <: Action[_], B <: Board[_, A, B, R], R <: Rules, PC <: Piece[_, _, _, _, _]](val pos: XY, val owner: P) {
+  def actions(board: B)(implicit rules: R): Set[A]
   def movedTo(pos: XY): PC // N.B. unsafe (doesn't check bounds)
 
   @tailrec
-  private final def doAllMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1, acc: Set[M] = Set())(
-    implicit rules: R): Set[M] =
-    movementOfDelta(from, delta * inc, board) match {
+  private final def doAllActionsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1, acc: Set[A] = Set())(
+    implicit rules: R): Set[A] =
+    actionOfDelta(from, delta * inc, board) match {
       case ms if ms.isEmpty ⇒ acc
-      case ms               ⇒ doAllMovementsOfDelta(from, delta, board, inc + 1, acc ++ ms)
+      case ms               ⇒ doAllActionsOfDelta(from, delta, board, inc + 1, acc ++ ms)
     }
 
   // N.B. this proxy serves no purpose other than enabling the tailrec optimisation
-  protected def allMovementsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R) =
-    doAllMovementsOfDelta(from, delta, board)
+  protected def allActionsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R) =
+    doAllActionsOfDelta(from, delta, board)
 
-  protected def movementOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[M] =
-    board.movement(from, delta)
+  protected def actionOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[A] =
+    board.action(from, delta)
 }
 
-abstract class Movement[P <: Piece[_, _, _, _, P]](fromPiece: P, delta: XY) {
+abstract class Action[P <: Piece[_, _, _, _, P]](fromPiece: P, delta: XY) {
   def gridUpdates: List[(Int, Option[P])]
 }
 
-abstract class Player[B <: Board[P, _, _, _], M <: Movement[_], P <: Piece[PL, _, _, _, P], PL <: Player[_, _, _, _]](val name: String) {
+abstract class Player[B <: Board[P, _, _, _], A <: Action[_], P <: Piece[PL, _, _, _, P], PL <: Player[_, _, _, _]](val name: String) {
   def equals(that: PL): Boolean = { that.name == name }
 
   def pieces(board: B): Set[P] = {
     board.pieces.filter { a: P ⇒ a.owner.equals(this) }.toSet
   }
 
-  def cantMoveMovement: M
+  def cantMoveAction: A
 }
 
 class Rules {} // TODO this should be abstract... and thought about
@@ -99,15 +99,15 @@ case class XY(x: Int, y: Int) {
 
 case class BoardSize(x: Int, y: Int) // N.B. implementation defines an implicit BoardSize -> wouldn't make this a Point
 
-abstract class Ai[B <: Board[_, _, _, R], P <: Player[_, M, _, _], G <: Game[_, _], M <: Movement[_], R <: Rules](player: P, seed: Option[Long] = None) {
+abstract class Ai[B <: Board[_, _, _, R], P <: Player[_, A, _, _], G <: Game[_, _], A <: Action[_], R <: Rules](player: P, seed: Option[Long] = None) {
   lazy val random = seed map (new Random(_)) getOrElse new Random()
-  def move(game: G)(implicit rules: R): M
-  def cantMoveMovement: M = player.cantMoveMovement
+  def nextAction(game: G)(implicit rules: R): A
+  def cantMoveAction: A = player.cantMoveAction
 }
 
-abstract class RandomAi[B <: Board[_, M, _, R], P <: Player[_, M, _, _], G <: Game[B, _], M <: Movement[_], R <: Rules](player: P, seed: Option[Long] = None)
-    extends Ai[B, P, G, M, R](player, seed) {
+abstract class RandomAi[B <: Board[_, A, _, R], P <: Player[_, A, _, _], G <: Game[B, _], A <: Action[_], R <: Rules](player: P, seed: Option[Long] = None)
+    extends Ai[B, P, G, A, R](player, seed) {
 
-  def randomMovement(movements: Set[M]): Option[M] = random.shuffle(movements.toList).headOption
-  def move(game: G)(implicit rules: R): M = randomMovement(game.board.movements) getOrElse cantMoveMovement
+  def randomAction(actions: Set[A]): Option[A] = random.shuffle(actions.toList).headOption
+  def nextAction(game: G)(implicit rules: R): A = randomAction(game.board.actions) getOrElse cantMoveAction
 }
