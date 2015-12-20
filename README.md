@@ -101,7 +101,9 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Change 'Movement' to 'Action'
+- Add movements method to generic Player class
+- Add basic checks to Board.move
+- Rename 'Movement' to 'Action'
 - Research repositories
 
 ## Long term TODO
