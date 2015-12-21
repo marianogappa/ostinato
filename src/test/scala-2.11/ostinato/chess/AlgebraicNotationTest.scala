@@ -88,4 +88,40 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       EnPassantCaptureAction(♟(XY(1, 3), WhiteChessPlayer, -1), XY(1, -1), ♟(XY(2, 2), BlackChessPlayer, 1)).toAn shouldBe "bxc6e.p."
     }
   }
+
+  describe("XY from Algebraic Notation") {
+    it("should convert AN positions to XY when White is on the botttom") {
+      ChessXY.fromAn("a1") shouldBe Some(XY(0, 7))
+      ChessXY.fromAn("h8") shouldBe Some(XY(7, 0))
+      ChessXY.fromAn("h1") shouldBe Some(XY(7, 7))
+      ChessXY.fromAn("a8") shouldBe Some(XY(0, 0))
+    }
+    it("should convert AN positions to XY when White is on top") {
+      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
+      ChessXY.fromAn("a1") shouldBe Some(XY(0, 0))
+      ChessXY.fromAn("h8") shouldBe Some(XY(7, 7))
+      ChessXY.fromAn("h1") shouldBe Some(XY(7, 0))
+      ChessXY.fromAn("a8") shouldBe Some(XY(0, 7))
+    }
+    it("should not convert AN positions out of range") {
+      ChessXY.fromAn("a0") shouldBe None
+      ChessXY.fromAn("a9") shouldBe None
+      ChessXY.fromAn("i1") shouldBe None
+      ChessXY.fromAn("z1") shouldBe None
+    }
+    it("should convert ignoring case, spacing and control characters") {
+      ChessXY.fromAn("A1") shouldBe Some(XY(0, 7))
+      ChessXY.fromAn("A1 ") shouldBe Some(XY(0, 7))
+      ChessXY.fromAn(" A1 ") shouldBe Some(XY(0, 7))
+      ChessXY.fromAn("a 1") shouldBe Some(XY(0, 7))
+      ChessXY.fromAn("\na \t1\r") shouldBe Some(XY(0, 7))
+    }
+    it("should not convert incomplete ANs or invalid characters") {
+      ChessXY.fromAn("a") shouldBe None
+      ChessXY.fromAn("a1♟") shouldBe None
+      ChessXY.fromAn("♟♟") shouldBe None
+      ChessXY.fromAn("1") shouldBe None
+      ChessXY.fromAn("") shouldBe None
+    }
+  }
 }

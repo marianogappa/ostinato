@@ -1,6 +1,6 @@
 package ostinato.chess
 
-import ostinato.core.{XY, BoardSize}
+import ostinato.core.{ XY, BoardSize }
 
 package object core {
   implicit val chessBoardSize = BoardSize(8, 8)
@@ -13,19 +13,55 @@ package object core {
   lazy val chessPlayers: List[ChessPlayer] = List(WhiteChessPlayer, BlackChessPlayer)
   lazy val castlingSides = List(CastlingSide.Queenside, CastlingSide.Kingside)
 
-  lazy val castlingFullyAvailable = (for {
-    chessPlayer <- chessPlayers
-    castlingSide <- castlingSides
-  }  yield (chessPlayer, castlingSide) -> true).toMap
+  lazy val castlingFullyAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = (for {
+    chessPlayer ← chessPlayers
+    castlingSide ← castlingSides
+  } yield (chessPlayer, castlingSide) -> true).toMap
+
+  lazy val castlingFullyUnavailable = castlingFullyAvailable map (kv => (kv._1, false))
+
+  object ChessXY {
+    lazy val chars = "abcdefgh"
+    def fromAn(string: String)(implicit rules: ChessRules = ChessRules.default) = {
+        val s = string.filter(_ > ' ').toLowerCase
+      if (s.length == 2 && s.matches("""[a-h][1-8]"""))
+        if (rules.whitePawnDirection == 1)
+          Some(XY(chars.indexOf(s(0)), s(1).asDigit - 1))
+        else
+          Some(XY(chars.indexOf(s(0)), chessBoardSize.y - 1 - (s(1).asDigit - 1)))
+      else
+        None
+    }
+  }
+
+  object ChessGrid {
+    def fromGridString(s: String)(implicit rules: ChessRules = ChessRules.default): Vector[Option[ChessPiece]] = {
+      charVector(s) map {
+        case ('♜', i) ⇒ Some(♜(XY.fromI(i), BlackChessPlayer))
+        case ('♞', i) ⇒ Some(♞(XY.fromI(i), BlackChessPlayer))
+        case ('♝', i) ⇒ Some(♝(XY.fromI(i), BlackChessPlayer))
+        case ('♛', i) ⇒ Some(♛(XY.fromI(i), BlackChessPlayer))
+        case ('♚', i) ⇒ Some(♚(XY.fromI(i), BlackChessPlayer))
+        case ('♟', i) ⇒ Some(♟(XY.fromI(i), BlackChessPlayer, rules.whitePawnDirection * -1))
+        case ('♖', i) ⇒ Some(♜(XY.fromI(i), WhiteChessPlayer))
+        case ('♘', i) ⇒ Some(♞(XY.fromI(i), WhiteChessPlayer))
+        case ('♗', i) ⇒ Some(♝(XY.fromI(i), WhiteChessPlayer))
+        case ('♕', i) ⇒ Some(♛(XY.fromI(i), WhiteChessPlayer))
+        case ('♔', i) ⇒ Some(♚(XY.fromI(i), WhiteChessPlayer))
+        case ('♙', i) ⇒ Some(♟(XY.fromI(i), WhiteChessPlayer, rules.whitePawnDirection))
+        case _        ⇒ None
+      }
+    }
+    def charVector(s: String) = s.split('\n').mkString.zipWithIndex.toVector
+  }
 
   implicit class ChessXY(pos: XY) {
-    lazy val chars = "abcdefgh"
 
     def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
       if (rules.whitePawnDirection == 1)
-        An(chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
+        An(ChessXY.chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
       else
-        An(chars(pos.x), chessBoardSize.y - pos.y)
+        An(ChessXY.chars(pos.x), chessBoardSize.y - pos.y)
   }
 
   case class An(x: Char, y: Int) {
@@ -38,30 +74,5 @@ package object core {
     def kingSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0"
     def queenSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0-0"
     def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
-  }
-
-  // TODO do complete Fen with active position, etc
-  object Fen {
-    def +(f: Fen, char: Char) = {
-      val isNewLine = (f.cellCount + 1) % 8 == 0
-      val newLine = if (isNewLine && f.cellCount < 63) "/" else ""
-
-      char match {
-        case ' ' =>
-          Fen(
-            f.partialString + (if (isNewLine) (f.emptyCells + 1).toString else "") + newLine,
-            f.cellCount + 1,
-            if (isNewLine) 0 else f.emptyCells + 1)
-        case c =>
-          Fen(
-            f.partialString + (if (f.emptyCells != 0) f.emptyCells.toString else "") + c + newLine,
-            f.cellCount + 1,
-            0
-          )
-      }
-    }
-  }
-  case class Fen(partialString: String = "", cellCount: Int = 0, emptyCells: Int = 0) {
-    override def toString = partialString
   }
 }
