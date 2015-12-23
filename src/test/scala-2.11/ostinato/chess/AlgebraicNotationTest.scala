@@ -6,7 +6,7 @@ import org.scalatest.{ShouldMatchers, FunSpec}
 
 class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
   describe("Algebraic notation for pieces") {
-    it("should find black rook at h8 if white moves downwards") {
+    it("should find black rook at a8 if white moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """........
@@ -18,7 +18,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |♜.......""".stripMargin)
 
-      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe An('h', 8)
+      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('a', 8)
     }
     it("should find black rook at a1 if white pawn moves upwards") {
       val game = ChessGame.fromString(
@@ -31,9 +31,9 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |♜.......""".stripMargin)
 
-      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe An('a', 1)
+      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('a', 1)
     }
-    it("should find white rook at e4 if white pawn moves downwards") {
+    it("should find white rook at d4 if white pawn moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """........
@@ -45,7 +45,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe An('e', 4)
+      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('d', 4)
     }
   }
 
@@ -122,6 +122,42 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       ChessXY.fromAn("♟♟") shouldBe None
       ChessXY.fromAn("1") shouldBe None
       ChessXY.fromAn("") shouldBe None
+    }
+  }
+
+  describe("Algebraic notations from Actions") {
+    it("should encode EnPassantActions into An strings") {
+      EnPassantAction(♟(XY(1, 6), WhiteChessPlayer, -1), XY(0, -2)).allPossibleAns shouldBe Set("b4", "bb4", "b2b4")
+      EnPassantAction(♟(XY(1, 1), WhiteChessPlayer, 1), XY(0, 2)).allPossibleAns(ChessRules.default.copy(whitePawnDirection = 1)) shouldBe Set("b4", "bb4", "b2b4")
+    }
+    it("should encode CaptureActions into An strings") {
+      CaptureAction(♞(XY(4, 2), WhiteChessPlayer), XY(1, -2), ♜(XY(5, 0), BlackChessPlayer)).allPossibleAns shouldBe
+        Set("N:f8", "♘xf", "♘e6f", "Nef8", "♘ef8:", "♘ef", "♘e6f8:", "♘e:f", "N:f", "Nf8:", "Nf", "Nef8:", "Nxf",
+          "♘exf8", "♘f:", "♘e6:f", "Ne6:f", "Nexf8", "♘e6f:", "Ne:f", "Nf:", "Ne:f8", "♘e:f8", "♘xf8", "♘e6:f8",
+          "Ne6f:", "Nexf", "♘e6xf8", "♘exf", "♘:f", "Nxf8", "♘f", "Nef:", "♘f8", "♘ef:", "♘f8:", "Nf8", "Nef", "♘ef8",
+          "Ne6f8", "Ne6:f8", "♘:f8", "♘e6xf", "Ne6f8:", "Ne6f", "♘e6f8", "Ne6xf8", "Ne6xf")
+    }
+    it("should encode PromoteActions into An strings") {
+      PromoteAction(♟(XY(5, 1), WhiteChessPlayer, -1), XY(0, -1), ♜(XY(5, 0), WhiteChessPlayer)).allPossibleAns shouldBe
+        Set("ff8(R)", "f7f8(♖)", "ff8=♖", "f8♖", "ff8♖", "ff8(♖)", "ff8/R", "ff8=R", "ff8R", "f7f8=♖", "f8=♖",
+          "f7f8(R)", "f8/♖", "f8R", "f8=R", "f7f8/R", "f7f8♖", "ff8/♖", "f7f8R", "f8(♖)", "f7f8/♖", "f8/R", "f7f8=R",
+          "f8(R)")
+    }
+    it("should encode MoveActions into An strings") {
+      MoveAction(♝(XY(2, 2), BlackChessPlayer), XY(4, 4)).allPossibleAns shouldBe
+        Set("Bc6g2", "Bg2", "♝g2", "Bcg2", "♝cg2", "♝c6g2")
+    }
+    it("should encode DrawActions into An strings") {
+      DrawAction(BlackChessPlayer).allPossibleAns shouldBe
+        Set("½–½")
+    }
+    it("should encode CastlingActions into An strings") {
+      CastlingAction(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0)).allPossibleAns shouldBe
+        Set("0-0-0", "O-O-O")
+    }
+    it("should encode EnPassantCaptureActions into An strings") {
+      EnPassantCaptureAction(♟(XY(1, 3), WhiteChessPlayer, -1), XY(1, -1), ♟(XY(2, 3), BlackChessPlayer, 1)).allPossibleAns shouldBe
+        Set("bc6e.p.", "bc6")
     }
   }
 }

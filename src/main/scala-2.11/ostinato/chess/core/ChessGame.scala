@@ -1,6 +1,5 @@
 package ostinato.chess.core
 
-import ostinato.chess.core.{ ChessPlayer, Fen }
 import ostinato.core._
 
 object ChessGame {

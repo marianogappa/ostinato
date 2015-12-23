@@ -56,15 +56,20 @@ package object core {
   }
 
   implicit class ChessXY(pos: XY) {
-
-    def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
+    def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
       if (rules.whitePawnDirection == 1)
-        An(ChessXY.chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
+        AnPos(ChessXY.chars(pos.x), pos.y + 1)
       else
-        An(ChessXY.chars(pos.x), chessBoardSize.y - pos.y)
+        AnPos(ChessXY.chars(pos.x), chessBoardSize.y - pos.y)
+    }
   }
 
-  case class An(x: Char, y: Int) {
+  implicit class ChessAnAction(action: ChessAction) {
+    def allPossibleAns(implicit rules: ChessRules = ChessRules.default): Set[String] =
+      An.allPossibleAns(action)
+  }
+
+  case class AnPos(x: Char, y: Int) {
     override def toString = s"$x$y"
   }
 
