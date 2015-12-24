@@ -2,10 +2,14 @@ package ostinato.chess.core
 
 import ostinato.core.{ BoardSize, XY, Piece }
 
+import scala.util.control.NoStackTrace
+
 abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](pos, owner) {
   val (isRook, isKnight, isBishop, isQueen, isKing, isPawn) = (false, false, false, false, false, false)
   val toAn: String
   val toFen: Char
+  val toIccf: Int
+  val toDn: Set[String]
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = defendedBy(board).nonEmpty
 
@@ -99,6 +103,8 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toChar = ♜.char(owner)
   val pieceName = "Rook"
   val toAn = "R"
+  val toDn = Set("R", "KR", "QR")
+  lazy val toIccf = 2
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isRook = true
   def withOwner(newOwner: ChessPlayer) = ♜(pos, newOwner)
@@ -113,6 +119,8 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toChar = ♝.char(owner)
   val pieceName = "Bishop"
   val toAn = "B"
+  val toDn = Set("B", "KB", "QB")
+  lazy val toIccf = 3
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isBishop = true
   def withOwner(newOwner: ChessPlayer) = ♝(pos, newOwner)
@@ -127,6 +135,8 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toChar = ♞.char(owner)
   val pieceName = "Knight"
   val toAn = "N"
+  val toDn = Set("N", "KN", "QN")
+  lazy val toIccf = 4
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isKnight = true
   def withOwner(newOwner: ChessPlayer) = ♞(pos, newOwner)
@@ -141,6 +151,8 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toChar = ♛.char(owner)
   val pieceName = "Queen"
   val toAn = "Q"
+  val toDn = Set("Q")
+  lazy val toIccf = 1
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isQueen = true
   def withOwner(newOwner: ChessPlayer) = ♛(pos, newOwner)
@@ -166,6 +178,8 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
   val toChar = ♚.char(owner)
   val pieceName = "King"
   val toAn = "K"
+  val toDn = Set("K")
+  lazy val toIccf = throw new RuntimeException("King does not have an Iccf code") with NoStackTrace
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isKing = true
   def withOwner(newOwner: ChessPlayer) = ♚(pos, newOwner)
@@ -181,6 +195,8 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   val toChar = ♟.char(owner)
   val pieceName = "Pawn"
   val toAn = ""
+  val toDn = Set("P")
+  lazy val toIccf = throw new RuntimeException("Pawn does not have an Iccf code") with NoStackTrace
   val toFen = if (owner == WhiteChessPlayer) 'P' else 'p'
   override val isPawn = true
   def withOwner(newOwner: ChessPlayer) = ♟(pos, newOwner, dy)

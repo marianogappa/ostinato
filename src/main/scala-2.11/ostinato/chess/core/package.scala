@@ -19,6 +19,8 @@ package object core {
   } yield (chessPlayer, castlingSide) -> true).toMap
 
   lazy val castlingFullyUnavailable = castlingFullyAvailable map (kv => (kv._1, false))
+  lazy val castlingOnlyBlackAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == BlackChessPlayer) }
+  lazy val castlingOnlyWhiteAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == WhiteChessPlayer) }
 
   object ChessXY {
     lazy val chars = "abcdefgh"
@@ -62,14 +64,37 @@ package object core {
       else
         AnPos(ChessXY.chars(pos.x), chessBoardSize.y - pos.y)
     }
+
+    lazy val dnConversions =
+      Map('a' -> Set("QR", "R"), 'b' -> Set("QN", "N"), 'c' -> Set("QB", "B"), 'd' -> Set("Q"), 'e' -> Set("K"),
+        'f' -> Set("KB", "B"), 'g' -> Set("KN", "N"), 'h' -> Set("KR", "R"))
+
+    lazy val iccfConversions =
+      Map('a' -> 1, 'b' -> 2, 'c' -> 3, 'd' -> 4, 'e' -> 5, 'f' -> 6, 'g' -> 7, 'h' -> 8)
+
+    def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
+      (toAn, turn) match {
+        case (AnPos(x, y), WhiteChessPlayer) => dnConversions(x) map (_ + y)
+        case (AnPos(x, y), BlackChessPlayer) => dnConversions(x) map (_ + (9 - y))
+      }
+    }
+
+    def toIccf(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
+      val an = toAn
+      IccfPos(iccfConversions(an.x), an.y)
+    }
   }
 
   implicit class ChessAnAction(action: ChessAction) {
-    def allPossibleAns(implicit rules: ChessRules = ChessRules.default): Set[String] =
-      An.allPossibleAns(action)
+    def allPossibleNotations(implicit rules: ChessRules = ChessRules.default): Set[String] =
+      Notation.allPossibleNotations(action)
   }
 
   case class AnPos(x: Char, y: Int) {
+    override def toString = s"$x$y"
+  }
+
+  case class IccfPos(x: Int, y: Int) {
     override def toString = s"$x$y"
   }
 
