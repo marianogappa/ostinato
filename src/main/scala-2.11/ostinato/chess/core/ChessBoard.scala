@@ -132,7 +132,7 @@ case class ChessBoard(
   }
 
   override def toString: String = {
-    def cellToChar(cell: Cell): Char = cell map (_.toChar) getOrElse '.'
+    def cellToChar(cell: Cell): Char = cell map (_.toFigurine) getOrElse '.'
     val linesOfCells = grid.grouped(8) map (_.toList)
 
     linesOfCells map (_ map cellToChar) map (_.mkString) mkString "\n"

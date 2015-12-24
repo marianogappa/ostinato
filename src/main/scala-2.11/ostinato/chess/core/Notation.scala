@@ -31,8 +31,8 @@ object Notation {
     }
 
     def genericPromotion(toPiece: ChessPiece) =
-      Set(toPiece.toAn.toString, toPiece.toChar.toString, s"(${toPiece.toAn})", s"(${toPiece.toChar})",
-        s"=${toPiece.toAn}", s"=${toPiece.toChar}", s"/${toPiece.toAn}", s"/${toPiece.toChar}")
+      Set(toPiece.toAn.toString, toPiece.toFigurine.toString, s"(${toPiece.toAn})", s"(${toPiece.toFigurine})",
+        s"=${toPiece.toAn}", s"=${toPiece.toFigurine}", s"/${toPiece.toAn}", s"/${toPiece.toFigurine}")
 
     def genericCastling(a: CastlingAction) =
       if (a.isKingside)
@@ -93,7 +93,7 @@ object Notation {
       (genericCastling(a) ++ Set("Castles", "castles")) * checkAndCheckMate(a.isCheck, a.isCheckmate)
 
     def anMove(a: ChessAction) =
-      Set(a.fromPiece.toAn.toString, a.fromPiece.toChar.toString) *
+      Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString) *
         Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
         (a.fromPiece.pos + a.delta).toAn.toString *
         checkAndCheckMate(a.isCheck, a.isCheckmate)
@@ -106,7 +106,7 @@ object Notation {
 
     // TODO Missing : at the end as an option
     def anCapture(a: CaptureAction) =
-      (if (a.fromPiece.isPawn) Set(a.fromPiece.pos.toAn.x.toString) else Set(a.fromPiece.toAn.toString, a.fromPiece.toChar.toString)) *
+      (if (a.fromPiece.isPawn) Set(a.fromPiece.pos.toAn.x.toString) else Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString)) *
         Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
         Set("x", ":", "") *
         Set((a.fromPiece.pos + a.delta).toAn.toString, (a.fromPiece.pos + a.delta).toAn.x.toString) *
