@@ -3,6 +3,7 @@ package ostinato.chess
 import ostinato.chess.core._
 import ostinato.core.XY
 import org.scalatest.{ ShouldMatchers, FunSpec }
+import org.mockito.Matchers.any
 
 class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
   describe("Algebraic notation for pieces") {
@@ -172,8 +173,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
 
   describe("Parsing games in different notations") {
     it("should parse the same game in different notations") {
-        val parsedPgn =
-          Notation.parseMatchString("""[Event "Ostinato Testing"]
+      val parsedPgn =
+        Notation.parseMatchString("""[Event "Ostinato Testing"]
                                       |[Site "Buenos Aires, Argentina"]
                                       |[Date "2015.??.??"]
                                       |[Round "1"]
@@ -185,8 +186,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |dxe4 7. 0-0
                                       |""".stripMargin)
 
-        val parsedAlgebraic =
-          Notation.parseMatchString("""e4 e6
+      val parsedAlgebraic =
+        Notation.parseMatchString("""e4 e6
                                       |d4 d5
                                       |Nc3 Bb4
                                       |Bb5+ Bd7
@@ -194,8 +195,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |Nge2 dxe4
                                       |0-0""".stripMargin)
 
-        val parsedCoordinate =
-          Notation.parseMatchString("""
+      val parsedCoordinate =
+        Notation.parseMatchString("""
                                       |1. e2-e4 e7-e6
                                       |2. d2-d4 d7-d5
                                       |3. b1-c3 f8-b4
@@ -204,8 +205,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |6. g1-e2 d5xe4
                                       |7. 0-0""".stripMargin)
 
-        val parsedDescriptive =
-          Notation.parseMatchString("""
+      val parsedDescriptive =
+        Notation.parseMatchString("""
                                       |1. P-K4 P-K3
                                       |2. P-Q4 P-Q4
                                       |3. N-QB3 B-N5
@@ -215,8 +216,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |7. 0-0
                                       |""".stripMargin)
 
-        val parsedIccf =
-          Notation.parseMatchString("""
+      val parsedIccf =
+        Notation.parseMatchString("""
                                       |1. 5254 5756
                                       |2. 4244 4745
                                       |3. 2133 6824
@@ -225,8 +226,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |6. 7152 4554
                                       |7. 5171""".stripMargin)
 
-        val parsedSmith =
-          Notation.parseMatchString("""
+      val parsedSmith =
+        Notation.parseMatchString("""
                                       |1. e2e4  e7e6
                                       |2. d2d4  d7d5
                                       |3. b1c3  f8b4
@@ -235,11 +236,11 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                                       |6. g1e2  d5e4p
                                       |7. e1g1c""".stripMargin)
 
-        Set(parsedPgn, parsedAlgebraic, parsedCoordinate, parsedDescriptive, parsedIccf, parsedSmith) foreach {
-          case Right(parsedGame) ⇒
-            parsedGame.size shouldBe 13
-            parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromString(
-              """♜♞..♚.♞♜
+      Set(parsedPgn, parsedAlgebraic, parsedCoordinate, parsedDescriptive, parsedIccf, parsedSmith) foreach {
+        case Right(parsedGame) ⇒
+          parsedGame.size shouldBe 13
+          parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromString(
+            """♜♞..♚.♞♜
                 |♟♟♟♛.♟♟♟
                 |....♟...
                 |........
@@ -247,11 +248,43 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
                 |..♘.....
                 |♙♙♙.♘♙♙♙
                 |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
-              fullMoveNumber = 7, halfMoveClock = 1
-            ).board)
-          case _ ⇒
-            fail
-        }
+            fullMoveNumber = 7, halfMoveClock = 1
+          ).board)
+        case _ ⇒
+          fail
+      }
+    }
+
+    it("should give proper feedback when it can't parse a whole game") {
+      val parsedCoordinate =
+        Notation.parseMatchString("""
+                                    |1. e2-e4 e7-e6
+                                    |2. d2-d4 d7-d5
+                                    |3. b1-c3 INVALID_MOVE!!
+                                    |4. f1-b5+ c8-d7
+                                    |5. b5xd7+ d8xd7
+                                    |6. g1-e2 d5xe4
+                                    |7. 0-0""".stripMargin)
+
+      parsedCoordinate match {
+        case Left(states: List[(String, Option[(ChessAction, ChessBoard)])]) ⇒
+          states take 5 foreach {
+            case (ra: String, Some((a: ChessAction, b: ChessBoard))) =>
+            case _ => fail
+          }
+          states drop 5 shouldBe
+            List(
+              ("INVALID_MOVE", None),
+              ("f1-b5+", None),
+              ("c8-d7", None),
+              ("b5xd7+", None),
+              ("d8xd7", None),
+              ("g1-e2", None),
+              ("d5xe4", None),
+              ("0-0", None)
+            )
+        case _ ⇒ fail
+      }
     }
   }
 }

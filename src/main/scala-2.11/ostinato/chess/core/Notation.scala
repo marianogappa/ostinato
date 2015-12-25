@@ -136,15 +136,15 @@ object Notation {
     }
   }
 
-  def prepareMatchString(s: String) =
+  private def prepareMatchString(s: String) =
     s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ").replaceAll(" +", " ").replaceAll("""[\?!]*""", "").trim.split(' ')
 
   @tailrec
-  def doParseMatch(actions: List[String], currentBoard: ChessBoard, boards: List[(ChessAction, ChessBoard)])(
-    implicit rules: ChessRules = ChessRules.default): Either[List[(ChessAction, ChessBoard)], List[(ChessAction, ChessBoard)]] =
+  private def doParseMatch(actions: List[String], currentBoard: ChessBoard, states: List[(String, Option[(ChessAction, ChessBoard)])])(
+    implicit rules: ChessRules = ChessRules.default): Either[List[(String, Option[(ChessAction, ChessBoard)])], List[(ChessAction, ChessBoard)]] =
     actions match {
       case Nil ⇒
-        Right(boards)
+        Right(states collect { case (_, Some(s)) => s })
       case a :: as ⇒
         val allPossibleActions = currentBoard.actions.flatMap(a ⇒ a.allPossibleNotations.map((_, a))).toMap
         allPossibleActions.get(a) match {
@@ -152,15 +152,15 @@ object Notation {
             currentBoard.doAction(chessAction) match {
               case Some(newBoard: ChessBoard) ⇒
 //                println(s"Successfully processed $a with $chessAction", newBoard)
-                doParseMatch(as, newBoard, boards :+ (chessAction, newBoard))
+                doParseMatch(as, newBoard, states :+ (a, Some((chessAction, newBoard))))
               case None ⇒
-                Left(boards)
+                Left(states ++ (a :: as).map((_, None)))
             }
           case None ⇒
-            Left(boards)
+            Left(states ++ (a :: as).map((_, None)))
         }
     }
 
   def parseMatchString(s: String, board: ChessBoard = ChessGame.defaultGame.board)(implicit rules: ChessRules = ChessRules.default) =
-    doParseMatch(prepareMatchString(s).toList, board, List.empty[(ChessAction, ChessBoard)])
+    doParseMatch(prepareMatchString(s).toList, board, List.empty[(String, Option[(ChessAction, ChessBoard)])])
 }
