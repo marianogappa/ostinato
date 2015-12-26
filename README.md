@@ -213,6 +213,8 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Draw in can't-checkmate scenarios
+- WhiteWin/BlackWin actions
 - Complete support for all known notations
 - Pawn should be able to capture and promote in one action!
 - Research repositories
