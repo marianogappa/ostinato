@@ -3,6 +3,8 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [![Build Status](https://travis-ci.org/MarianoGappa/ostinato.png)](https://travis-ci.org/MarianoGappa/ostinato)
 
+[Chess Game Parser using ChessBoardJS](http://marianogappa.github.io/ostinato-examples/parser)
+
 [Basic UI demo using ChessBoardJS](http://marianogappa.github.io/ostinato-example/)
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
@@ -10,8 +12,8 @@ A modular, fully tested, very comprehensive helper library for board games, with
 ## Features
 
 - ~~Feature parity with the more mature chess.js~~ Not yet! No draw based on 3-fold repetition.
-- Supporting the following Chess notations (with variants): PGN, Algebraic, Coordinate, Descriptive, Iccf, Smith, FEN.
-- Support for importing/exporting a game state encoded in FEN notation
+- Supporting the following Chess notations (with variants): PGN, Algebraic, Coordinate, Descriptive, ICCF, Smith, FEN.
+- Support for importing/exporting a game state encoded in FEN notation.
 
 ## Technical features
 - Compiled for JVM and JS => can serve as backend or in the frontend
