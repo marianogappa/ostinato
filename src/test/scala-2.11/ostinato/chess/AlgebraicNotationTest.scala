@@ -127,7 +127,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
   }
 
   describe("Algebraic notations from Actions") {
-    it("should encode EnPassantActions into An strings") {
+    it("should encode EnPassantActions into all possible notations") {
       EnPassantAction(♟(XY(1, 6), WhiteChessPlayer, -1), XY(0, -2)).allPossibleNotations shouldBe
         Set("B2-b4", "b2-b4", "♙bb4", "b4", "P-N4", "P-QN4", "PN4", "♙b2b4", "B2-B4", "b2-B4", "2224",
           "bb4", "PQN4", "♙b4", "b2b4")
@@ -135,7 +135,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
         Set("B2-b4", "b2-b4", "♙bb4", "b4", "P-N4", "P-QN4", "PN4", "♙b2b4", "B2-B4", "b2-B4", "2224",
           "bb4", "PQN4", "♙b4", "b2b4")
     }
-    it("should encode CaptureActions into An strings") {
+    it("should encode CaptureActions into all possible notations") {
       CaptureAction(♞(XY(4, 2), WhiteChessPlayer), XY(1, -2), ♜(XY(5, 0), BlackChessPlayer)).allPossibleNotations shouldBe
         Set("N:f8", "♘xf", "♘e6f", "Nef8", "e6f8kr", "QNxQR", "♘ef", "♘e:f", "N:f", "Nf", "e6xF8", "E6:f8", "Nxf",
           "E6xf8", "♘exf8", "KNxQR", "e6f8qr", "♘e6:f", "e6-F8", "Ne6:f", "Nexf8", "Ne:f", "Ne:f8", "♘e:f8", "E6-F8",
@@ -143,7 +143,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           "Nxf8", "e6:F8", "♘f", "♘f8", "E6:F8", "KNxR", "5668", "Nf8", "e6-f8", "E6-f8", "Nef", "♘ef8", "e6:f8",
           "Ne6f8", "Ne6:f8", "NxR", "♘:f8", "♘e6xf", "Ne6f", "KNxKR", "♘e6f8", "Ne6xf8", "Ne6xf")
     }
-    it("should encode PromoteActions into An strings") {
+    it("should encode PromoteActions into all possible notations") {
       PromoteAction(♟(XY(5, 1), WhiteChessPlayer, -1), XY(0, -1), ♜(XY(5, 0), WhiteChessPlayer)).allPossibleNotations shouldBe
         Set("F7-F8/R", "f7-F8/♖", "ff8(R)", "f7f8(♖)", "F7-F8/♖", "ff8=♖", "F7-F8(♖)", "F7-F8R", "F7-f8R", "f8♖",
           "F7-f8(R)", "ff8♖", "F7-F8=♖", "ff8(♖)", "f7-F8♖", "F7-f8/R", "ff8/R", "f7-F8/R", "f7-f8/♖", "f7-f8(♖)",
@@ -152,22 +152,53 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           "f7-f8R", "F7-f8=R", "f7f8R", "f8(♖)", "f7f8/♖", "f7-F8=♖", "f7-f8(R)", "f7-f8=♖", "f8/R", "f7-F8(R)",
           "F7-F8(R)", "F7-f8♖", "f7f8=R", "f8(R)", "f7-F8(♖)")
     }
-    it("should encode MoveActions into An strings") {
+    it("should encode MoveActions into all possible notations") {
       MoveAction(♝(XY(2, 2), BlackChessPlayer), XY(4, 4)).allPossibleNotations shouldBe
         Set("Bc6g2", "c6g2", "Bg2", "B-N7", "KBKN7", "C6-g2", "QBKN7", "c6-g2", "B-KN7", "BKN7", "3672", "♝g2", "Bcg2",
           "♝cg2", "C6-G2", "KB-KN7", "KBN7", "♝c6g2", "QB-KN7", "c6-G2", "BN7", "QB-N7", "KB-N7", "QBN7")
     }
-    it("should encode DrawActions into An strings") {
+    it("should encode DrawActions into all possible notations") {
       DrawAction(BlackChessPlayer).allPossibleNotations shouldBe
         Set("½–½", "draws", "1/2-1/2")
     }
-    it("should encode CastlingActions into An strings") {
+    it("should encode CastlingActions into all possible notations") {
       CastlingAction(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0)).allPossibleNotations shouldBe
         Set("0-0-0", "e8c8C", "O-O", "castles", "Castles", "5838")
     }
-    it("should encode EnPassantCaptureActions into An strings") {
+    it("should encode EnPassantCaptureActions into all possible notations") {
       EnPassantCaptureAction(♟(XY(1, 3), WhiteChessPlayer, -1), XY(1, -1), ♟(XY(2, 3), BlackChessPlayer, 1)).allPossibleNotations shouldBe
-        Set("2536", "b5c6p", "bc6e.p.", "bc6")
+        Set("B5xC6", "bc6", "b5xC6", "b5-c6", "bc6e.p.", "B5:c6", "b5c6p", "B5-c6", "B5xc6", "b5xc6", "b5-C6", "b5:C6",
+          "2536", "PxP", "B5-C6", "b5:c6", "B5:C6")
+    }
+    it("should encode CapturePromoteActions into all possible notations") {
+      CapturePromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(1, -1), ♞(XY(3, 0), BlackChessPlayer), ♛(XY(3, 0), WhiteChessPlayer)).allPossibleNotations shouldBe
+        Set("c:d8♕", "c7:d8=Q", "ccxd=Q", "C7:D8/Q", "C7:d8=♕", "cc7d8=♕", "c7-D8Q", "c7:d8=♕", "ccxdQ", "cd8=♕",
+          "cd/♕", "cxd(♕)", "cc7xd8♕", "cc7d♕", "cc7:d(Q)", "cc7xd/♕", "PxKN=♕", "PxN/♕", "cc:d8/♕", "c7-d8=Q",
+          "C7-D8/♕", "cc7xd/Q", "ccd8=♕", "C7-d8=♕", "cd=Q", "c7:d8/♕", "c7-D8=Q", "cc7xd8=Q", "C7-D8/Q", "ccxd(♕)",
+          "cc:d8Q", "c7:D8=♕", "C7xD8=♕", "C7-D8Q", "c:d=♕", "C7:D8/♕", "PxKN=Q", "cc:d=♕", "c7-D8(♕)", "cxd8♕",
+          "ccxd/Q", "c7xd8/Q", "c7:d8/Q", "cc7d=♕", "cc7d/Q", "cc7xd8(Q)", "cc7:dQ", "c7xd8=Q", "PxN(♕)", "c7-D8(Q)",
+          "C7xD8Q", "C7:D8=♕", "cd8/♕", "PxKN/♕", "ccxd8=♕", "C7-d8/Q", "cc7dQ", "cc:d(Q)", "PxQN=♕", "C7xd8(Q)",
+          "cxd(Q)", "C7xd8♕", "ccxd8/♕", "cc7d=Q", "C7-D8(Q)", "cc7:d8=♕", "ccxd8(♕)", "c:d8(♕)", "c7-d8/♕", "ccd8=Q",
+          "C7:d8=Q", "cc7d8♕", "C7xD8/♕", "cd8Q", "cd(Q)", "cxd8(♕)", "c7xD8/♕", "ccd/Q", "c7:D8/♕", "cd8/Q",
+          "c7:D8(Q)", "cxd/♕", "C7xD8(♕)", "C7-D8=♕", "PxN♕", "cc7:d8♕", "cc:d8/Q", "ccxd8=Q", "cd8=Q", "cxdQ",
+          "C7xd8/♕", "c7xD8/Q", "ccxd8/Q", "PxQN=Q", "cc7d8=Q", "C7:D8♕", "PxQN/Q", "PxNQ", "c7-D8/Q", "cd/Q", "ccxd♕",
+          "cc7d8/♕", "PxN(Q)", "cc7:d(♕)", "PxQN♕", "c:d8=♕", "PxN/Q", "c7xD8(Q)", "c7-d8(♕)", "ccdQ", "cc7:d/♕",
+          "C7:d8/♕", "ccd8/Q", "PxN=Q", "ccxd8Q", "cc:d8♕", "c7-d8♕", "c7xd8♕", "C7-d8/♕", "c7-d8=♕", "PxQN(♕)",
+          "c7-D8/♕", "cc:d8(♕)", "PxKNQ", "C7:d8(Q)", "ccd8(Q)", "cc:d8(Q)", "PxKN(♕)", "cc7xd(Q)", "c7:D8♕", "ccd8(♕)",
+          "cd8♕", "c:d8(Q)", "c7xd8/♕", "c7d8nQ", "C7-d8♕", "cc:d♕", "c7:D8(♕)", "cc7xd8(♕)", "c7xd8(Q)", "c:d8/♕",
+          "C7xD8♕", "c7-d8(Q)", "c7-d8Q", "C7:d8(♕)", "cc7:d8=Q", "C7-D8(♕)", "c7:D8=Q", "c7d8knQ", "cd♕", "ccd8/♕",
+          "cc7xd8/♕", "cc7:d♕", "c7:D8Q", "c7:d8(♕)", "cxd♕", "C7xd8/Q", "c7xD8=Q", "cc7:d8Q", "C7-d8=Q", "c:d/♕",
+          "C7:D8Q", "c:d(Q)", "c7-D8=♕", "c:dQ", "ccd(Q)", "ccxd8♕", "c7xD8=♕", "ccxd/♕", "cc:d8=Q", "cc7xd=♕", "cxd=♕",
+          "ccd8♕", "C7xd8=Q", "cc7d/♕", "c7:d8♕", "C7xd8=♕", "cc:d8=♕", "C7-d8(♕)", "ccd8Q", "cc7:d=Q", "C7xd8Q",
+          "c7xD8Q", "C7-D8♕", "cc7xd(♕)", "ccd♕", "cc7xd8Q", "c7xd8(♕)", "ccxd=♕", "cxd=Q", "cc7:d8(♕)", "PxKN/Q",
+          "cc:d/♕", "cxd8=♕", "c:d(♕)", "C7-d8Q", "cc:d(♕)", "c:d8/Q", "cxd8Q", "C7-D8=Q", "C7xD8/Q", "cc7xd8/Q",
+          "PxQN(Q)", "c:d=Q", "cxd8(Q)", "cc7d8/Q", "C7xD8=Q", "PxQNQ", "cc7d8(Q)", "c:d♕", "cc7xdQ", "ccd=♕",
+          "cc7:d8(Q)", "c:d8=Q", "cc:d/Q", "c7xd8Q", "C7:D8=Q", "cc7d(♕)", "cd(♕)", "cd8(♕)", "c7xD8(♕)", "C7:D8(Q)",
+          "C7:d8♕", "c7-D8♕", "cxd8/Q", "PxQN/♕", "cc7xd8=♕", "cc7:d=♕", "c7:D8/Q", "c:d/Q", "PxN=♕", "cxd/Q",
+          "cc7xd=Q", "C7:D8(♕)", "cd=♕", "3748", "c7xD8♕", "c7xd8=♕", "C7:d8/Q", "cc7:d8/Q", "cc7xd♕", "c7-d8/Q",
+          "c7:d8(Q)", "C7-d8(Q)", "cc7:d8/♕", "C7xD8(Q)", "ccd/♕", "c7:d8Q", "cxd8=Q", "cxd8/♕", "cc:d=Q", "cc7d(Q)",
+          "ccd(♕)", "cc:dQ", "c:d8Q", "cc7d8(♕)", "c7d8qnQ", "C7xd8(♕)", "ccxd(Q)", "ccxd8(Q)", "ccd=Q", "cc7:d/Q",
+          "PxKN(Q)", "PxKN♕", "cdQ", "cd8(Q)", "cc7d8Q", "C7:d8Q")
     }
   }
 

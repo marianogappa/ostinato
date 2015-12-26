@@ -1,6 +1,6 @@
 package ostinato.chess.core
 
-import ostinato.core.{BoardSize, Action, XY}
+import ostinato.core.{ BoardSize, Action, XY }
 
 abstract class ChessAction(
     val fromPiece: ChessPiece,
@@ -40,6 +40,27 @@ case class CaptureAction(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =
     fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+}
+
+case class CapturePromoteActionFactory(fromPiece: ChessPiece, delta: XY, capturedPiece: ChessPiece, promotePiece: ChessPiece) extends ChessActionFactory {
+  def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
+    CapturePromoteAction(fromPiece, delta, capturedPiece, promotePiece, isCheck, isCheckmate)
+}
+
+case class CapturePromoteAction(
+    override val fromPiece: ChessPiece,
+    override val delta: XY,
+    capturedPiece: ChessPiece,
+    promotePiece: ChessPiece,
+    override val isCheck: Boolean = false,
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
+
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${capturedPiece.owner.name}'s ${capturedPiece.pieceName} and promotes to ${promotePiece.pieceName}"
+  def withCheck = this.copy(isCheck = true)
+  def withCheckmate = this.copy(isCheckmate = true)
+  def toAn(implicit rules: ChessRules = ChessRules.default) =
+    fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  override def gridUpdates = super.gridUpdates ++ List(promotePiece.pos.toI -> Some(promotePiece))
 }
 
 case class MoveActionFactory(fromPiece: ChessPiece, delta: XY) extends ChessActionFactory {
@@ -119,8 +140,8 @@ object CastlingAction {
   private def y(player: ChessPlayer)(
     implicit rules: ChessRules = ChessRules.default, boardSize: BoardSize) =
     (player, rules.whitePawnDirection) match {
-      case (WhiteChessPlayer, 1) | (BlackChessPlayer, -1) => 0
-      case (WhiteChessPlayer, -1) | (BlackChessPlayer, 1) => boardSize.y - 1
+      case (WhiteChessPlayer, 1) | (BlackChessPlayer, -1) ⇒ 0
+      case (WhiteChessPlayer, -1) | (BlackChessPlayer, 1) ⇒ boardSize.y - 1
     }
 
   private val kingX = 4
@@ -136,21 +157,20 @@ object CastlingAction {
     CastlingAction(♚(XY(kingX, y(WhiteChessPlayer)), WhiteChessPlayer), kingDelta(side), ♜(XY(rookX(side),
       y(WhiteChessPlayer)), WhiteChessPlayer), rookDelta(side), isCheck, isCheckmate)
 
-
   def whiteKingside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
     implicit rules: ChessRules = ChessRules.default) =
     constructWith(WhiteChessPlayer, CastlingSide.Kingside, isCheck, isCheckmate)
 
   def whiteQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-  implicit rules: ChessRules = ChessRules.default) =
+    implicit rules: ChessRules = ChessRules.default) =
     constructWith(WhiteChessPlayer, CastlingSide.Queenside, isCheck, isCheckmate)
 
   def blackKingside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-  implicit rules: ChessRules = ChessRules.default) =
+    implicit rules: ChessRules = ChessRules.default) =
     constructWith(BlackChessPlayer, CastlingSide.Kingside, isCheck, isCheckmate)
 
   def blackQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-  implicit rules: ChessRules = ChessRules.default) =
+    implicit rules: ChessRules = ChessRules.default) =
     constructWith(BlackChessPlayer, CastlingSide.Queenside, isCheck, isCheckmate)
 }
 

@@ -10,34 +10,35 @@ case class ChessBoard(
     fullMoveNumber: Int = 1,
     halfMoveClock: Int = 0) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](grid) {
 
-  def doAction(m: ChessAction)(implicit rules: ChessRules = ChessRules.default) = {
-    def calculateEnPassants = m match {
+  def doAction(a: ChessAction)(implicit rules: ChessRules = ChessRules.default) = {
+    def calculateEnPassants = a match {
       case EnPassantAction(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
       case _ ⇒
         None
     }
 
-    def calculateCastlingAvailable = m match {
+    def calculateCastlingAvailable = a match {
       case CastlingAction(_, _, _, _, _, _) ⇒
         castlingAvailable.updated((turn, CastlingSide.Queenside), false).updated((turn, CastlingSide.Kingside), false)
       case _ ⇒
         castlingAvailable
     }
 
-    def calculateHalfMoveClock = m match {
-      case MoveAction(p: ♟, _, _, _)          ⇒ 0
-      case EnPassantAction(_, _, _, _)        ⇒ 0
-      case EnPassantCaptureAction(_, _, _, _, _) ⇒ 0
-      case CaptureAction(_, _, _, _, _)          ⇒ 0
-      case PromoteAction(_, _, _, _, _)       ⇒ 0
-      case _                                    ⇒ halfMoveClock + 1
+    def calculateHalfMoveClock = a match {
+      case MoveAction(p: ♟, _, _, _)              ⇒ 0
+      case EnPassantAction(_, _, _, _)            ⇒ 0
+      case EnPassantCaptureAction(_, _, _, _, _)  ⇒ 0
+      case CaptureAction(_, _, _, _, _)           ⇒ 0
+      case PromoteAction(_, _, _, _, _)           ⇒ 0
+      case CapturePromoteAction(_, _, _, _, _, _) ⇒ 0
+      case _                                      ⇒ halfMoveClock + 1
     }
 
-    get(m.fromPiece.pos) match {
-      case Some(Some(m.fromPiece)) if m.fromPiece.owner == turn ⇒
+    get(a.fromPiece.pos) match {
+      case Some(Some(a.fromPiece)) if a.fromPiece.owner == turn ⇒
         Some(ChessBoard(
-          m.gridUpdates.foldLeft(grid)(applyUpdate),
+          a.gridUpdates.foldLeft(grid)(applyUpdate),
           turn.enemy,
           calculateEnPassants,
           calculateCastlingAvailable,
@@ -70,6 +71,11 @@ case class ChessBoard(
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree ⇒
         Set(EnPassantActionFactory(p, delta))
+
+      case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner && to.y == ♟.promotingPosition(delta.y) ⇒
+        Set(
+          ♜(from + delta, p.owner), ♝(from + delta, p.owner),
+          ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (CapturePromoteActionFactory(p, delta, toP, _))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
         Set(

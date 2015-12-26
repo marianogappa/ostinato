@@ -48,10 +48,26 @@ object Notation {
     def iccfPromote(a: PromoteAction) =
       a.fromPiece.pos.toIccf.toString * (a.fromPiece.pos + a.delta).toIccf.toString * a.toPiece.toIccf.toString
 
+    // TODO Missing : at the end as an option
     def canCapture(a: CaptureAction) =
       Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
         Set("x", ":", "-") *
         Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
+        checkAndCheckMate(a.isCheck, a.isCheckmate)
+
+    // TODO Missing : at the end as an option
+    def canEnPassantCapture(a: EnPassantCaptureAction) =
+      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
+        Set("x", ":", "-") *
+        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
+        checkAndCheckMate(a.isCheck, a.isCheckmate)
+
+    // TODO Missing : at the end as an option
+    def canCapturePromote(a: CapturePromoteAction) =
+      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
+        Set("x", ":", "-") *
+        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
+        genericPromotion(a.promotePiece) *
         checkAndCheckMate(a.isCheck, a.isCheckmate)
 
     def canAction(a: ChessAction) =
@@ -73,6 +89,9 @@ object Notation {
     def smithCapture(a: CaptureAction) =
       a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.toPiece.toDn.map(_.toLowerCase)
 
+    def smithCapturePromote(a: CapturePromoteAction) =
+      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.capturedPiece.toDn.map(_.toLowerCase) * a.promotePiece.toAn
+
     def smithEnPassantCapture(a: EnPassantCaptureAction) =
       a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.toPawn.toDn.map(_.toLowerCase)
 
@@ -86,8 +105,16 @@ object Notation {
       (a.fromPiece.toDn * Set("-", "") * (a.fromPiece.pos + a.delta).toDn(a.turn)) * checkAndCheckMate(a.isCheck, a.isCheckmate)
 
     // TODO Descriptive actions with disambiguations
-    def descriptiveCapture(a: CaptureAction) = // TODO with pos
+    def descriptiveCapture(a: CaptureAction) =
       a.fromPiece.toDn * "x" * a.toPiece.toDn * checkAndCheckMate(a.isCheck, a.isCheckmate)
+
+    // TODO Descriptive actions with disambiguations
+    def descriptiveEnPassantCapture(a: EnPassantCaptureAction) =
+      a.fromPiece.toDn * "x" * a.toPawn.toDn * checkAndCheckMate(a.isCheck, a.isCheckmate)
+
+    // TODO Descriptive actions with disambiguations
+    def descriptiveCapturePromote(a: CapturePromoteAction) =
+      a.fromPiece.toDn * "x" * a.capturedPiece.toDn * genericPromotion(a.promotePiece) * checkAndCheckMate(a.isCheck, a.isCheckmate)
 
     def descriptiveCastling(a: CastlingAction) =
       (genericCastling(a) ++ Set("Castles", "castles")) * checkAndCheckMate(a.isCheck, a.isCheckmate)
@@ -112,6 +139,14 @@ object Notation {
         Set((a.fromPiece.pos + a.delta).toAn.toString, (a.fromPiece.pos + a.delta).toAn.x.toString) *
         checkAndCheckMate(a.isCheck, a.isCheckmate)
 
+    def anCapturePromote(a: CapturePromoteAction) =
+      (if (a.fromPiece.isPawn) Set(a.fromPiece.pos.toAn.x.toString) else Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString)) *
+        Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
+        Set("x", ":", "") *
+        Set((a.fromPiece.pos + a.delta).toAn.toString, (a.fromPiece.pos + a.delta).toAn.x.toString) *
+        genericPromotion(a.promotePiece) *
+        checkAndCheckMate(a.isCheck, a.isCheckmate)
+
     def anEnPassantCapture(a: EnPassantCaptureAction) =
       a.fromPawn.pos.toAn.x.toString *
         (a.fromPawn.pos + a.delta).toAn.toString *
@@ -124,7 +159,7 @@ object Notation {
       case a: MoveAction ⇒
         iccfAction(a) ++ canAction(a) ++ smithMove(a) ++ descriptiveMove(a) ++ anMove(a)
       case a: EnPassantCaptureAction ⇒
-        iccfAction(a) /*++ canCapture(a)*/ ++ smithEnPassantCapture(a) /*++ descriptiveCapture(a)*/ ++ anEnPassantCapture(a)
+        iccfAction(a) ++ canEnPassantCapture(a) ++ smithEnPassantCapture(a) ++ descriptiveEnPassantCapture(a) ++ anEnPassantCapture(a)
       case a: EnPassantAction ⇒
         iccfAction(a) ++ canAction(a) ++ smithMove(a) ++ descriptiveMove(a) ++ anMove(a)
       case a: PromoteAction ⇒
@@ -133,6 +168,8 @@ object Notation {
         iccfAction(a) ++ genericCastling(a) ++ smithCastling(a) ++ descriptiveCastling(a)
       case a: DrawAction ⇒
         genericDraw(a)
+      case a: CapturePromoteAction ⇒
+        iccfAction(a) ++ canCapturePromote(a) ++ smithCapturePromote(a) ++ descriptiveCapturePromote(a) ++ anCapturePromote(a)
     }
   }
 
