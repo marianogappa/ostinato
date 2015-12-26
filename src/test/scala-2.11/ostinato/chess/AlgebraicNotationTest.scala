@@ -159,7 +159,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
     }
     it("should encode DrawActions into An strings") {
       DrawAction(BlackChessPlayer).allPossibleNotations shouldBe
-        Set("½–½", "draws")
+        Set("½–½", "draws", "1/2-1/2")
     }
     it("should encode CastlingActions into An strings") {
       CastlingAction(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0)).allPossibleNotations shouldBe
@@ -269,8 +269,8 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       parsedCoordinate match {
         case Left(states: List[(String, Option[(ChessAction, ChessBoard)])]) ⇒
           states take 5 foreach {
-            case (ra: String, Some((a: ChessAction, b: ChessBoard))) =>
-            case _ => fail
+            case (ra: String, Some((a: ChessAction, b: ChessBoard))) ⇒
+            case _ ⇒ fail
           }
           states drop 5 shouldBe
             List(

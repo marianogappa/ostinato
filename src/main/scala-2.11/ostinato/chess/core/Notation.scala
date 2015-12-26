@@ -40,7 +40,7 @@ object Notation {
       else
         Set("0-0-0", "O-O")
 
-    def genericDraw(a: DrawAction) = Set("½–½", "draws")
+    def genericDraw(a: DrawAction) = Set("½–½", "draws", "1/2-1/2")
 
     def iccfAction(a: ChessAction) =
       a.fromPiece.pos.toIccf.toString * (a.fromPiece.pos + a.delta).toIccf.toString
