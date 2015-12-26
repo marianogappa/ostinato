@@ -3,9 +3,9 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [![Build Status](https://travis-ci.org/MarianoGappa/ostinato.png)](https://travis-ci.org/MarianoGappa/ostinato)
 
-[Chess Game Parser using ChessBoardJS](http://marianogappa.github.io/ostinato-examples/parser)
+[Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser)
 
-[Basic UI demo using ChessBoardJS](http://marianogappa.github.io/ostinato-example/autoplay)
+[Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
 
