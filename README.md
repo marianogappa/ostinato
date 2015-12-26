@@ -5,7 +5,7 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [Chess Game Parser using ChessBoardJS](http://marianogappa.github.io/ostinato-examples/parser)
 
-[Basic UI demo using ChessBoardJS](http://marianogappa.github.io/ostinato-example/)
+[Basic UI demo using ChessBoardJS](http://marianogappa.github.io/ostinato-example/autoplay)
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
 
