@@ -239,7 +239,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = WhiteChessPlayer)
 
-      game.board.actions.size shouldBe 8
+      game.board.actions.size shouldBe 10
     }
   }
 }

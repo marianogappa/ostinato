@@ -42,6 +42,8 @@ object Notation {
 
     def genericDraw(a: DrawAction) = Set("½–½", "draws", "1/2-1/2")
 
+    def genericWin(a: WinAction) = if (a.winner == WhiteChessPlayer) Set("1-0") else Set("0-1")
+
     def iccfAction(a: ChessAction) =
       a.fromPiece.pos.toIccf.toString * (a.fromPiece.pos + a.delta).toIccf.toString
 
@@ -170,6 +172,8 @@ object Notation {
         genericDraw(a)
       case a: CapturePromoteAction ⇒
         iccfAction(a) ++ canCapturePromote(a) ++ smithCapturePromote(a) ++ descriptiveCapturePromote(a) ++ anCapturePromote(a)
+      case a: WinAction ⇒
+        genericWin(a)
     }
   }
 

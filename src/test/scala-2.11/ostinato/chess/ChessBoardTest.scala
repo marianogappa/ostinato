@@ -34,18 +34,18 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
       board.turn shouldBe WhiteChessPlayer
       board.fullMoveNumber shouldBe 1
 
-      val board2 = board.doAction(board.actions.head).get
+      val board2 = board.doAction(board.nonWinDrawActions.head).get
       board2.turn shouldBe BlackChessPlayer
       board2.fullMoveNumber shouldBe 1
 
-      val board3 = board2.doAction(board2.actions.head).get
+      val board3 = board2.doAction(board2.nonWinDrawActions.head).get
       board3.turn shouldBe WhiteChessPlayer
       board3.fullMoveNumber shouldBe 2
     }
 
     it("should change turn after an action when on white's turn") {
       val board = ChessGame.defaultGame.board
-      board.doAction(board.actions.head).get.turn shouldBe BlackChessPlayer
+      board.doAction(board.nonWinDrawActions.head).get.turn shouldBe BlackChessPlayer
     }
 
     it("should change turn after a action when on blacks's turn") {
@@ -58,12 +58,12 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
                                         |♙♙♙♙♙♙♙♙
                                         |♖♘♗♕♔♗♘♖""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.doAction(game.board.actions.head).get.turn shouldBe WhiteChessPlayer
+      game.board.doAction(game.board.nonWinDrawActions.head).get.turn shouldBe WhiteChessPlayer
     }
 
     it("should play a lot and not stack overflow") {
       def doActionsUntilLockedOrNActions(board: ChessBoard = ChessGame.defaultGame.board, n: Int = 200): Unit = {
-        val actions = board.actions
+        val actions = board.nonWinDrawActions
         if (n > 0 && actions.nonEmpty)
           doActionsUntilLockedOrNActions(board.doAction(actions.head).get, n - 1)
         else

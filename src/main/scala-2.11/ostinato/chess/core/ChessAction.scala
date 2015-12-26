@@ -214,3 +214,9 @@ case class DrawAction(
   def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.draw
   override def gridUpdates = List()
 }
+
+case class WinAction(winner: ChessPlayer) extends ChessAction(♚(XY(0, 0), winner.enemy), XY(0, 0)) {
+  override def toString = s"${winner.name}'s wins"
+  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.checkmate(winner)
+  override def gridUpdates = List()
+}

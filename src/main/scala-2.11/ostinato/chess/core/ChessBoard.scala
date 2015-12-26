@@ -126,7 +126,9 @@ case class ChessBoard(
   }
 
   def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)
-  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = player.actions(this).isEmpty && !isLossFor(player)
+  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) =
+    player.nonWinDrawActions(this).isEmpty && !isLossFor(player)
+
   def isLoss(implicit rules: ChessRules = ChessRules.default) = isLossFor(turn)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default): Boolean = {
     val noCheckForMates = rules.copy(checkForThreatens = false)
@@ -148,6 +150,13 @@ case class ChessBoard(
     case Some(c) ⇒ c.toFen
     case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
+
+  def nonWinDrawActions(implicit rules: ChessRules = ChessRules.default) =
+    actions.filter {
+      case WinAction(_)        ⇒ false
+      case DrawAction(_, _, _) ⇒ false
+      case _                   ⇒ true
+    }
 
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
   def rooks = pieces filter (_.isRook)
