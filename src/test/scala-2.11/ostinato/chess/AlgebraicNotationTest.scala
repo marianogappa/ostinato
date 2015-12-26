@@ -161,6 +161,10 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       DrawAction(BlackChessPlayer).allPossibleNotations shouldBe
         Set("½–½", "draws", "1/2-1/2")
     }
+    it("should encode WinActions into all possible notations") {
+      WinAction(BlackChessPlayer).allPossibleNotations shouldBe Set("0-1")
+      WinAction(WhiteChessPlayer).allPossibleNotations shouldBe Set("1-0")
+    }
     it("should encode CastlingActions into all possible notations") {
       CastlingAction(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0)).allPossibleNotations shouldBe
         Set("0-0-0", "e8c8C", "O-O", "castles", "Castles", "5838")
