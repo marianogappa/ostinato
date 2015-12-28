@@ -89,7 +89,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.action(XY(6, 5), XY(1, 0)) shouldBe
+      game.board.movementsOfDelta(XY(6, 5), XY(1, 0)) shouldBe
         Set(MoveAction(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
     }
 
@@ -104,7 +104,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.action(XY(5, 4), XY(2, 0)) shouldBe
+      game.board.movementsOfDelta(XY(5, 4), XY(2, 0)) shouldBe
         Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
     }
 
@@ -119,7 +119,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.action(XY(5, 4), XY(-5, 0)) shouldBe
+      game.board.movementsOfDelta(XY(5, 4), XY(-5, 0)) shouldBe
         Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
     }
   }

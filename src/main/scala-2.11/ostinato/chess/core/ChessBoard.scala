@@ -52,7 +52,7 @@ case class ChessBoard(
     }
   }
 
-  def action(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+  def movementsOfDelta(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
     val to = from + delta
     val fromPiece = get(from)
     val toPiece = get(to)
@@ -74,12 +74,12 @@ case class ChessBoard(
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree ⇒
         Set(EnPassantActionFactory(p, delta))
 
-      case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner && to.y == ♟.promotingPosition(delta.y) ⇒
+      case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner && to.y == p.promotingPosition(delta.y) ⇒
         Set(
           ♜(from + delta, p.owner), ♝(from + delta, p.owner),
           ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (CapturePromoteActionFactory(p, delta, toP, _))
 
-      case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == ♟.promotingPosition(delta.y) ⇒
+      case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == p.promotingPosition(delta.y) ⇒
         Set(
           ♜(from + delta, p.owner), ♝(from + delta, p.owner),
           ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (PromoteActionFactory(p, delta, _))
@@ -96,7 +96,7 @@ case class ChessBoard(
             castlingAvailable((k.owner, cs)) && betweenLocationsFree && !k.isThreatened(this) &&
             betweenLocationsNotThreatenedBy(k.enemy) ⇒
 
-            Set(CastlingActionFactory(k, delta, r, ♚.rookDeltaFor(delta)))
+            Set(CastlingActionFactory(k, delta, r, k.rookDeltaFor(delta)))
 
           case _ ⇒ Set()
         }

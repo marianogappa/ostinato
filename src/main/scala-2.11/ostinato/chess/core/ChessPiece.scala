@@ -11,6 +11,8 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
   val toIccf: Int
   val toDn: Set[String]
   val toFigurine: Char
+  val pieceName: String
+
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = defendedBy(board).nonEmpty
 
@@ -21,76 +23,48 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
     (owner.pieces(board) - this).filter(
       _.canMoveTo(pos, board.copy(turn = owner, grid = board.grid.updated(pos.toI, Some(withOwner(enemy)))))(
-      rules.copy(checkForThreatens = false))
+        rules.copy(checkForThreatens = false))
     )
 
   def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
-    !cantMove(to) && actions(board).exists {
+    !cantMove(to, board) && actions(board).exists {
       m ⇒ (pos + m.delta) == to
     }
 
-  def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default): Boolean
+  def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean
 
   def enemy: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
   def equals(that: ChessPiece) = pos == that.pos && owner == that.owner
   override def toString = s"${owner.name}'s $pieceName on (${pos.x}, ${pos.y})"
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction]
-  val pieceName: String
-}
 
-object ♜ {
-  val deltas = Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1)))
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♜'
-    case WhiteChessPlayer ⇒ '♖'
-  }
-}
-object ♝ {
-  val deltas = Piece.toXYs(Set((-1, -1), (1, 1), (-1, 1), (1, -1)))
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♝'
-    case WhiteChessPlayer ⇒ '♗'
-  }
-}
-object ♞ {
-  val deltas = Piece.toXYs(Set((-1, -2), (1, -2), (-1, 2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)))
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♞'
-    case WhiteChessPlayer ⇒ '♘'
-  }
-}
-object ♚ {
-  def deltas(addCastlingDeltas: Boolean) = normalDeltas ++ (if (addCastlingDeltas) Piece.toXYs(Set((-2, 0), (2, 0))) else Set())
-  def normalDeltas = ♜.deltas ++ ♝.deltas
-  def rookDeltaFor(kingDelta: XY) = XY(if (kingDelta.x < 0) 3 else -2, 0)
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♚'
-    case WhiteChessPlayer ⇒ '♔'
-  }
-}
-object ♛ {
-  val deltas = ♚.normalDeltas
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♛'
-    case WhiteChessPlayer ⇒ '♕'
-  }
-}
-object ♟ {
-  def deltas(dy: Int, isInInitialPosition: Boolean) =
-    Piece.toXYs(Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set()))
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default): Set[XY]
+  protected val hasRecursiveDeltas: Boolean
 
-  def figurine(owner: ChessPlayer) = owner match {
-    case BlackChessPlayer ⇒ '♟'
-    case WhiteChessPlayer ⇒ '♙'
+  private def concreteDeltas(board: ChessBoard, ds: Set[XY], accDeltas: Set[XY], inc: Int = 1)(
+    implicit rules: ChessRules = ChessRules.default): Set[XY] = {
+
+    ds.map(d ⇒ (d, board.get(pos + d * inc))).flatMap[XY, Set[XY]] {
+      case (d: XY, Some(None)) if hasRecursiveDeltas ⇒ concreteDeltas(board, Set(d), accDeltas + (d * inc), inc + 1)
+      case (d: XY, Some(None)) ⇒ accDeltas + (d * inc)
+      case (d: XY, Some(Some(piece: ChessPiece))) if piece.owner != owner ⇒ accDeltas + (d * inc)
+      case (_: XY, Some(Some(piece: ChessPiece))) ⇒ accDeltas
+      case (_: XY, None) ⇒ accDeltas
+    }
   }
-  def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.x - 1))(dy)
+
+  def deltas(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    concreteDeltas(board, deltaPatterns, Set())
+
+  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    deltas(board).flatMap { case delta ⇒ movementsOfDelta(pos, delta, board) }
+  }
 }
 
 case class ♜(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♜.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
-  }
+  protected val hasRecursiveDeltas = true
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1)))
 
   lazy val castlingSide =
     if (pos.x == 0)
@@ -100,7 +74,11 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
     else
       None
 
-  val toFigurine = ♜.figurine(owner)
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♜'
+    case WhiteChessPlayer ⇒ '♖'
+  }
+
   val pieceName = "Rook"
   val toAn = "R"
   val toDn = Set("R", "KR", "QR")
@@ -109,14 +87,20 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isRook = true
   def withOwner(newOwner: ChessPlayer) = ♜(pos, newOwner)
   def movedTo(newXY: XY) = ♜(newXY, owner)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = pos.x != to.x && pos.y != to.y
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    pos.x != to.x && pos.y != to.y
 }
 
 case class ♝(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♝.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
+  protected val hasRecursiveDeltas = true
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, -1), (1, 1), (-1, 1), (1, -1)))
+
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♝'
+    case WhiteChessPlayer ⇒ '♗'
   }
-  val toFigurine = ♝.figurine(owner)
+
   val pieceName = "Bishop"
   val toAn = "B"
   val toDn = Set("B", "KB", "QB")
@@ -125,14 +109,20 @@ case class ♝(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isBishop = true
   def withOwner(newOwner: ChessPlayer) = ♝(pos, newOwner)
   def movedTo(newXY: XY) = ♝(newXY, owner)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = (pos - to).abs.subtractXY != 0
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    (pos - to).abs.subtractXY != 0
 }
 
 case class ♞(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♞.deltas.flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
+  protected val hasRecursiveDeltas = false
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, -2), (1, -2), (-1, 2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)))
+
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♞'
+    case WhiteChessPlayer ⇒ '♘'
   }
-  val toFigurine = ♞.figurine(owner)
+
   val pieceName = "Knight"
   val toAn = "N"
   val toDn = Set("N", "KN", "QN")
@@ -141,14 +131,20 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isKnight = true
   def withOwner(newOwner: ChessPlayer) = ♞(pos, newOwner)
   def movedTo(newXY: XY) = ♞(newXY, owner)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = ♞.deltas.forall(pos + _ != to)
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    deltas(board).forall(pos + _ != to)
 }
 
 case class ♛(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♛.deltas.flatMap { case delta ⇒ allActionsOfDelta(pos, delta, board) }
+  protected val hasRecursiveDeltas = true
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1)))
+
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♛'
+    case WhiteChessPlayer ⇒ '♕'
   }
-  val toFigurine = ♛.figurine(owner)
+
   val pieceName = "Queen"
   val toAn = "Q"
   val toDn = Set("Q")
@@ -157,13 +153,15 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isQueen = true
   def withOwner(newOwner: ChessPlayer) = ♛(pos, newOwner)
   def movedTo(newXY: XY) = ♛(newXY, owner)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = (pos - to).abs.subtractXY != 0 && pos.x != to.x && pos.y != to.y
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    (pos - to).abs.subtractXY != 0 && pos.x != to.x && pos.y != to.y
 }
 
 case class ♚(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♚.deltas(isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
-  }
+  protected val hasRecursiveDeltas = false
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1))) ++
+      (if (isInInitialPosition) Piece.toXYs(Set((-2, 0), (2, 0))) else Set())
 
   def initialY(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
     if (owner == WhiteChessPlayer && rules.whitePawnDirection == 1 ||
@@ -173,9 +171,15 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
       chessBoardSize.y - 1
 
   def targetRookPosition(dx: Int)(implicit rules: ChessRules = ChessRules.default) = XY(if (dx < 0) 0 else chessBoardSize.x - 1, initialY)
+  def rookDeltaFor(kingDelta: XY) = XY(if (kingDelta.x < 0) 3 else -2, 0)
 
   def isInInitialPosition(implicit rules: ChessRules = ChessRules.default) = pos.x == 4 && pos.y == initialY
-  val toFigurine = ♚.figurine(owner)
+
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♚'
+    case WhiteChessPlayer ⇒ '♔'
+  }
+
   val pieceName = "King"
   val toAn = "K"
   val toDn = Set("K")
@@ -184,15 +188,23 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
   override val isKing = true
   def withOwner(newOwner: ChessPlayer) = ♚(pos, newOwner)
   def movedTo(newXY: XY) = ♚(newXY, owner)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = pos.chebyshevDistance(to) > 1
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    pos.chebyshevDistance(to) > 1
 }
 case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) {
-  def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♟.deltas(dy, isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
-  }
   val isInInitialPosition = dy == 1 && pos.y == 1 || dy == -1 && pos.y == chessBoardSize.y - 2
-  val isPromoting = pos.y == ♟.promotingPosition(dy)
-  val toFigurine = ♟.figurine(owner)
+  protected val hasRecursiveDeltas = false
+  protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
+    Piece.toXYs(Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set()))
+
+  def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.x - 1))(dy)
+  val isPromoting = pos.y == promotingPosition(dy)
+
+  val toFigurine = owner match {
+    case BlackChessPlayer ⇒ '♟'
+    case WhiteChessPlayer ⇒ '♙'
+  }
+
   val pieceName = "Pawn"
   val toAn = ""
   val toDn = Set("P")
@@ -201,7 +213,8 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   override val isPawn = true
   def withOwner(newOwner: ChessPlayer) = ♟(pos, newOwner, dy)
   def movedTo(newXY: XY) = ♟(newXY, owner, dy)
-  override def cantMove(to: XY)(implicit rules: ChessRules = ChessRules.default) = ♟.deltas(dy, isInInitialPosition).forall(pos + _ != to)
+  override def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+    deltas(board).forall(pos + _ != to)
 }
 
 object EnPassantPawn {

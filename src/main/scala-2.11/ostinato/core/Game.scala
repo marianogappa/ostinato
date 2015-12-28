@@ -15,6 +15,7 @@ abstract class Board[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], 
   def get(pos: XY)(implicit boardSize: BoardSize): Location = if (pos.exists) Some(grid(pos.toI)) else None
   def isPiece(l: Location): Boolean = l.flatten.nonEmpty
   def isEmptyCell(l: Location): Boolean = l.nonEmpty && l.flatten.isEmpty
+  def isInBounds(l: Location): Boolean = l.nonEmpty
   def pieces = grid.flatten
   def applyUpdate(grid: Vector[Option[PC]], update: (Int, Option[PC])) = grid.updated(update._1, update._2)
 
@@ -36,7 +37,7 @@ abstract class Board[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], 
     Set(from) ++ (if (from == to) Set() else betweenInclusive(from + delta, to, delta))
 
   def actions(implicit rules: R): Set[A]
-  def action(from: XY, delta: XY)(implicit rules: R): Set[A]
+  def movementsOfDelta(from: XY, delta: XY)(implicit rules: R): Set[A]
   def doAction(a: A)(implicit rules: R): Option[B]
 }
 
@@ -51,19 +52,19 @@ abstract class Piece[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], 
   def movedTo(pos: XY): PC // N.B. unsafe (doesn't check bounds)
 
   @tailrec
-  private final def doAllActionsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1, acc: Set[A] = Set())(
+  private final def concreteAllMovementsOfDelta(from: XY, delta: XY, board: B, inc: Int = 1, acc: Set[A] = Set())(
     implicit rules: R): Set[A] =
-    actionOfDelta(from, delta * inc, board) match {
+    movementsOfDelta(from, delta * inc, board) match {
       case ms if ms.isEmpty ⇒ acc
-      case ms               ⇒ doAllActionsOfDelta(from, delta, board, inc + 1, acc ++ ms)
+      case ms               ⇒ concreteAllMovementsOfDelta(from, delta, board, inc + 1, acc ++ ms)
     }
 
   // N.B. this proxy serves no purpose other than enabling the tailrec optimisation
-  protected def allActionsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R) =
-    doAllActionsOfDelta(from, delta, board)
+  protected def allMovementsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R) =
+    concreteAllMovementsOfDelta(from, delta, board)
 
-  protected def actionOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[A] =
-    board.action(from, delta)
+  protected def movementsOfDelta(from: XY, delta: XY, board: B)(implicit rules: R): Set[A] =
+    board.movementsOfDelta(from, delta)
 }
 
 abstract class Action[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules](
