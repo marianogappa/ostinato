@@ -67,7 +67,7 @@ case class ChessBoard(
       case _ ⇒ None
     }
 
-    val validateAction: Set[ChessActionFactory] = (fromPiece, toPiece, enPassantPawn) match {
+    lazy val validateAction: Set[ChessActionFactory] = (fromPiece, toPiece, enPassantPawn) match {
       case (Some(Some(p: ♟)), Some(None), Some(epp: EnPassantPawn)) if delta.x != 0 && isEnPassantPawn(to) && epp.pawn.owner != p.owner ⇒
         Set(EnPassantTakeActionFactory(p, delta, epp.pawn))
 
@@ -124,7 +124,10 @@ case class ChessBoard(
       }
     }
 
-    validateAction flatMap validateAfterAction
+    fromPiece match {
+      case Some(Some(p: ChessPiece)) if p.deltas(this).contains(delta) ⇒ validateAction flatMap validateAfterAction
+      case _ ⇒ Set()
+    }
   }
 
   def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)

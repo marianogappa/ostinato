@@ -1,8 +1,8 @@
 package ostinato.chess
 
-import org.scalatest.{FunSpec, ShouldMatchers}
+import org.scalatest.{ FunSpec, ShouldMatchers }
 import ostinato.chess.core._
-import ostinato.core.{Piece, XY}
+import ostinato.core.{ Piece, XY }
 
 class PieceDeltasTest extends FunSpec with ShouldMatchers {
   describe("Piece deltas on the board") {
