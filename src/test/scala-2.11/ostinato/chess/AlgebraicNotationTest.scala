@@ -75,6 +75,13 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       CastlingAction(♚(XY(4, 7), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 7), BlackChessPlayer), XY(3, 0)).toAn shouldBe "0-0-0"
     }
 
+    it("should encode castling properly when using sugar methods to create the actions") {
+      CastlingAction.blackKingside().toAn shouldBe "0-0"
+      CastlingAction.whiteKingside().toAn shouldBe "0-0"
+      CastlingAction.blackQueenside().toAn shouldBe "0-0-0"
+      CastlingAction.whiteQueenside().toAn shouldBe "0-0-0"
+    }
+
     it("should encode promoting to algebraic notation") {
       PromoteAction(♟(XY(4, 1), WhiteChessPlayer, -1), XY(0, -1), ♛(XY(4, 0), WhiteChessPlayer)).toAn shouldBe "e8Q"
       PromoteAction(♟(XY(6, 6), BlackChessPlayer, 1), XY(0, 1), ♜(XY(6, 7), BlackChessPlayer)).toAn shouldBe "g1R"
