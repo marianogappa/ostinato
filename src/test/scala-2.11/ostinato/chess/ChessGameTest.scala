@@ -29,7 +29,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 14
+      game.board.rooks.head.actions(game.board).size shouldBe 14
     }
 
     it("should find 0 possible actions for a Rook") {
@@ -71,7 +71,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 13
+      game.board.pieces.head.actions(game.board).size shouldBe 13
     }
 
     it("should find 0 possible actions for a Bishop") {
@@ -141,7 +141,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 8
+      game.board.pieces.head.actions(game.board).size shouldBe 8
     }
 
     it("should find 0 possible actions for a Knight") {
@@ -183,7 +183,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 27
+      game.board.pieces.head.actions(game.board).size shouldBe 27
     }
 
     it("should find 7 possible actions for a Queen") {

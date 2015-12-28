@@ -35,8 +35,10 @@ case class ChessBoard(
       case _                                      ⇒ halfMoveClock + 1
     }
 
-    get(a.fromPiece.pos) match {
-      case Some(Some(a.fromPiece)) if a.fromPiece.owner == turn ⇒
+    (a, get(a.fromPiece.pos)) match {
+      case (a: FinalAction, _) ⇒
+        Some(ChessBoard(grid, turn, None, castlingFullyUnavailable, fullMoveNumber, 0))
+      case (_, Some(Some(a.fromPiece))) if a.fromPiece.owner == turn ⇒
         Some(ChessBoard(
           a.gridUpdates.foldLeft(grid)(applyUpdate),
           turn.enemy,
@@ -151,13 +153,9 @@ case class ChessBoard(
     case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
 
-  def nonWinDrawActions(implicit rules: ChessRules = ChessRules.default) =
-    actions.filter {
-      case WinAction(_)        ⇒ false
-      case DrawAction(_, _, _) ⇒ false
-      case _                   ⇒ true
-    }
+  def insufficientMaterial = false // TODO implement this
 
+  def nonWinDrawActions(implicit rules: ChessRules = ChessRules.default) = turn.nonWinDrawActions(this)
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
   def rooks = pieces filter (_.isRook)
   def knights = pieces filter (_.isKnight)

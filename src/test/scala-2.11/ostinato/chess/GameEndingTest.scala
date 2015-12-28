@@ -2,7 +2,7 @@ package ostinato.chess
 
 import ostinato.chess.core._
 import ostinato.core.XY
-import org.scalatest.{ShouldMatchers, FunSpec}
+import org.scalatest.{ ShouldMatchers, FunSpec }
 
 class GameEndingTest extends FunSpec with ShouldMatchers {
   describe("Game ending") {
@@ -73,8 +73,8 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.......♔""".stripMargin, turn = BlackChessPlayer)
 
       game.blackPlayer.actions(game.board).count {
-        case m: ChessAction => m.isCheckmate
-        case _ => false
+        case m: ChessAction ⇒ m.isCheckmate
+        case _              ⇒ false
       } shouldBe 7
     }
 
@@ -121,6 +121,24 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
 
       game.board.action(XY(5, 4), XY(-5, 0)) shouldBe
         Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))
+    }
+  }
+
+  describe("Ending actions") {
+    it("draw and resign are always actions for both players") {
+      val white = ChessGame.defaultGame.board
+      val black = white.doAction(white.nonWinDrawActions.head).get
+
+      Set(white, black) foreach { b =>
+        b.actions.exists {
+          case DrawAction(_, _, _) ⇒ true
+          case _ ⇒ false
+        } shouldBe true
+        b.actions.exists {
+          case LoseAction(_) ⇒ true
+          case _ ⇒ false
+        } shouldBe true
+      }
     }
   }
 }

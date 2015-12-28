@@ -17,7 +17,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 1
+      game.board.pieces.head.actions(game.board).size shouldBe 1
     }
 
     it("should find 2 possible actions for black pawn") {
@@ -31,7 +31,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 2
+      game.board.pieces.head.actions(game.board).size shouldBe 2
     }
 
     it("should find 4 possible actions for black pawn") {
@@ -45,7 +45,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 4
+      game.board.pieces.head.actions(game.board).size shouldBe 4
     }
 
     it("should find 3 possible actions for black pawn") {
@@ -59,7 +59,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 3
+      game.board.pieces.head.actions(game.board).size shouldBe 3
     }
 
     it("should find 0 possible actions for black pawn") {
@@ -73,7 +73,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
 
-      game.board.actions.size shouldBe 0
+      game.board.pieces.head.actions(game.board).size shouldBe 0
     }
   }
   describe("Promoting") {
@@ -156,7 +156,7 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin, turn = WhiteChessPlayer)
 
-      game.board.actions.size shouldBe 4
+      game.board.pieces.head.actions(game.board).size shouldBe 4
     }
 
     Map(
@@ -205,6 +205,8 @@ class PawnsTest extends FunSpec with ShouldMatchers {
           |........""".stripMargin, turn = WhiteChessPlayer)
 
       game.board.actions shouldBe Set(
+        LoseAction(WhiteChessPlayer),
+        DrawAction(WhiteChessPlayer),
         CapturePromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(1, -1), ♞(XY(3, 0), BlackChessPlayer), ♛(XY(3, 0), WhiteChessPlayer)),
         CapturePromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(1, -1), ♞(XY(3, 0), BlackChessPlayer), ♞(XY(3, 0), WhiteChessPlayer)),
         CapturePromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(1, -1), ♞(XY(3, 0), BlackChessPlayer), ♝(XY(3, 0), WhiteChessPlayer)),

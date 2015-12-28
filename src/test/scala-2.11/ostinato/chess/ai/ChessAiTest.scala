@@ -8,17 +8,11 @@ import org.mockito.Matchers.any
 
 class ChessAiTest extends FunSpec with ShouldMatchers with MockitoSugar {
   describe("ChessRandomAi") {
-    it("should Draw if there are no actions available") {
-      new Fixture {
-        when(board.actions(any[ChessRules])).thenReturn(Set.empty[ChessAction])
-        ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe a[DrawAction]
-      }
-    }
     it("should return the only available action") {
       new Fixture {
         val action = mock[ChessAction]
         when(board.actions(any[ChessRules])).thenReturn(Set(action))
-        ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe action
+        ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe Some(action)
       }
     }
     it("should return random actions") {
@@ -36,7 +30,7 @@ class ChessAiTest extends FunSpec with ShouldMatchers with MockitoSugar {
         when(board.actions(any[ChessRules])).thenReturn(actions)
 
         val ai = ChessRandomAi(WhiteChessPlayer, Some(seed))
-        ai.nextAction(game) shouldBe randomAction
+        ai.nextAction(game) shouldBe Some(randomAction)
       }
     }
   }

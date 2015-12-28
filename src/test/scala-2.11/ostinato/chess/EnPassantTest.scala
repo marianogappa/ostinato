@@ -20,7 +20,7 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
       game.board.pieces.head.actions(game.board).size shouldBe 1
       game.board.pieces.head.actions(game.board).head shouldBe a [EnPassantCaptureAction]
     }
-    it("should find 2 actions including en passant for white pawn") {
+    it("should find 2 actions including en passant for white pawn (plus Resigning and offering Draw)") {
       val game = ChessGame.fromString(
         """........
           |........
@@ -31,7 +31,7 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
           |........
           |........""".stripMargin, turn = WhiteChessPlayer)
 
-      game.board.actions.size shouldBe 2
+      game.board.actions.size shouldBe 4
     }
     it("should not find en passant capture action for black pawn, since king would be threatened") {
       val game = ChessGame.fromString(

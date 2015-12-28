@@ -15,16 +15,18 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   def enemy: ChessPlayer
 
   override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] =
-    super.actions(board)
+    (board.insufficientMaterial, super.actions(board), kingPiece(board)) match {
+      case (true, _, _)                 ⇒ Set(DrawAction(this))
+      case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
+      case (_, a, _)                    ⇒ super.actions(board) ++ Set(LoseAction(this), DrawAction(this))
+    }
 
   def nonWinDrawActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
-    super.actions(board).filter {
-      case WinAction(_)        ⇒ false
+    actions(board).filter {
+      case LoseAction(_)       ⇒ false
       case DrawAction(_, _, _) ⇒ false
       case _                   ⇒ true
     }
-
-  def cantMoveAction = DrawAction(this)
 
   def rooks(board: ChessBoard) = pieces(board) filter (_.isRook)
   def knights(board: ChessBoard) = pieces(board) filter (_.isKnight)

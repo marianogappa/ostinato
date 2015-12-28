@@ -162,8 +162,7 @@ case class ♛(override val pos: XY, override val owner: ChessPlayer) extends Ch
 
 case class ♚(override val pos: XY, override val owner: ChessPlayer) extends ChessPiece(pos, owner) {
   def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
-    ♚.deltas(isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) } ++
-      Set(DrawAction(owner), WinAction(owner.enemy))
+    ♚.deltas(isInInitialPosition).flatMap { case delta ⇒ actionOfDelta(pos, delta, board) }
   }
 
   def initialY(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =

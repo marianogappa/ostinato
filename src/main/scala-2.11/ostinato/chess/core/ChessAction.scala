@@ -199,24 +199,31 @@ case class CastlingAction(
       )
 }
 
-case class DrawActionFactory(fromPlayer: ChessPlayer) extends ChessActionFactory {
+abstract class FinalAction(player: ChessPlayer) extends ChessAction(♚(XY(0, 0), player), XY(0, 0)) {
+  val isDraw = false
+  val isLoss = false
+}
+
+case class DrawActionFactory(player: ChessPlayer) extends ChessActionFactory {
   def complete(isCheck: Boolean = false, isCheckmate: Boolean = false) =
-    DrawAction(fromPlayer, isCheck, isCheckmate)
+    DrawAction(player, isCheck, isCheckmate)
 }
 
 case class DrawAction(
-    fromPlayer: ChessPlayer,
+    player: ChessPlayer,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessAction(♚(XY(0, 0), fromPlayer), XY(0, 0)) {
-  override def toString = s"${fromPiece.owner.name}'s claims draw"
+    override val isCheckmate: Boolean = false) extends FinalAction(player) {
+  override val isDraw = true
+  override def toString = s"${player.name} claims draw"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.draw
   override def gridUpdates = List()
 }
 
-case class WinAction(winner: ChessPlayer) extends ChessAction(♚(XY(0, 0), winner.enemy), XY(0, 0)) {
-  override def toString = s"${winner.name}'s wins"
-  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.checkmate(winner)
+case class LoseAction(player: ChessPlayer) extends FinalAction(player) {
+  override val isLoss = true
+  override def toString = s"${player.enemy.name} wins"
+  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.checkmate(player.enemy)
   override def gridUpdates = List()
 }

@@ -82,8 +82,6 @@ abstract class Player[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R],
   }
 
   def actions(board: B)(implicit rules: R): Set[A] = pieces(board) flatMap (_.actions(board))
-
-  def cantMoveAction: A
 }
 
 class Rules {} // TODO this should be abstract... and thought about
@@ -114,13 +112,11 @@ abstract class Ai[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC 
     player: PL, seed: Option[Long] = None) {
 
   lazy val random = seed map (new Random(_)) getOrElse new Random()
-  def nextAction(game: G)(implicit rules: R): A
-  def cantMoveAction: A = player.cantMoveAction
+  def nextAction(game: G)(implicit rules: R): Option[A]
 }
 
 abstract class RandomAi[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules, G <: Game[B, A, PC, PL, R]](
   player: PL, seed: Option[Long] = None) extends Ai[B, A, PC, PL, R, G](player, seed) {
 
-  def randomAction(actions: Set[A]): Option[A] = random.shuffle(actions.toList).headOption
-  def nextAction(game: G)(implicit rules: R): A = randomAction(game.board.actions) getOrElse cantMoveAction
+  def nextAction(game: G)(implicit rules: R): Option[A] = random.shuffle(game.board.actions.toList).headOption
 }
