@@ -10,6 +10,11 @@ package object core {
     val Queenside, Kingside = Value
   }
 
+  object SquareColor extends Enumeration {
+    type SquareColor = Value
+    val Light, Dark = Value
+  }
+
   lazy val chessPlayers: List[ChessPlayer] = List(WhiteChessPlayer, BlackChessPlayer)
   lazy val castlingSides = List(CastlingSide.Queenside, CastlingSide.Kingside)
 
@@ -58,6 +63,8 @@ package object core {
   }
 
   implicit class ChessXY(pos: XY) {
+    def squareColor = if ((pos.x + pos.y) % 2 == 0) SquareColor.Light else SquareColor.Dark
+
     def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
       if (rules.whitePawnDirection == 1)
         AnPos(ChessXY.chars(pos.x), pos.y + 1)

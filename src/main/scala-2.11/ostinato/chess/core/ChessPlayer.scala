@@ -21,11 +21,10 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
       case (_, a, _)                    ⇒ super.actions(board) ++ Set(LoseAction(this), DrawAction(this))
     }
 
-  def nonWinDrawActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+  def nonFinalActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
     actions(board).filter {
-      case LoseAction(_)       ⇒ false
-      case DrawAction(_, _, _) ⇒ false
-      case _                   ⇒ true
+      case a: FinalAction ⇒ false
+      case _              ⇒ true
     }
 
   def rooks(board: ChessBoard) = pieces(board) filter (_.isRook)

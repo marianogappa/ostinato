@@ -127,7 +127,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
   describe("Ending actions") {
     it("draw and resign are always actions for both players") {
       val white = ChessGame.defaultGame.board
-      val black = white.doAction(white.nonWinDrawActions.head).get
+      val black = white.doAction(white.nonFinalActions.head).get
 
       Set(white, black) foreach { b =>
         b.actions.exists {

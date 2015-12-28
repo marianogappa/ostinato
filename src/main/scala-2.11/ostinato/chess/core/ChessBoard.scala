@@ -129,7 +129,7 @@ case class ChessBoard(
 
   def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)
   def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) =
-    player.nonWinDrawActions(this).isEmpty && !isLossFor(player)
+    player.nonFinalActions(this).isEmpty && !isLossFor(player)
 
   def isLoss(implicit rules: ChessRules = ChessRules.default) = isLossFor(turn)
   def isLossFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default): Boolean = {
@@ -153,9 +153,15 @@ case class ChessBoard(
     case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
 
-  def insufficientMaterial = false // TODO implement this
+  private def simpleInsufficientMaterial =
+    Set("Kk", "Kbk", "KNk", "BKk", "Kkn") contains pieces.map(_.toFen).mkString.sorted
 
-  def nonWinDrawActions(implicit rules: ChessRules = ChessRules.default) = turn.nonWinDrawActions(this)
+  private def kingsBishopsInsufficientMaterial =
+    "BKbk" == pieces.map(_.toFen).toSet.mkString.sorted && bishops.map(_.pos.squareColor).toSet.size == 1
+
+  def insufficientMaterial = simpleInsufficientMaterial || kingsBishopsInsufficientMaterial
+
+  def nonFinalActions(implicit rules: ChessRules = ChessRules.default) = turn.nonFinalActions(this)
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
   def rooks = pieces filter (_.isRook)
   def knights = pieces filter (_.isKnight)

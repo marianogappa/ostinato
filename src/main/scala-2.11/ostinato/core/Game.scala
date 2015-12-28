@@ -118,5 +118,6 @@ abstract class Ai[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC 
 abstract class RandomAi[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R], PC <: Piece[B, A, PC, PL, R], PL <: Player[B, A, PC, PL, R], R <: Rules, G <: Game[B, A, PC, PL, R]](
   player: PL, seed: Option[Long] = None) extends Ai[B, A, PC, PL, R, G](player, seed) {
 
-  def nextAction(game: G)(implicit rules: R): Option[A] = random.shuffle(game.board.actions.toList).headOption
+  def shuffleHead[T](list: List[T]): Option[T] = random.shuffle(list).headOption
+  def nextAction(game: G)(implicit rules: R): Option[A] = shuffleHead(game.board.actions.toList)
 }
