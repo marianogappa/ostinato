@@ -12,109 +12,119 @@ A modular, fully tested, very comprehensive helper library for board games, with
 ## Features
 
 - ~~Feature parity with the more mature chess.js~~ Not yet! No draw based on 3-fold repetition.
-- Supporting the following Chess notations (with variants): PGN, Algebraic, Coordinate, Descriptive, ICCF, Smith, FEN.
+- Supporting the following Chess notations (with variants): PGN, Algebraic, Figurine, Coordinate, Descriptive, ICCF, Smith and FEN.
 - Support for importing/exporting a game state encoded in FEN notation.
 
 ## Technical features
 - Compiled for JVM and JS => can serve as backend or in the frontend
 - Fully stateless design => thread-safe & scalable; no mutable state & no side-effects
-- Functional design
+- `Functional design; no nulls or exception handling` x `Object Oriented design with inheritance but no downcasting`
 
 ## Status
 
-- ~~Chess implementation is feature complete!~~ No, it's not! Pawns can't promote and capture at the same time.
+- ~~Chess implementation is feature complete!~~ No, it's not! Engine does not calculate Draw based on 3-fold repetition.
 - Highly experimental at the moment; implementation might change drastically at any time
 
 ## Chess
 
-- Supports importing a game in any known notation without specifying the notation, with proper structured feedback when it can't
+### Supports importing a game in any known notation without specifying the notation, with proper structured feedback when it can't
 ```
-    it("should parse the same game in different notations") {
-        val parsedPgn =
-          Notation.parseMatchString("""[Event "Ostinato Testing"]
-                                      |[Site "Buenos Aires, Argentina"]
-                                      |[Date "2015.??.??"]
-                                      |[Round "1"]
-                                      |[Result "½–½"]
-                                      |[White "Fake Player 1"]
-                                      |[Black "Fake Player 2"]
-                                      |
-                                      |1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. Bb5+ Bd7 5. Bxd7+ Qxd7 6. Nge2
-                                      |dxe4 7. 0-0
-                                      |""".stripMargin)
+it("should parse the same game in different notations") {
+      val pgn =
+        Notation.parseMatchString("""[Event "Ostinato Testing"]
+                                    |[Site "Buenos Aires, Argentina"]
+                                    |[Date "2015.??.??"]
+                                    |[Round "1"]
+                                    |[Result "½–½"]
+                                    |[White "Fake Player 1"]
+                                    |[Black "Fake Player 2"]
+                                    |
+                                    |1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. Bb5+ Bd7 5. Bxd7+ Qxd7 6. Nge2
+                                    |dxe4 7. 0-0
+                                    |""".stripMargin)
 
-        val parsedAlgebraic =
-          Notation.parseMatchString("""e4 e6
-                                      |d4 d5
-                                      |Nc3 Bb4
-                                      |Bb5+ Bd7
-                                      |Bxd7+ Qxd7
-                                      |Nge2 dxe4
-                                      |0-0""".stripMargin)
+      val algebraic =
+        Notation.parseMatchString("""e4 e6
+                                    |d4 d5
+                                    |Nc3 Bb4
+                                    |Bb5+ Bd7
+                                    |Bxd7+ Qxd7
+                                    |Nge2 dxe4
+                                    |0-0""".stripMargin)
 
-        val parsedCoordinate =
-          Notation.parseMatchString("""
-                                      |1. e2-e4 e7-e6
-                                      |2. d2-d4 d7-d5
-                                      |3. b1-c3 f8-b4
-                                      |4. f1-b5+ c8-d7
-                                      |5. b5xd7+ d8xd7
-                                      |6. g1-e2 d5xe4
-                                      |7. 0-0""".stripMargin)
+      val figurine =
+        Notation.parseMatchString("""e4 e6
+                                    |d4 d5
+                                    |♘c3 ♝b4
+                                    |♗b5+ ♝d7
+                                    |♗xd7+ ♛xd7
+                                    |♘ge2 dxe4
+                                    |0-0""".stripMargin)
 
-        val parsedDescriptive =
-          Notation.parseMatchString("""
-                                      |1. P-K4 P-K3
-                                      |2. P-Q4 P-Q4
-                                      |3. N-QB3 B-N5
-                                      |4. B-N5ch B-Q2
-                                      |5. BxBch QxB
-                                      |6. KN-K2 PxP
-                                      |7. 0-0
-                                      |""".stripMargin)
+      val coordinate =
+        Notation.parseMatchString("""
+                                    |1. e2-e4 e7-e6
+                                    |2. d2-d4 d7-d5
+                                    |3. b1-c3 f8-b4
+                                    |4. f1-b5+ c8-d7
+                                    |5. b5xd7+ d8xd7
+                                    |6. g1-e2 d5xe4
+                                    |7. 0-0""".stripMargin)
 
-        val parsedIccf =
-          Notation.parseMatchString("""
-                                      |1. 5254 5756
-                                      |2. 4244 4745
-                                      |3. 2133 6824
-                                      |4. 6125 3847
-                                      |5. 2547 4847
-                                      |6. 7152 4554
-                                      |7. 5171""".stripMargin)
+      val descriptive =
+        Notation.parseMatchString("""
+                                    |1. P-K4 P-K3
+                                    |2. P-Q4 P-Q4
+                                    |3. N-QB3 B-N5
+                                    |4. B-N5ch B-Q2
+                                    |5. BxBch QxB
+                                    |6. KN-K2 PxP
+                                    |7. 0-0
+                                    |""".stripMargin)
 
-        val parsedSmith =
-          Notation.parseMatchString("""
-                                      |1. e2e4  e7e6
-                                      |2. d2d4  d7d5
-                                      |3. b1c3  f8b4
-                                      |4. f1b5  c8d7
-                                      |5. b5d7b d8d7b
-                                      |6. g1e2  d5e4p
-                                      |7. e1g1c""".stripMargin)
+      val iccf =
+        Notation.parseMatchString("""
+                                    |1. 5254 5756
+                                    |2. 4244 4745
+                                    |3. 2133 6824
+                                    |4. 6125 3847
+                                    |5. 2547 4847
+                                    |6. 7152 4554
+                                    |7. 5171""".stripMargin)
 
-        Set(parsedPgn, parsedAlgebraic, parsedCoordinate, parsedDescriptive, parsedIccf, parsedSmith) foreach {
-          case Right(parsedGame) ⇒
-            parsedGame.size shouldBe 13
-            parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromString(
-              """♜♞..♚.♞♜
-                |♟♟♟♛.♟♟♟
-                |....♟...
-                |........
-                |.♝.♙♟...
-                |..♘.....
-                |♙♙♙.♘♙♙♙
-                |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
-              fullMoveNumber = 7, halfMoveClock = 1
-            ).board)
-          case _ ⇒
-            fail
-        }
+      val smith =
+        Notation.parseMatchString("""
+                                    |1. e2e4  e7e6
+                                    |2. d2d4  d7d5
+                                    |3. b1c3  f8b4
+                                    |4. f1b5  c8d7
+                                    |5. b5d7b d8d7b
+                                    |6. g1e2  d5e4p
+                                    |7. e1g1c""".stripMargin)
+
+      Set(pgn, algebraic, figurine, coordinate, descriptive, iccf, smith) foreach {
+        case Right(parsedGame) ⇒
+          parsedGame.size shouldBe 13
+          parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromString(
+            """♜♞..♚.♞♜
+              |♟♟♟♛.♟♟♟
+              |....♟...
+              |........
+              |.♝.♙♟...
+              |..♘.....
+              |♙♙♙.♘♙♙♙
+              |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
+            fullMoveNumber = 7, halfMoveClock = 1
+          ).board)
+        case _ ⇒
+          fail
+      }
     }
 ```
 
-- Import a ChessBoard
+### Import a ChessBoard
 ```
+// Import a chessboard by drawing it
 val game = ChessGame.fromString(
         """........
           |........
@@ -124,15 +134,17 @@ val game = ChessGame.fromString(
           |........
           |........
           |........""".stripMargin, turn = BlackChessPlayer)
-```
-- Get all movements from the black Rook
-```
-val movements = game.board.movements
-```
-- Print them out! (outlined horizontally for brevity)
-```
-movements map board.move foreach (b => println(b + "\n"))
 
+
+// Get available actions (note that the board keeps track of turns; 0 actions for white here!)
+val actions = game.board.actions
+
+
+// Print them out! 
+actions map board.doAction.get foreach (b => println(b + "\n"))
+
+
+// -> Shows on console (outlined horizontally for brevity)
 ...♜....    ........    ........    ........    ........    ........    ........
 ........    ........    ........    ........    ........    ........    ........
 ........    ...♜....    ........    ........    ........    ........    ........
@@ -152,7 +164,19 @@ movements map board.move foreach (b => println(b + "\n"))
 ...♜....    ........    ........    ........    ........    ........    ........
 ```
 
-- Fully featured; supporting en passant, castling, promoting, check & checkmate detection with proper testing
+### Fully featured, e.g.:
+- en passant
+- castling
+- promoting
+- promoting while capturing
+- check & checkmate detection with proper testing
+- detection of draw due to insufficient material
+- detection of draw due to stalemate
+- basic AI available
+
+### Some illustrative tests
+
+- En Passant
 ```
     it("should not find en passant take move for black pawn, since king would be threatened") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
@@ -166,16 +190,17 @@ movements map board.move foreach (b => println(b + "\n"))
           |....♚...
           |........""".stripMargin)
 
-      game.whitePlayer.pawns.head.movements(game.board).size shouldBe 1
+      game.whitePlayer.pawns.head.actions(game.board).size shouldBe 1
     }
 ```
 
-- Support for Algebraic Notation (WIP)
+- Algebraic Notation (WIP)
 ```
+CastlingAction.blackQueenside().toAn shouldBe "0-0-0"
 TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChessPlayer)).toAn shouldBe "Bxc6"
 ```
 
-- Support for FEN Notation importing/exporting
+- FEN Notation importing/exporting
 ```
     it("should encode this board") {
       ChessGame.fromString(
@@ -213,10 +238,8 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Draw in can't-checkmate scenarios
-- WhiteWin/BlackWin actions
+- Add `ChessGame.from` and `ChessGame.to` methods for all cases
 - Complete support for all known notations
-- Pawn should be able to capture and promote in one action!
 - Research repositories
 
 ## Long term TODO
