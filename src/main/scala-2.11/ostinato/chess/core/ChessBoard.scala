@@ -56,7 +56,7 @@ case class ChessBoard(
     val to = from + delta
     val fromPiece = get(from)
     val toPiece = get(to)
-    lazy val betweenLocationsFree = between(from, to) forall isEmptyCell
+    def betweenLocationsFree(f: XY = from, t: XY = to) = between(f, t) forall isEmptyCell
     def betweenLocationsNotThreatenedBy(player: ChessPlayer) =
       xyBetween(from, to) forall (pos ⇒ player.pieces(this) forall (!_.canMoveTo(pos, this.copy(turn = player))))
 
@@ -71,7 +71,7 @@ case class ChessBoard(
       case (Some(Some(p: ♟)), Some(None), Some(epp: EnPassantPawn)) if delta.x != 0 && isEnPassantPawn(to) && epp.pawn.owner != p.owner ⇒
         Set(EnPassantTakeActionFactory(p, delta, epp.pawn))
 
-      case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree ⇒
+      case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 2 && betweenLocationsFree() ⇒
         Set(EnPassantActionFactory(p, delta))
 
       case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner && to.y == p.promotingPosition(delta.y) ⇒
@@ -93,7 +93,8 @@ case class ChessBoard(
       case (Some(Some(k: ♚)), _, _) if math.abs(delta.x) == 2 ⇒
         (toPiece, targetRook(k)) match {
           case (Some(None), Some((r: ♜, Some(cs: CastlingSide.Value)))) if k.isInInitialPosition &&
-            castlingAvailable((k.owner, cs)) && betweenLocationsFree && !k.isThreatened(this) &&
+            castlingAvailable((k.owner, cs)) && betweenLocationsFree() &&
+            betweenLocationsFree(r.pos, r.pos + k.rookDeltaFor(delta)) && !k.isThreatened(this) &&
             betweenLocationsNotThreatenedBy(k.enemy) ⇒
 
             Set(CastlingActionFactory(k, delta, r, k.rookDeltaFor(delta)))
@@ -101,10 +102,10 @@ case class ChessBoard(
           case _ ⇒ Set()
         }
 
-      case (Some(Some(p: ChessPiece)), Some(None), _) if !p.isPawn && betweenLocationsFree ⇒
+      case (Some(Some(p: ChessPiece)), Some(None), _) if !p.isPawn && betweenLocationsFree() ⇒
         Set(MoveActionFactory(p, delta))
 
-      case (Some(Some(p: ChessPiece)), Some(Some(toP: ChessPiece)), _) if !p.isPawn && betweenLocationsFree && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
+      case (Some(Some(p: ChessPiece)), Some(Some(toP: ChessPiece)), _) if !p.isPawn && betweenLocationsFree() && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner ⇒
         Set(CaptureActionFactory(p, delta, toP))
 
       case _ ⇒ Set()
