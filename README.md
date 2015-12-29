@@ -7,6 +7,8 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
 
+[Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
+
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
 
 ## Features
@@ -238,6 +240,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Bug found! Rook jumps pieces when castling.
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
 - Complete support for all known notations
 - Research repositories
