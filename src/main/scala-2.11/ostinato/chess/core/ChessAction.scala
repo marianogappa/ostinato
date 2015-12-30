@@ -137,25 +137,23 @@ case class PromoteAction(
 }
 
 object CastlingAction {
-  private def y(player: ChessPlayer)(
-    implicit rules: ChessRules = ChessRules.default, boardSize: BoardSize) =
-    (player, rules.whitePawnDirection) match {
-      case (WhiteChessPlayer, 1) | (BlackChessPlayer, -1) ⇒ 0
-      case (WhiteChessPlayer, -1) | (BlackChessPlayer, 1) ⇒ boardSize.y - 1
-    }
+  private def rookX(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
+    ♚.rookX(side, rules.whitePawnDirection)
 
-  private val kingX = 4
+  private def kingDelta(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
+    ♚.kingDelta(side, rules.whitePawnDirection)
 
-  private def rookX(side: CastlingSide.Value) =
-    if (side == CastlingSide.Kingside) implicitly[BoardSize].x - 1 else 0
-
-  private def kingDelta(side: CastlingSide.Value) = if (side == CastlingSide.Kingside) XY(2, 0) else XY(-2, 0)
-  private def rookDelta(side: CastlingSide.Value) = if (side == CastlingSide.Kingside) XY(-2, 0) else XY(3, 0)
+  private def rookDelta(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
+    ♚.rookDelta(side, rules.whitePawnDirection)
 
   private def constructWith(player: ChessPlayer, side: CastlingSide.Value, isCheck: Boolean, isCheckmate: Boolean)(
     implicit rules: ChessRules = ChessRules.default) =
-    CastlingAction(♚(XY(kingX, y(WhiteChessPlayer)), WhiteChessPlayer), kingDelta(side), ♜(XY(rookX(side),
-      y(WhiteChessPlayer)), WhiteChessPlayer), rookDelta(side), isCheck, isCheckmate)
+    CastlingAction(
+      ♚(XY(♚.initialX(rules.whitePawnDirection), ♚.initialY(player, rules.whitePawnDirection)), player),
+      kingDelta(side),
+      ♜(XY(rookX(side), ♚.initialY(player, rules.whitePawnDirection)), player),
+      rookDelta(side), isCheck, isCheckmate
+    )
 
   def whiteKingside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
     implicit rules: ChessRules = ChessRules.default) =
@@ -189,8 +187,11 @@ case class CastlingAction(
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =
     if (isKingside) Fan.kingSideCastle else Fan.queenSideCastle
-  def isKingside = kingDelta.sign.x == 1
-  def isQueenside = kingDelta.sign.x == -1
+
+  def isKingside(implicit rules: ChessRules = ChessRules.default) =
+    kingDelta.x == 2 && rules.whitePawnDirection == -1 || kingDelta.x == -2 && rules.whitePawnDirection == 1
+
+  def isQueenside(implicit rules: ChessRules = ChessRules.default) = !isKingside
   override def gridUpdates =
     super.gridUpdates ++
       List(

@@ -6,7 +6,7 @@ import org.scalatest.{ ShouldMatchers, FunSpec }
 
 class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
   describe("Algebraic notation for pieces") {
-    it("should find black rook at a8 if white moves downwards") {
+    it("should find black rook at h8 if white moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """........
@@ -18,7 +18,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |♜.......""".stripMargin)
 
-      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('a', 8)
+      game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('h', 8)
     }
     it("should find black rook at a1 if white pawn moves upwards") {
       val game = ChessGame.fromString(
@@ -33,7 +33,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
 
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('a', 1)
     }
-    it("should find white rook at d4 if white pawn moves downwards") {
+    it("should find white rook at e4 if white pawn moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """........
@@ -45,7 +45,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........""".stripMargin)
 
-      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('d', 4)
+      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('e', 4)
     }
   }
 
@@ -69,10 +69,10 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
 
     it("should encode castling to algebraic notation when white is on top") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
-      CastlingAction(♚(XY(4, 0), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 0), WhiteChessPlayer), XY(-2, 0)).toAn shouldBe "0-0"
-      CastlingAction(♚(XY(4, 0), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 0), WhiteChessPlayer), XY(3, 0)).toAn shouldBe "0-0-0"
-      CastlingAction(♚(XY(4, 7), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 7), WhiteChessPlayer), XY(-2, 0)).toAn shouldBe "0-0"
-      CastlingAction(♚(XY(4, 7), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 7), BlackChessPlayer), XY(3, 0)).toAn shouldBe "0-0-0"
+      CastlingAction(♚(XY(3, 0), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 0), WhiteChessPlayer), XY(-3, 0)).toAn shouldBe "0-0-0"
+      CastlingAction(♚(XY(3, 0), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 0), WhiteChessPlayer), XY(2, 0)).toAn shouldBe "0-0"
+      CastlingAction(♚(XY(3, 7), BlackChessPlayer), XY(2, 0), ♜(XY(7, 7), BlackChessPlayer), XY(-3, 0)).toAn shouldBe "0-0-0"
+      CastlingAction(♚(XY(3, 7), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 7), BlackChessPlayer), XY(2, 0)).toAn shouldBe "0-0"
     }
 
     it("should encode castling properly when using sugar methods to create the actions") {
@@ -137,7 +137,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       EnPassantAction(♟(XY(1, 6), WhiteChessPlayer, -1), XY(0, -2)).allPossibleNotations shouldBe
         Set("B2-b4", "b2-b4", "♙bb4", "b4", "P-N4", "P-QN4", "PN4", "♙b2b4", "B2-B4", "b2-B4", "2224",
           "bb4", "PQN4", "♙b4", "b2b4")
-      EnPassantAction(♟(XY(1, 1), WhiteChessPlayer, 1), XY(0, 2)).allPossibleNotations(ChessRules.default.copy(whitePawnDirection = 1)) shouldBe
+      EnPassantAction(♟(XY(6, 1), WhiteChessPlayer, 1), XY(0, 2)).allPossibleNotations(ChessRules.default.copy(whitePawnDirection = 1)) shouldBe
         Set("B2-b4", "b2-b4", "♙bb4", "b4", "P-N4", "P-QN4", "PN4", "♙b2b4", "B2-B4", "b2-B4", "2224",
           "bb4", "PQN4", "♙b4", "b2b4")
     }
