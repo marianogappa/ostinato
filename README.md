@@ -240,7 +240,6 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Bug found! Rook jumps pieces when castling.
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
 - Complete support for all known notations
 - Research repositories
