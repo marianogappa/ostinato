@@ -17,12 +17,12 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = defendedBy(board).nonEmpty
 
-  def threatenedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
-    enemy.pieces(board).filter(_.canMoveTo(pos, board.copy(turn = enemy))(
+  def threatenedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] =
+    enemy.pieces(board).find(_.canMoveTo(pos, board.copy(turn = enemy))(
       rules.copy(kingIsTakeable = true, checkForThreatens = false)))
 
-  def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessPiece] =
-    (owner.pieces(board) - this).filter(
+  def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] =
+    (owner.pieces(board) - this).find(
       _.canMoveTo(pos, board.copy(turn = owner, grid = board.grid.updated(pos.toI, Some(withOwner(enemy)))))(
         rules.copy(checkForThreatens = false))
     )
