@@ -13,19 +13,20 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 ## Features
 
-- ~~Feature parity with the more mature chess.js~~ Not yet! No draw based on 3-fold repetition.
-- Supporting the following Chess notations (with variants): PGN, Algebraic, Figurine, Coordinate, Descriptive, ICCF, Smith and FEN.
-- Support for importing/exporting a game state encoded in FEN notation.
+- Feature parity with the more mature [chess.js](https://github.com/jhlywa/chess.js) minus history, PGN headers and undo, and plus a lot of useful stuff!
+- Supporting the following Chess notations (with variants): PGN, Algebraic, Figurine, Coordinate, Descriptive, ICCF, Smith and FEN
+- Support for importing/exporting a game state encoded in FEN notation
+- Random and Basic AI available
 
 ## Technical features
 - Compiled for JVM and JS => can serve as backend or in the frontend
-- Fully stateless design => thread-safe & scalable; no mutable state & no side-effects
+- Fully stateless design => thread-safe & scalable; no shared mutable state & no side-effects
 - `Functional design; no nulls or exception handling` x `Object Oriented design with inheritance but no downcasting`
 
 ## Status
 
-- ~~Chess implementation is feature complete!~~ No, it's not! Engine does not calculate Draw based on 3-fold repetition.
-- Highly experimental at the moment; implementation might change drastically at any time
+- Chess implementation is feature complete!
+- Experimental at the moment; implementation might change drastically at any time
 
 ## Chess
 
@@ -241,6 +242,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 ## Short term TODO
 
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
+- At the moment can only export to "short FEN"; this is enough for ChessboardJS, not for other use cases
 - Complete support for all known notations
 - Research repositories
 
