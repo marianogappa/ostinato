@@ -8,7 +8,8 @@ case class ChessBoard(
     enPassantPawn: Option[EnPassantPawn] = None,
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
-    halfMoveClock: Int = 0) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](grid) {
+    halfMoveClock: Int = 0,
+    pastBoards: PastBoards = PastBoards()) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](grid) {
 
   def doAction(a: ChessAction)(implicit rules: ChessRules = ChessRules.default) = {
     def calculateEnPassants = a match {
@@ -35,18 +36,25 @@ case class ChessBoard(
       case _                                      ⇒ halfMoveClock + 1
     }
 
+    def calculatePastBoards(newBoard: ChessBoard) =
+      if (pastBoards.isEmpty)
+        pastBoards.withBoard(this).withBoard(newBoard)
+      else
+        pastBoards.withBoard(newBoard)
+
     (a, get(a.fromPiece.pos)) match {
       case (a: FinalAction, _) ⇒
         Some(ChessBoard(grid, turn, None, castlingFullyUnavailable, fullMoveNumber, 0))
       case (_, Some(Some(a.fromPiece))) if a.fromPiece.owner == turn ⇒
-        Some(ChessBoard(
+        val newBoard = ChessBoard(
           a.gridUpdates.foldLeft(grid)(applyUpdate),
           turn.enemy,
           calculateEnPassants,
           calculateCastlingAvailable,
           if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
           calculateHalfMoveClock
-        ))
+        )
+        Some(newBoard.copy(pastBoards = calculatePastBoards(newBoard)))
       case _ ⇒
         None
     }
@@ -163,7 +171,10 @@ case class ChessBoard(
   private def kingsBishopsInsufficientMaterial =
     "BKbk" == pieces.map(_.toFen).toSet.mkString.sorted && bishops.map(_.pos.squareColor).toSet.size == 1
 
-  def insufficientMaterial = simpleInsufficientMaterial || kingsBishopsInsufficientMaterial
+  def hasInsufficientMaterial = simpleInsufficientMaterial || kingsBishopsInsufficientMaterial
+  def isInFiftyMoveRule = halfMoveClock >= 50
+  def isInThreefoldRepetition = pastBoards.isInThreefoldRepetition
+  def isInStalemate = turn.actions(this) == Set(DrawAction(turn, isCheck = false, isCheckmate = false))
 
   def nonFinalActions(implicit rules: ChessRules = ChessRules.default) = turn.nonFinalActions(this)
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
@@ -174,4 +185,16 @@ case class ChessBoard(
   def kings = pieces filter (_.isKing)
   def pawns = pieces filter (_.isPawn)
   def game(implicit rules: ChessRules = ChessRules.default) = ChessGame(this, rules)
+
+  override def equals(any: Any) = any match {
+    case that: ChessBoard ⇒
+      that.grid == grid &&
+        that.turn == turn &&
+        that.castlingAvailable == castlingAvailable &&
+        that.enPassantPawn == enPassantPawn &&
+        that.fullMoveNumber == fullMoveNumber &&
+        that.halfMoveClock == halfMoveClock
+    case _ ⇒
+      false
+  }
 }

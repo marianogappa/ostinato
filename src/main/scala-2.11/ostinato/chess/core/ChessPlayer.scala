@@ -15,7 +15,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   def enemy: ChessPlayer
 
   override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] =
-    (board.insufficientMaterial, super.actions(board), kingPiece(board)) match {
+    (board.hasInsufficientMaterial, super.actions(board), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
       case (_, a, _)                    ⇒ super.actions(board) ++ Set(LoseAction(this), DrawAction(this))
