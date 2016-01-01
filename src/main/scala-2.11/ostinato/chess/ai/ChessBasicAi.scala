@@ -19,12 +19,12 @@ case class ChessBasicAi(player: ChessPlayer, seed: Option[Long] = None)
   def tree(board: ChessBoard, actions: List[ChessAction], depth: Int): List[(List[ChessAction], Int)] =
     if (depth == 0) {
       if (actions.isEmpty)
-        List((List(), evaluate(board)))
+        List((List(), evaluate(board, None)))
       else
         actions.last match {
-          case a: DrawAction => List((actions, (Int.MaxValue / 2) * sign(a.player.enemy)))
-          case a: LoseAction => List((actions, Int.MaxValue * sign(a.player.enemy)))
-          case _ => List((actions, evaluate(board)))
+          case a: DrawAction => List((actions, (10000 / 2) * sign(a.player.enemy)))
+          case a: LoseAction => List((actions, 10000 * sign(a.player.enemy)))
+          case a => List((actions, evaluate(board, Some(a))))
         }
     } else {
       board.actions.map(a => (a, board.doAction(a))).flatMap {
@@ -46,6 +46,7 @@ case class ChessBasicAi(player: ChessPlayer, seed: Option[Long] = None)
 
   private def materialValue(board: ChessBoard): Int = board.pieces.map(materialValue).sum
 
-  def evaluate(board: ChessBoard): Int = materialValue(board)
+  def evaluate(board: ChessBoard, action: Option[ChessAction]): Int =
+    materialValue(board) * 100 + action.map(a => (if (a.isCheckmate) 10000 else if (a.isCheck) 100 else 0) * sign(a.turn)).getOrElse(0)
 }
 
