@@ -8,6 +8,7 @@ abstract class ChessAction(
     val isCheck: Boolean = false,
     val isCheckmate: Boolean = false) extends Action[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](fromPiece, delta) {
 
+  val isFinal = false
   val turn = fromPiece.owner
   val enemy = turn.enemy
   def toAn(implicit rules: ChessRules = ChessRules.default): String
@@ -203,6 +204,7 @@ case class CastlingAction(
 abstract class FinalAction(player: ChessPlayer) extends ChessAction(♚(XY(0, 0), player), XY(0, 0)) {
   val isDraw = false
   val isLoss = false
+  override val isFinal = true
 }
 
 case class DrawActionFactory(player: ChessPlayer) extends ChessActionFactory {

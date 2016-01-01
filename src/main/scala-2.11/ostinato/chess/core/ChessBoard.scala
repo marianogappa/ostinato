@@ -42,21 +42,34 @@ case class ChessBoard(
       else
         pastBoards.withBoard(newBoard)
 
-    (a, get(a.fromPiece.pos)) match {
-      case (a: FinalAction, _) ⇒
-        Some(ChessBoard(grid, turn, None, castlingFullyUnavailable, fullMoveNumber, 0))
-      case (_, Some(Some(a.fromPiece))) if a.fromPiece.owner == turn ⇒
-        val newBoard = ChessBoard(
-          a.gridUpdates.foldLeft(grid)(applyUpdate),
-          turn.enemy,
-          calculateEnPassants,
-          calculateCastlingAvailable,
-          if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
-          calculateHalfMoveClock
-        )
-        Some(newBoard.copy(pastBoards = calculatePastBoards(newBoard)))
-      case _ ⇒
-        None
+    lazy val applyAction = {
+      val newBoard = ChessBoard(
+        a.gridUpdates.foldLeft(grid)(applyUpdate),
+        turn.enemy,
+        calculateEnPassants,
+        calculateCastlingAvailable,
+        if (turn == BlackChessPlayer) fullMoveNumber + 1 else fullMoveNumber,
+        calculateHalfMoveClock
+      )
+      Some(newBoard.copy(pastBoards = calculatePastBoards(newBoard)))
+    }
+
+    lazy val applyFinalAction = Some(ChessBoard(grid, turn, None, castlingFullyUnavailable, fullMoveNumber, 0))
+
+    if (rules.extraValidationOnActionApply) {
+      (a, get(a.fromPiece.pos)) match {
+        case (action, _) if action.isFinal ⇒
+          applyFinalAction
+        case (_, Some(Some(a.fromPiece))) if a.fromPiece.owner == turn ⇒
+          applyAction
+        case _ ⇒
+          None
+      }
+    } else {
+      if (a.isFinal)
+        applyFinalAction
+      else
+        applyAction
     }
   }
 
@@ -122,21 +135,25 @@ case class ChessBoard(
     def validateAfterAction(mf: ChessActionFactory): Set[ChessAction] = doAction(mf.complete()).toSet.flatMap { newBoard: ChessBoard ⇒
       val m = mf.complete()
       val isPlayersKingThreatened = rules.checkForThreatens && m.fromPiece.owner.kingPiece(newBoard).exists(_.isThreatened(newBoard))
-      lazy val isCheckMate = rules.checkForThreatens && newBoard.isLossFor(m.fromPiece.enemy)
       lazy val isCheck = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
 
       Set(m) filter (_ ⇒ !isPlayersKingThreatened) map { _ ⇒
-        val mate = isCheckMate
-        val check = mate || isCheck
+        val check = isCheck
+        val mate = check && newBoard.isLossFor(m.fromPiece.enemy, basedOnCheckKnown = true)
 
         mf.complete(check, mate)
       }
     }
 
-    fromPiece match {
-      case Some(Some(p: ChessPiece)) if p.deltas(this).contains(delta) ⇒ validateAction flatMap validateAfterAction
-      case _ ⇒ Set()
-    }
+    lazy val concreteMovementsOfDelta = validateAction flatMap validateAfterAction
+
+    if (rules.validateDeltasOnActionCalculation)
+      fromPiece match {
+        case Some(Some(p: ChessPiece)) if p.deltas(this).contains(delta) ⇒ concreteMovementsOfDelta
+        case _ ⇒ Set()
+      }
+    else
+      concreteMovementsOfDelta
   }
 
   def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)
@@ -144,13 +161,14 @@ case class ChessBoard(
     player.nonFinalActions(this).isEmpty && !isLossFor(player)
 
   def isLoss(implicit rules: ChessRules = ChessRules.default) = isLossFor(turn)
-  def isLossFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default): Boolean = {
+  def isLossFor(player: ChessPlayer, basedOnCheckKnown: Boolean = false)(implicit rules: ChessRules = ChessRules.default): Boolean = {
     val noCheckForMates = rules.copy(checkForThreatens = false)
     lazy val allNewBoards = player.actions(this)(noCheckForMates) map doAction
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 
-    player.kingPiece(this).map { _.isThreatened(this)(noCheckForMates) && (allNewBoards.flatten forall isKingThreatened) } getOrElse
-      rules.noKingMeansLoss
+    player.kingPiece(this).map { king =>
+      (basedOnCheckKnown || king.isThreatened(this)(noCheckForMates)) && (allNewBoards.flatten forall isKingThreatened)
+    } getOrElse rules.noKingMeansLoss
   }
 
   override def toString: String = {

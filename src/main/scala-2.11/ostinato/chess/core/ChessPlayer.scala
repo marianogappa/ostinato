@@ -14,12 +14,14 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
   def enemy: ChessPlayer
 
-  override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] =
-    (board.hasInsufficientMaterial, super.actions(board), kingPiece(board)) match {
+  override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+    val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
+    (board.hasInsufficientMaterial, super.actions(board)(noDeltaValidation), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
-      case (_, a, _)                    ⇒ super.actions(board) ++ Set(LoseAction(this), DrawAction(this))
+      case (_, a, _)                    ⇒ a ++ Set(LoseAction(this), DrawAction(this))
     }
+  }
 
   def nonFinalActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
     actions(board).filter {

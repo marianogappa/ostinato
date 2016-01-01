@@ -8,7 +8,9 @@ object ChessRules {
     kingIsTakeable = false,
     allowImpossibleBoards = false,
     noKingMeansLoss = false,
-    checkForThreatens = true
+    checkForThreatens = true,
+    validateDeltasOnActionCalculation = true,
+    extraValidationOnActionApply = false
   )
 }
 
@@ -17,5 +19,8 @@ case class ChessRules(
                        kingIsTakeable: Boolean,
                        allowImpossibleBoards: Boolean,
                        noKingMeansLoss: Boolean,
-                       checkForThreatens: Boolean) extends Rules
+                       checkForThreatens: Boolean,
+                       validateDeltasOnActionCalculation: Boolean,
+                       extraValidationOnActionApply: Boolean
+                     ) extends Rules
 
