@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Piece</span><span class="tparams">[<span name="P">P &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.M">M</span>, _, _]</span>, <span name="M">M &lt;: <a href="Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[_]</span>, <span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[_, <span class="extype" name="ostinato.core.Piece.M">M</span>, <span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>, <span name="PC">PC &lt;: <a href="" class="extype" name="ostinato.core.Piece">Piece</a>[_, _, _, _, _]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Piece</span><span class="tparams">[<span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.A">A</span>, <span class="extype" name="ostinato.core.Piece.PC">PC</span>, <span class="extype" name="ostinato.core.Piece.PL">PL</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="A">A &lt;: <a href="Action.html" class="extype" name="ostinato.core.Action">Action</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.A">A</span>, <span class="extype" name="ostinato.core.Piece.PC">PC</span>, <span class="extype" name="ostinato.core.Piece.PL">PL</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="PC">PC &lt;: <a href="" class="extype" name="ostinato.core.Piece">Piece</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.A">A</span>, <span class="extype" name="ostinato.core.Piece.PC">PC</span>, <span class="extype" name="ostinato.core.Piece.PL">PL</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="PL">PL &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Piece.B">B</span>, <span class="extype" name="ostinato.core.Piece.A">A</span>, <span class="extype" name="ostinato.core.Piece.PC">PC</span>, <span class="extype" name="ostinato.core.Piece.PL">PL</span>, <span class="extype" name="ostinato.core.Piece.R">R</span>]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -83,15 +83,15 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.core.Piece#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(pos:ostinato.core.XY,owner:P):ostinato.core.Piece[P,M,B,R,PC]"></a>
-      <a id="&lt;init&gt;:Piece[P,M,B,R,PC]"></a>
+      <a id="&lt;init&gt;(pos:ostinato.core.XY,owner:PL):ostinato.core.Piece[B,A,PC,PL,R]"></a>
+      <a id="&lt;init&gt;:Piece[B,A,PC,PL,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Piece</span><span class="params">(<span name="pos">pos: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <span class="extype" name="ostinato.core.Piece.P">P</span></span>)</span>
+        <span class="name">Piece</span><span class="params">(<span name="pos">pos: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="owner">owner: <span class="extype" name="ostinato.core.Piece.PL">PL</span></span>)</span>
       </span>
       </h4>
       
@@ -102,7 +102,20 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="ostinato.core.Piece#movedTo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="ostinato.core.Piece#actions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="actions(board:B)(implicitrules:R):Set[A]"></a>
+      <a id="actions(B)(R):Set[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">actions</span><span class="params">(<span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Piece#movedTo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="movedTo(pos:ostinato.core.XY):PC"></a>
       <a id="movedTo(XY):PC"></a>
       <h4 class="signature">
@@ -112,19 +125,6 @@
       </span>
       <span class="symbol">
         <span class="name">movedTo</span><span class="params">(<span name="pos">pos: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="result">: <span class="extype" name="ostinato.core.Piece.PC">PC</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="ostinato.core.Piece#movements" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="movements(board:B)(implicitrules:R):Set[M]"></a>
-      <a id="movements(B)(R):Set[M]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">movements</span><span class="params">(<span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.M">M</span>]</span>
       </span>
       </h4>
       
@@ -199,15 +199,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="ostinato.core.Piece#allMovementsOfDelta" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="allMovementsOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY,board:B)(implicitrules:R):Set[M]"></a>
-      <a id="allMovementsOfDelta(XY,XY,B)(R):Set[M]"></a>
+      <a id="allMovementsOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY,board:B)(implicitrules:R):Set[A]"></a>
+      <a id="allMovementsOfDelta(XY,XY,B)(R):Set[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allMovementsOfDelta</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.M">M</span>]</span>
+        <span class="name">allMovementsOfDelta</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -327,16 +327,16 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="ostinato.core.Piece#movementOfDelta" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="movementOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY,board:B)(implicitrules:R):Set[M]"></a>
-      <a id="movementOfDelta(XY,XY,B)(R):Set[M]"></a>
+    </li><li name="ostinato.core.Piece#movementsOfDelta" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="movementsOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY,board:B)(implicitrules:R):Set[A]"></a>
+      <a id="movementsOfDelta(XY,XY,B)(R):Set[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">movementOfDelta</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.M">M</span>]</span>
+        <span class="name">movementsOfDelta</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="board">board: <span class="extype" name="ostinato.core.Piece.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Piece.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Piece.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -380,15 +380,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.core.Piece#owner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="owner:P"></a>
-      <a id="owner:P"></a>
+      <a id="owner:PL"></a>
+      <a id="owner:PL"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">owner</span><span class="result">: <span class="extype" name="ostinato.core.Piece.P">P</span></span>
+        <span class="name">owner</span><span class="result">: <span class="extype" name="ostinato.core.Piece.PL">PL</span></span>
       </span>
       </h4>
       

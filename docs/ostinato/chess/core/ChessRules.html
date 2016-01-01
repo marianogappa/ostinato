@@ -35,7 +35,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessRules</span><span class="params">(<span name="whitePawnDirection">whitePawnDirection: <span class="extype" name="scala.Int">Int</span></span>, <span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="allowImpossibleBoards">allowImpossibleBoards: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noKingMeansLoss">noKingMeansLoss: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../core/Rules.html" class="extype" name="ostinato.core.Rules">Rules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ChessRules</span><span class="params">(<span name="whitePawnDirection">whitePawnDirection: <span class="extype" name="scala.Int">Int</span></span>, <span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="allowImpossibleBoards">allowImpossibleBoards: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noKingMeansLoss">noKingMeansLoss: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../core/Rules.html" class="extype" name="ostinato.core.Rules">Rules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -80,7 +80,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.chess.core.ChessRules#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(whitePawnDirection:Int,kingIsTakeable:Boolean,allowImpossibleBoards:Boolean,noKingMeansLoss:Boolean,checkForThreatens:Boolean):ostinato.chess.core.ChessRules"></a>
+      <a id="&lt;init&gt;(whitePawnDirection:Int,kingIsTakeable:Boolean,allowImpossibleBoards:Boolean,noKingMeansLoss:Boolean,checkForThreatens:Boolean,validateDeltasOnActionCalculation:Boolean,extraValidationOnActionApply:Boolean):ostinato.chess.core.ChessRules"></a>
       <a id="&lt;init&gt;:ChessRules"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -88,7 +88,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessRules</span><span class="params">(<span name="whitePawnDirection">whitePawnDirection: <span class="extype" name="scala.Int">Int</span></span>, <span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="allowImpossibleBoards">allowImpossibleBoards: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noKingMeansLoss">noKingMeansLoss: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">ChessRules</span><span class="params">(<span name="whitePawnDirection">whitePawnDirection: <span class="extype" name="scala.Int">Int</span></span>, <span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="allowImpossibleBoards">allowImpossibleBoards: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noKingMeansLoss">noKingMeansLoss: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -237,6 +237,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessRules#extraValidationOnActionApply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="extraValidationOnActionApply:Boolean"></a>
+      <a id="extraValidationOnActionApply:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extraValidationOnActionApply</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -360,6 +373,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessRules#validateDeltasOnActionCalculation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateDeltasOnActionCalculation:Boolean"></a>
+      <a id="validateDeltasOnActionCalculation:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateDeltasOnActionCalculation</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

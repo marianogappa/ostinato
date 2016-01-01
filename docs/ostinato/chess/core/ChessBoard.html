@@ -35,13 +35,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessBoard</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]]</span>, <span name="turn">turn: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> = <span class="symbol">WhiteChessPlayer</span></span>, <span name="enPassantPawn">enPassantPawn: <span class="extype" name="scala.Option">Option</span>[<a href="EnPassantPawn.html" class="extype" name="ostinato.chess.core.EnPassantPawn">EnPassantPawn</a>] = <span class="symbol">scala.None</span></span>, <span name="hasCastled">hasCastled: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <span class="extype" name="scala.Boolean">Boolean</span>] = <span class="defval" name="scala.this.Predef.Map.apply[ostinato.chess.core.ChessPlayer, Boolean](scala.this.Predef.ArrowAssoc[ostinato.chess.core.WhiteChessPlayer.type](WhiteChessPlayer).-&gt;[Boolean](false), scala.this.Predef.ArrowAssoc[ostinato.chess.core.BlackChessPlayer.type](BlackChessPlayer).-&gt;[Boolean](false))">...</span></span>, <span name="fullMoveNumber">fullMoveNumber: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="halfMoveClock">halfMoveClock: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ChessBoard</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]]</span>, <span name="turn">turn: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> = <span class="symbol">WhiteChessPlayer</span></span>, <span name="enPassantPawn">enPassantPawn: <span class="extype" name="scala.Option">Option</span>[<a href="EnPassantPawn.html" class="extype" name="ostinato.chess.core.EnPassantPawn">EnPassantPawn</a>] = <span class="symbol">scala.None</span></span>, <span name="castlingAvailable">castlingAvailable: <span class="extype" name="scala.Predef.Map">Map</span>[(<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="package$$CastlingSide$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="ostinato.chess.core.CastlingSide.Value">CastlingSide.Value</a>), <span class="extype" name="scala.Boolean">Boolean</span>] = <span class="defval" name="core.this.`package`.castlingFullyAvailable">...</span></span>, <span name="fullMoveNumber">fullMoveNumber: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="halfMoveClock">halfMoveClock: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="pastBoards">pastBoards: <a href="package$$PastBoards.html" class="extype" name="ostinato.chess.core.PastBoards">PastBoards</a> = <span class="defval" name="core.this.`package`.PastBoards.apply(core.this.`package`.PastBoards.apply$default$1)">...</span></span>)</span><span class="result"> extends <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -80,7 +80,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.chess.core.ChessBoard#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(grid:Vector[Option[ostinato.chess.core.ChessPiece]],turn:ostinato.chess.core.ChessPlayer,enPassantPawn:Option[ostinato.chess.core.EnPassantPawn],hasCastled:Map[ostinato.chess.core.ChessPlayer,Boolean],fullMoveNumber:Int,halfMoveClock:Int):ostinato.chess.core.ChessBoard"></a>
+      <a id="&lt;init&gt;(grid:Vector[Option[ostinato.chess.core.ChessPiece]],turn:ostinato.chess.core.ChessPlayer,enPassantPawn:Option[ostinato.chess.core.EnPassantPawn],castlingAvailable:Map[(ostinato.chess.core.ChessPlayer,ostinato.chess.core.CastlingSide.Value),Boolean],fullMoveNumber:Int,halfMoveClock:Int,pastBoards:ostinato.chess.core.PastBoards):ostinato.chess.core.ChessBoard"></a>
       <a id="&lt;init&gt;:ChessBoard"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -88,7 +88,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessBoard</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]]</span>, <span name="turn">turn: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> = <span class="symbol">WhiteChessPlayer</span></span>, <span name="enPassantPawn">enPassantPawn: <span class="extype" name="scala.Option">Option</span>[<a href="EnPassantPawn.html" class="extype" name="ostinato.chess.core.EnPassantPawn">EnPassantPawn</a>] = <span class="symbol">scala.None</span></span>, <span name="hasCastled">hasCastled: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <span class="extype" name="scala.Boolean">Boolean</span>] = <span class="defval" name="scala.this.Predef.Map.apply[ostinato.chess.core.ChessPlayer, Boolean](scala.this.Predef.ArrowAssoc[ostinato.chess.core.WhiteChessPlayer.type](WhiteChessPlayer).-&gt;[Boolean](false), scala.this.Predef.ArrowAssoc[ostinato.chess.core.BlackChessPlayer.type](BlackChessPlayer).-&gt;[Boolean](false))">...</span></span>, <span name="fullMoveNumber">fullMoveNumber: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="halfMoveClock">halfMoveClock: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span>
+        <span class="name">ChessBoard</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>]]</span>, <span name="turn">turn: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a> = <span class="symbol">WhiteChessPlayer</span></span>, <span name="enPassantPawn">enPassantPawn: <span class="extype" name="scala.Option">Option</span>[<a href="EnPassantPawn.html" class="extype" name="ostinato.chess.core.EnPassantPawn">EnPassantPawn</a>] = <span class="symbol">scala.None</span></span>, <span name="castlingAvailable">castlingAvailable: <span class="extype" name="scala.Predef.Map">Map</span>[(<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="package$$CastlingSide$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="ostinato.chess.core.CastlingSide.Value">CastlingSide.Value</a>), <span class="extype" name="scala.Boolean">Boolean</span>] = <span class="defval" name="core.this.`package`.castlingFullyAvailable">...</span></span>, <span name="fullMoveNumber">fullMoveNumber: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="halfMoveClock">halfMoveClock: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="pastBoards">pastBoards: <a href="package$$PastBoards.html" class="extype" name="ostinato.chess.core.PastBoards">PastBoards</a> = <span class="defval" name="core.this.`package`.PastBoards.apply(core.this.`package`.PastBoards.apply$default$1)">...</span></span>)</span>
       </span>
       </h4>
       
@@ -98,7 +98,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="ostinato.core.Board.Cell" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Cell=Option[P]"></a>
+      <a id="Cell=Option[PC]"></a>
       <a id="Cell:Cell"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -119,7 +119,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Location</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<a href="#Cell=Option[P]" class="extmbr" name="ostinato.chess.core.ChessBoard.Cell">Cell</a>]</span>
+        <span class="name">Location</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<a href="#Cell=Option[PC]" class="extmbr" name="ostinato.chess.core.ChessBoard.Cell">Cell</a>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
@@ -195,8 +195,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#actions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="actions(implicitrules:ostinato.chess.core.ChessRules):Set[ostinato.chess.core.ChessAction]"></a>
+      <a id="actions(ChessRules):Set[ChessAction]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">actions</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> → <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
     </li><li name="ostinato.core.Board#applyUpdate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="applyUpdate(grid:Vector[Option[P]],update:(Int,Option[P])):scala.collection.immutable.Vector[Option[P]]"></a>
+      <a id="applyUpdate(grid:Vector[Option[PC]],update:(Int,Option[PC])):scala.collection.immutable.Vector[Option[PC]]"></a>
       <a id="applyUpdate(Vector[Option[ChessPiece]],(Int,Option[ChessPiece])):Vector[Option[ChessPiece]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -247,6 +260,19 @@
       </span>
       </h4>
       
+    </li><li name="ostinato.chess.core.ChessBoard#castlingAvailable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="castlingAvailable:Map[(ostinato.chess.core.ChessPlayer,ostinato.chess.core.CastlingSide.Value),Boolean]"></a>
+      <a id="castlingAvailable:Map[(ChessPlayer,CastlingSide.Value),Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">castlingAvailable</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[(<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="package$$CastlingSide$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="ostinato.chess.core.CastlingSide.Value">CastlingSide.Value</a>), <span class="extype" name="scala.Boolean">Boolean</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -266,6 +292,19 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#doAction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="doAction(a:ostinato.chess.core.ChessAction)(implicitrules:ostinato.chess.core.ChessRules):Option[ostinato.chess.core.ChessBoard]"></a>
+      <a id="doAction(ChessAction)(ChessRules):Option[ChessBoard]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">doAction</span><span class="params">(<span name="a">a: <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> → <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
     </li><li name="ostinato.chess.core.ChessBoard#enPassantPawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="enPassantPawn:Option[ostinato.chess.core.EnPassantPawn]"></a>
       <a id="enPassantPawn:Option[EnPassantPawn]"></a>
@@ -292,6 +331,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(any:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="any">any: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> → Equals → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -321,6 +373,19 @@
       </span>
       <span class="symbol">
         <span class="name">fullMoveNumber</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard#game" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="game(implicitrules:ostinato.chess.core.ChessRules):ostinato.chess.core.ChessGame"></a>
+      <a id="game(ChessRules):ChessGame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">game</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <a href="ChessGame.html" class="extype" name="ostinato.chess.core.ChessGame">ChessGame</a></span>
       </span>
       </h4>
       
@@ -376,16 +441,29 @@
       </span>
       </h4>
       
-    </li><li name="ostinato.chess.core.ChessBoard#hasCastled" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="hasCastled:Map[ostinato.chess.core.ChessPlayer,Boolean]"></a>
-      <a id="hasCastled:Map[ChessPlayer,Boolean]"></a>
+    </li><li name="ostinato.chess.core.ChessBoard#hasInsufficientMaterial" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hasInsufficientMaterial:Boolean"></a>
+      <a id="hasInsufficientMaterial:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hasCastled</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <span class="extype" name="scala.Boolean">Boolean</span>]</span>
+        <span class="name">hasInsufficientMaterial</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard#isDraw" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isDraw(implicitrules:ostinato.chess.core.ChessRules):Boolean"></a>
+      <a id="isDraw(ChessRules):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDraw</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -415,6 +493,58 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
+    </li><li name="ostinato.core.Board#isInBounds" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInBounds(l:Board.this.Location):Boolean"></a>
+      <a id="isInBounds(Location):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInBounds</span><span class="params">(<span name="l">l: <a href="#Location=Option[Board.this.Cell]" class="extmbr" name="ostinato.chess.core.ChessBoard.Location">Location</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#isInFiftyMoveRule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isInFiftyMoveRule:Boolean"></a>
+      <a id="isInFiftyMoveRule:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInFiftyMoveRule</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard#isInStalemate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isInStalemate:Boolean"></a>
+      <a id="isInStalemate:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInStalemate</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard#isInThreefoldRepetition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isInThreefoldRepetition:Boolean"></a>
+      <a id="isInThreefoldRepetition:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInThreefoldRepetition</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -428,16 +558,29 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="ostinato.chess.core.ChessBoard#isLossFor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="isLossFor(player:ostinato.chess.core.ChessPlayer)(implicitrules:ostinato.chess.core.ChessRules):Boolean"></a>
-      <a id="isLossFor(ChessPlayer)(ChessRules):Boolean"></a>
+    </li><li name="ostinato.chess.core.ChessBoard#isLoss" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isLoss(implicitrules:ostinato.chess.core.ChessRules):Boolean"></a>
+      <a id="isLoss(ChessRules):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isLossFor</span><span class="params">(<span name="player">player: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isLoss</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ChessBoard#isLossFor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isLossFor(player:ostinato.chess.core.ChessPlayer,basedOnCheckKnown:Boolean)(implicitrules:ostinato.chess.core.ChessRules):Boolean"></a>
+      <a id="isLossFor(ChessPlayer,Boolean)(ChessRules):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isLossFor</span><span class="params">(<span name="player">player: <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>, <span name="basedOnCheckKnown">basedOnCheckKnown: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -480,45 +623,19 @@
       </span>
       </h4>
       
-    </li><li name="ostinato.chess.core.ChessBoard#move" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="move(m:ostinato.chess.core.ChessMovement)(implicitrules:ostinato.chess.core.ChessRules):ostinato.chess.core.ChessBoard"></a>
-      <a id="move(ChessMovement)(ChessRules):ChessBoard"></a>
+    </li><li name="ostinato.chess.core.ChessBoard#movementsOfDelta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="movementsOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY)(implicitrules:ostinato.chess.core.ChessRules):Set[ostinato.chess.core.ChessAction]"></a>
+      <a id="movementsOfDelta(XY,XY)(ChessRules):Set[ChessAction]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">move</span><span class="params">(<span name="m">m: <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a></span>
+        <span class="name">movementsOfDelta</span><span class="params">(<span name="from">from: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> → <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
-    </li><li name="ostinato.chess.core.ChessBoard#movement" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="movement(from:ostinato.core.XY,delta:ostinato.core.XY)(implicitrules:ostinato.chess.core.ChessRules):Set[ostinato.chess.core.ChessMovement]"></a>
-      <a id="movement(XY,XY)(ChessRules):Set[ChessMovement]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">movement</span><span class="params">(<span name="from">from: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> → <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a></dd></dl></div>
-    </li><li name="ostinato.chess.core.ChessBoard#movements" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="movements:Set[ostinato.chess.core.ChessMovement]"></a>
-      <a id="movements:Set[ChessMovement]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">movements</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>]</span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -532,6 +649,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#nonFinalActions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nonFinalActions(implicitrules:ostinato.chess.core.ChessRules):scala.collection.immutable.Set[ostinato.chess.core.ChessAction]"></a>
+      <a id="nonFinalActions(ChessRules):Set[ChessAction]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonFinalActions</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -558,6 +688,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessBoard#pastBoards" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pastBoards:ostinato.chess.core.PastBoards"></a>
+      <a id="pastBoards:PastBoards"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pastBoards</span><span class="result">: <a href="package$$PastBoards.html" class="extype" name="ostinato.chess.core.PastBoards">PastBoards</a></span>
+      </span>
+      </h4>
+      
     </li><li name="ostinato.chess.core.ChessBoard#pawns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="pawns:scala.collection.immutable.Vector[ostinato.chess.core.ChessPiece]"></a>
       <a id="pawns:Vector[ChessPiece]"></a>
@@ -572,7 +715,7 @@
       </h4>
       
     </li><li name="ostinato.core.Board#pieces" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="pieces:scala.collection.immutable.Vector[P]"></a>
+      <a id="pieces:scala.collection.immutable.Vector[PC]"></a>
       <a id="pieces:Vector[ChessPiece]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -750,7 +893,7 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="ostinato.core.Board">
-              <h3>Inherited from <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessMovement.html" class="extype" name="ostinato.chess.core.ChessMovement">ChessMovement</a>, <a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>]</h3>
+              <h3>Inherited from <a href="../../core/Board.html" class="extype" name="ostinato.core.Board">Board</a>[<a href="" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

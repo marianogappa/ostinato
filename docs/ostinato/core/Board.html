@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Board</span><span class="tparams">[<span name="P">P &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[_, _, _, _, <span class="extype" name="ostinato.core.Board.P">P</span>]</span>, <span name="M">M &lt;: <a href="Movement.html" class="extype" name="ostinato.core.Movement">Movement</a>[<span class="extype" name="ostinato.core.Board.P">P</span>]</span>, <span name="B">B &lt;: <a href="" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Board.P">P</span>, <span class="extype" name="ostinato.core.Board.M">M</span>, _, _]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Board</span><span class="tparams">[<span name="B">B &lt;: <a href="" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Board.B">B</span>, <span class="extype" name="ostinato.core.Board.A">A</span>, <span class="extype" name="ostinato.core.Board.PC">PC</span>, <span class="extype" name="ostinato.core.Board.PL">PL</span>, <span class="extype" name="ostinato.core.Board.R">R</span>]</span>, <span name="A">A &lt;: <a href="Action.html" class="extype" name="ostinato.core.Action">Action</a>[<span class="extype" name="ostinato.core.Board.B">B</span>, <span class="extype" name="ostinato.core.Board.A">A</span>, <span class="extype" name="ostinato.core.Board.PC">PC</span>, <span class="extype" name="ostinato.core.Board.PL">PL</span>, <span class="extype" name="ostinato.core.Board.R">R</span>]</span>, <span name="PC">PC &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[<span class="extype" name="ostinato.core.Board.B">B</span>, <span class="extype" name="ostinato.core.Board.A">A</span>, <span class="extype" name="ostinato.core.Board.PC">PC</span>, <span class="extype" name="ostinato.core.Board.PL">PL</span>, <span class="extype" name="ostinato.core.Board.R">R</span>]</span>, <span name="PL">PL &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Board.B">B</span>, <span class="extype" name="ostinato.core.Board.A">A</span>, <span class="extype" name="ostinato.core.Board.PC">PC</span>, <span class="extype" name="ostinato.core.Board.PL">PL</span>, <span class="extype" name="ostinato.core.Board.R">R</span>]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -83,15 +83,15 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.core.Board#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(grid:Vector[Option[P]]):ostinato.core.Board[P,M,B,R]"></a>
-      <a id="&lt;init&gt;:Board[P,M,B,R]"></a>
+      <a id="&lt;init&gt;(grid:Vector[Option[PC]]):ostinato.core.Board[B,A,PC,PL,R]"></a>
+      <a id="&lt;init&gt;:Board[B,A,PC,PL,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Board</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]]</span>)</span>
+        <span class="name">Board</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]]</span>)</span>
       </span>
       </h4>
       
@@ -101,7 +101,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="ostinato.core.Board.Cell" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Cell=Option[P]"></a>
+      <a id="Cell=Option[PC]"></a>
       <a id="Cell:Cell"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -109,7 +109,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Cell</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]</span>
+        <span class="name">Cell</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]</span>
       </span>
       </h4>
       
@@ -122,7 +122,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Location</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<a href="#Cell=Option[P]" class="extmbr" name="ostinato.core.Board.Cell">Cell</a>]</span>
+        <span class="name">Location</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<a href="#Cell=Option[PC]" class="extmbr" name="ostinato.core.Board.Cell">Cell</a>]</span>
       </span>
       </h4>
       
@@ -131,29 +131,42 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="ostinato.core.Board#move" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="move(m:M)(implicitrules:R):B"></a>
-      <a id="move(M)(R):B"></a>
+              <ol><li name="ostinato.core.Board#actions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="actions(implicitrules:R):Set[A]"></a>
+      <a id="actions(R):Set[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">move</span><span class="params">(<span name="m">m: <span class="extype" name="ostinato.core.Board.M">M</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Board.R">R</span></span>)</span><span class="result">: <span class="extype" name="ostinato.core.Board.B">B</span></span>
+        <span class="name">actions</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Board.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Board.A">A</span>]</span>
       </span>
       </h4>
       
-    </li><li name="ostinato.core.Board#movement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="movement(from:ostinato.core.XY,delta:ostinato.core.XY)(implicitrules:R):Set[M]"></a>
-      <a id="movement(XY,XY)(R):Set[M]"></a>
+    </li><li name="ostinato.core.Board#doAction" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="doAction(a:A)(implicitrules:R):Option[B]"></a>
+      <a id="doAction(A)(R):Option[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">movement</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Board.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Board.M">M</span>]</span>
+        <span class="name">doAction</span><span class="params">(<span name="a">a: <span class="extype" name="ostinato.core.Board.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Board.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.B">B</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Board#movementsOfDelta" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="movementsOfDelta(from:ostinato.core.XY,delta:ostinato.core.XY)(implicitrules:R):Set[A]"></a>
+      <a id="movementsOfDelta(XY,XY)(R):Set[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">movementsOfDelta</span><span class="params">(<span name="from">from: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="delta">delta: <a href="XY.html" class="extype" name="ostinato.core.XY">XY</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <span class="extype" name="ostinato.core.Board.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="ostinato.core.Board.A">A</span>]</span>
       </span>
       </h4>
       
@@ -228,15 +241,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="ostinato.core.Board#applyUpdate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="applyUpdate(grid:Vector[Option[P]],update:(Int,Option[P])):scala.collection.immutable.Vector[Option[P]]"></a>
-      <a id="applyUpdate(Vector[Option[P]],(Int,Option[P])):Vector[Option[P]]"></a>
+      <a id="applyUpdate(grid:Vector[Option[PC]],update:(Int,Option[PC])):scala.collection.immutable.Vector[Option[PC]]"></a>
+      <a id="applyUpdate(Vector[Option[PC]],(Int,Option[PC])):Vector[Option[PC]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">applyUpdate</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]]</span>, <span name="update">update: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>])</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]]</span>
+        <span class="name">applyUpdate</span><span class="params">(<span name="grid">grid: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]]</span>, <span name="update">update: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>])</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]]</span>
       </span>
       </h4>
       
@@ -357,15 +370,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="ostinato.core.Board#grid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="grid:Vector[Option[P]]"></a>
-      <a id="grid:Vector[Option[P]]"></a>
+      <a id="grid:Vector[Option[PC]]"></a>
+      <a id="grid:Vector[Option[PC]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">grid</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]]</span>
+        <span class="name">grid</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]]</span>
       </span>
       </h4>
       
@@ -392,6 +405,19 @@
       </span>
       <span class="symbol">
         <span class="name">isEmptyCell</span><span class="params">(<span name="l">l: <a href="#Location=Option[Board.this.Cell]" class="extmbr" name="ostinato.core.Board.Location">Location</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.core.Board#isInBounds" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isInBounds(l:Board.this.Location):Boolean"></a>
+      <a id="isInBounds(Location):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInBounds</span><span class="params">(<span name="l">l: <a href="#Location=Option[Board.this.Cell]" class="extmbr" name="ostinato.core.Board.Location">Location</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -461,15 +487,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.core.Board#pieces" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pieces:scala.collection.immutable.Vector[P]"></a>
-      <a id="pieces:Vector[P]"></a>
+      <a id="pieces:scala.collection.immutable.Vector[PC]"></a>
+      <a id="pieces:Vector[PC]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pieces</span><span class="result">: <span class="extype" name="scala.collection.immutable.Vector">Vector</span>[<span class="extype" name="ostinato.core.Board.P">P</span>]</span>
+        <span class="name">pieces</span><span class="result">: <span class="extype" name="scala.collection.immutable.Vector">Vector</span>[<span class="extype" name="ostinato.core.Board.PC">PC</span>]</span>
       </span>
       </h4>
       

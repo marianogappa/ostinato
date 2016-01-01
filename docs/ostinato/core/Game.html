@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Game</span><span class="tparams">[<span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[_, _, _, _]</span>, <span name="P">P &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, _, _, _]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Game</span><span class="tparams">[<span name="B">B &lt;: <a href="Board.html" class="extype" name="ostinato.core.Board">Board</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, <span class="extype" name="ostinato.core.Game.A">A</span>, <span class="extype" name="ostinato.core.Game.PC">PC</span>, <span class="extype" name="ostinato.core.Game.PL">PL</span>, <span class="extype" name="ostinato.core.Game.R">R</span>]</span>, <span name="A">A &lt;: <a href="Action.html" class="extype" name="ostinato.core.Action">Action</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, <span class="extype" name="ostinato.core.Game.A">A</span>, <span class="extype" name="ostinato.core.Game.PC">PC</span>, <span class="extype" name="ostinato.core.Game.PL">PL</span>, <span class="extype" name="ostinato.core.Game.R">R</span>]</span>, <span name="PC">PC &lt;: <a href="Piece.html" class="extype" name="ostinato.core.Piece">Piece</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, <span class="extype" name="ostinato.core.Game.A">A</span>, <span class="extype" name="ostinato.core.Game.PC">PC</span>, <span class="extype" name="ostinato.core.Game.PL">PL</span>, <span class="extype" name="ostinato.core.Game.R">R</span>]</span>, <span name="PL">PL &lt;: <a href="Player.html" class="extype" name="ostinato.core.Player">Player</a>[<span class="extype" name="ostinato.core.Game.B">B</span>, <span class="extype" name="ostinato.core.Game.A">A</span>, <span class="extype" name="ostinato.core.Game.PC">PC</span>, <span class="extype" name="ostinato.core.Game.PL">PL</span>, <span class="extype" name="ostinato.core.Game.R">R</span>]</span>, <span name="R">R &lt;: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -83,15 +83,15 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.core.Game#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(board:B,players:List[P],rules:ostinato.core.Rules):ostinato.core.Game[B,P]"></a>
-      <a id="&lt;init&gt;:Game[B,P]"></a>
+      <a id="&lt;init&gt;(board:B,players:List[PL],rules:ostinato.core.Rules):ostinato.core.Game[B,A,PC,PL,R]"></a>
+      <a id="&lt;init&gt;:Game[B,A,PC,PL,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Game</span><span class="params">(<span name="board">board: <span class="extype" name="ostinato.core.Game.B">B</span></span>, <span name="players">players: <span class="extype" name="scala.List">List</span>[<span class="extype" name="ostinato.core.Game.P">P</span>]</span>, <span name="rules">rules: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>)</span>
+        <span class="name">Game</span><span class="params">(<span name="board">board: <span class="extype" name="ostinato.core.Game.B">B</span></span>, <span name="players">players: <span class="extype" name="scala.List">List</span>[<span class="extype" name="ostinato.core.Game.PL">PL</span>]</span>, <span name="rules">rules: <a href="Rules.html" class="extype" name="ostinato.core.Rules">Rules</a></span>)</span>
       </span>
       </h4>
       
@@ -338,15 +338,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.core.Game#players" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="players:List[P]"></a>
-      <a id="players:List[P]"></a>
+      <a id="players:List[PL]"></a>
+      <a id="players:List[PL]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">players</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="ostinato.core.Game.P">P</span>]</span>
+        <span class="name">players</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="ostinato.core.Game.PL">PL</span>]</span>
       </span>
       </h4>
       
