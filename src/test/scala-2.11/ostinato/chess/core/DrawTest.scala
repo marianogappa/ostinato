@@ -7,7 +7,7 @@ import ostinato.core.XY
 class DrawTest extends FunSpec with ShouldMatchers {
   describe("Board Insufficient material") {
     it("should find insufficient material on the Kk case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -20,7 +20,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find insufficient material on the KBk case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |.....♗..
           |........
@@ -33,7 +33,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find insufficient material on the Kkb case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -46,7 +46,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find insufficient material on the KNk case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |......♘.
@@ -59,7 +59,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find insufficient material on the Kkn case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -72,7 +72,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find insufficient material on the KBkb case") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """♝.♝.♝.♝.
           |.♝.♝.♝.♝
           |♗.♗.♗.♗.
@@ -85,7 +85,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
       game.board.hasInsufficientMaterial shouldBe true
     }
     it("should find Draw based on insufficient material") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """♝.♝.♝.♝.
           |.♝.♝.♝.♝
           |♗.♗.♗.♗.
@@ -114,7 +114,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
   describe("Threefold repetition rule") {
     it("should calculate the threefold repetition rule properly") {
       val board =
-        ChessGame.fromString(
+        ChessGame.fromGridString(
           """♜.......
             |........
             |........
@@ -143,7 +143,7 @@ class DrawTest extends FunSpec with ShouldMatchers {
   }
   describe("Stalemate rule") {
     it("should find stalemate") {
-      ChessGame.fromString(
+      ChessGame.fromGridString(
         """..♛.....
           |........
           |♛.......

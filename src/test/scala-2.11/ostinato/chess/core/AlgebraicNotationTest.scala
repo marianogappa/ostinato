@@ -8,7 +8,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
   describe("Algebraic notation for pieces") {
     it("should find black rook at h8 if white moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -21,7 +21,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('h', 8)
     }
     it("should find black rook at a1 if white pawn moves upwards") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -35,7 +35,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
     }
     it("should find white rook at e4 if white pawn moves downwards") {
       implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -289,7 +289,7 @@ class AlgebraicNotationTest extends FunSpec with ShouldMatchers {
       Set(pgn, algebraic, figurine, coordinate, descriptive, iccf, smith) foreach {
         case Right(parsedGame) ⇒
           parsedGame.size shouldBe 13
-          parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromString(
+          parsedGame.last shouldBe (CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...

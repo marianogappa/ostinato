@@ -3,7 +3,7 @@ package ostinato.chess.core
 import ostinato.core._
 
 object ChessGame {
-  def fromString(
+  def fromGridString(
     string: String,
     turn: ChessPlayer = WhiteChessPlayer,
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
@@ -20,7 +20,7 @@ object ChessGame {
     }
 
     // TODO: headOption means keep only the first; this is incorrect: if there's 2 there's a problem!
-    ChessGame(new ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock), rules)
+    ChessGame(ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock), rules)
   }
 
   def fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Option[ChessGame] =
@@ -63,7 +63,7 @@ object ChessGame {
       None
     }
 
-  val defaultGame: ChessGame = fromString(
+  val defaultGame: ChessGame = fromGridString(
     """♜♞♝♛♚♝♞♜
       |♟♟♟♟♟♟♟♟
       |........
@@ -84,4 +84,7 @@ case class ChessGame(override val board: ChessBoard, override val rules: ChessRu
   def isGameOver(implicit rules: ChessRules = ChessRules.default): Boolean = isDraw || lossFor.nonEmpty
   def lossFor(implicit rules: ChessRules = ChessRules.default): Option[ChessPlayer] = players find (board.isLossFor(_) == true)
   def isDraw(implicit rules: ChessRules = ChessRules.default): Boolean = board.isDraw
+
+  def toShortFen = board.toShortFen
+  def toFen = board.toFen
 }

@@ -27,6 +27,17 @@ package object core {
   lazy val castlingOnlyBlackAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == BlackChessPlayer) }
   lazy val castlingOnlyWhiteAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == WhiteChessPlayer) }
 
+  def fenCastling(castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean]) =
+    if (castlingAvailable == castlingFullyUnavailable)
+      "-"
+    else
+      List(
+        "K" -> castlingAvailable((WhiteChessPlayer, CastlingSide.Kingside)),
+        "Q" -> castlingAvailable((WhiteChessPlayer, CastlingSide.Queenside)),
+        "k" -> castlingAvailable((BlackChessPlayer, CastlingSide.Kingside)),
+        "q" -> castlingAvailable((BlackChessPlayer, CastlingSide.Queenside))
+      ).filter(_._2).map(_._1).mkString
+
   object ChessXY {
     lazy val chars = "abcdefgh"
     def fromAn(string: String)(implicit rules: ChessRules = ChessRules.default) = {
@@ -114,7 +125,7 @@ package object core {
   }
 
   case class PastBoards(boards: Map[String, Int] = Map()) {
-    def serialiseBoard(board: ChessBoard): String = "^([^ ]+ +[^ ]+ +[^ ]+ +[^ ]+).*$".r.replaceFirstIn(board.toFen, "$1")
+    def serialiseBoard(board: ChessBoard): String = "^([^ ]+ +[^ ]+ +[^ ]+ +[^ ]+).*$".r.replaceFirstIn(board.toShortFen, "$1")
     lazy val isInThreefoldRepetition = boards.values.exists(_ >= 3)
     val isEmpty = boards.isEmpty
 

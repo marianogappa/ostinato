@@ -7,11 +7,16 @@ import org.scalatest.{FunSpec, ShouldMatchers}
 class FenNotationTest extends FunSpec with ShouldMatchers {
 
   describe("to FEN Notation") {
+    it("should go from and to FEN Notation") {
+      val fenGame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      ChessGame.fromFen(fenGame).get.toFen shouldBe fenGame
+    }
     it("should encode a default ChessBoard to FEN Notation") {
-      ChessGame.defaultGame.board.toFen shouldBe "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+      ChessGame.defaultGame.board.toFen shouldBe "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      ChessGame.defaultGame.board.toShortFen shouldBe "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     }
     it("should encode this board") {
-      ChessGame.fromString(
+      ChessGame.fromGridString(
         """.......♔
           |........
           |♚.♙.....
@@ -20,7 +25,7 @@ class FenNotationTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |""".stripMargin).board.toFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
+          |""".stripMargin).board.toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
     }
   }
 
@@ -29,7 +34,7 @@ class FenNotationTest extends FunSpec with ShouldMatchers {
       ChessGame.fromShortFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") shouldBe Some(ChessGame.defaultGame)
     }
     it("should decode this chessboard in short FEN Notation") {
-      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Some(ChessGame.fromString(
+      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Some(ChessGame.fromGridString(
         """.......♔
           |........
           |♚.♙.....
@@ -51,7 +56,7 @@ class FenNotationTest extends FunSpec with ShouldMatchers {
     }
     it("should decode the default chess setup plus an e4 in FEN Notation") {
       ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1") shouldBe
-      Some(ChessGame.fromString(
+      Some(ChessGame.fromGridString(
       """♜♞♝♛♚♝♞♜
         |♟♟♟♟♟♟♟♟
         |........
@@ -64,7 +69,7 @@ class FenNotationTest extends FunSpec with ShouldMatchers {
     }
     it("should decode a chess setup with black en passant in FEN Notation") {
       ChessGame.fromFen("rnbqkbnr/p1pppppp/8/1p6/8/8/PPPPPPPP/RNBQKBNR w KQkq b6 4 5") shouldBe
-      Some(ChessGame.fromString(
+      Some(ChessGame.fromGridString(
       """♜♞♝♛♚♝♞♜
         |♟.♟♟♟♟♟♟
         |.↓......

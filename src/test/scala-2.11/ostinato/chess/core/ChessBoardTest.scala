@@ -50,7 +50,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
     }
 
     it("should change turn after a action when on blacks's turn") {
-      val game = ChessGame.fromString("""♜♞♝♛♚♝♞♜
+      val game = ChessGame.fromGridString("""♜♞♝♛♚♝♞♜
                                         |♟♟♟♟♟♟♟♟
                                         |........
                                         |........

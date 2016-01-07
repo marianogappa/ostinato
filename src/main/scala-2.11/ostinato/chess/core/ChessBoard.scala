@@ -166,7 +166,7 @@ case class ChessBoard(
     lazy val allNewBoards = player.actions(this)(noCheckForMates) map doAction
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 
-    player.kingPiece(this).map { king =>
+    player.kingPiece(this).map { king ⇒
       (basedOnCheckKnown || king.isThreatened(this)(noCheckForMates)) && (allNewBoards.flatten forall isKingThreatened)
     } getOrElse rules.noKingMeansLoss
   }
@@ -178,10 +178,18 @@ case class ChessBoard(
     linesOfCells map (_ map cellToChar) map (_.mkString) mkString "\n"
   }
 
-  def toFen: String = grid.map {
+  def toShortFen: String = grid.map {
     case Some(c) ⇒ c.toFen
     case _       ⇒ ' '
   }.foldLeft(Fen(""))(Fen.+).toString
+
+  def toFen: String =
+    toShortFen + " " +
+      turn.toFen + " " +
+      fenCastling(castlingAvailable) + " " +
+      enPassantPawn.map(_.from.toAn).getOrElse("-") + " " +
+      halfMoveClock + " " +
+      fullMoveNumber
 
   private def simpleInsufficientMaterial =
     Set("Kk", "Kbk", "KNk", "BKk", "Kkn") contains pieces.map(_.toFen).mkString.sorted

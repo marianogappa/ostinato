@@ -19,7 +19,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 14 possible actions for a Rook") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -33,7 +33,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Rook") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |...♞....
@@ -47,7 +47,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 1 possible actions for a Rook") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |...♞....
@@ -61,7 +61,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 13 possible actions for a Bishop") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -75,7 +75,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Bishop") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |..♞♞♞...
@@ -89,7 +89,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Bishop (diagonally trapped)") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |..♞♞♞...
@@ -103,7 +103,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Bishop (one diagonal free)") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |..♞♞♞...
@@ -117,7 +117,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 1 possible actions for a Bishop (take)") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |..♞♞♞...
@@ -131,7 +131,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 8 possible actions for a Knight") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -145,7 +145,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Knight") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """♞.......
           |..♝.....
           |.♝......
@@ -159,7 +159,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 1 possible actions for a Knight") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """♞.......
           |..♝.....
           |.♗......
@@ -173,7 +173,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 27 possible actions for a Queen") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -187,7 +187,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 7 possible actions for a Queen") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """......♝♛
           |......♝.
           |........
@@ -201,7 +201,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 1 possible actions for a Queen") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """......♝♛
           |......♝♗
           |........
@@ -215,7 +215,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 0 possible actions for a Queen; can't take King") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """......♝♛
           |......♝♔
           |........
@@ -229,7 +229,7 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
     }
 
     it("should find 8 possible actions for a King") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........

@@ -7,7 +7,7 @@ import ostinato.core.{ Piece, XY }
 class PieceDeltasTest extends FunSpec with ShouldMatchers {
   describe("Piece deltas on the board") {
     it("should find no deltas for trapped king") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |...♜♜♜..
@@ -20,7 +20,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
       game.board.kings.head.deltas(game.board) shouldBe Set()
     }
     it("should find only one delta for trapped king") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |...♜♜♜..
@@ -33,7 +33,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
       game.board.kings.head.deltas(game.board) shouldBe Set(XY(0, 1))
     }
     it("should find all deltas for king (except castling)") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -47,7 +47,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1)))
     }
     it("should find all deltas for king (including castling but except going up)") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """....♚...
           |........
           |........
@@ -61,7 +61,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((-1, 0), (1, 0), (0, 1), (1, 1), (-1, 1), (2, 0), (-2, 0)))
     }
     it("should find delta to capture enemy queen") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |...♜♜♜..
@@ -75,7 +75,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((1, 0)))
     }
     it("should find all pawn deltas including en passant movement") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -89,7 +89,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((0, -1), (0, -2), (-1, -1), (1, -1)))
     }
     it("should find all pawn deltas except en passant movement") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |........
           |........
@@ -103,7 +103,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((0, -1), (-1, -1), (1, -1)))
     }
     it("should find all pawn deltas except en passant movement, and promotion quadruplication shouldn't affect it") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |...♙....
           |........
@@ -117,7 +117,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
         Piece.toXYs(Set((0, -1), (-1, -1), (1, -1)))
     }
     it("should find all deltas for queen") {
-      val game = ChessGame.fromString(
+      val game = ChessGame.fromGridString(
         """........
           |...♛....
           |........
