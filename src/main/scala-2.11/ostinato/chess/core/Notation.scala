@@ -1,207 +1,59 @@
 package ostinato.chess.core
 
-import scala.annotation.tailrec
+trait NotationRules
 
-object Notation {
-  def allPossibleNotations(a: ChessAction)(implicit rules: ChessRules = ChessRules.default): Set[String] = {
-    def checkAndCheckMate(isCheck: Boolean, isCheckMate: Boolean) =
-      if (isCheckMate)
-        Set("#", "++", "mate", "‡", "≠")
-      else if (isCheck)
-        Set("+", "†", "ch", "dbl ch", "++", "") // TODO dbl ch and ++ should be calculated
-      else
-        Set("")
+abstract class Notation[NR <: NotationRules] {
+  def allPossibleRules: Set[NR]
+}
 
-    implicit class CartesianProductableString(s: String) {
-      def *(that: String) = Set(s + that)
-      def *(that: Set[String]) = for {
-        i1 ← Set(s)
-        i2 ← that
-      } yield i1 + i2
-    }
-    implicit class CartesianProductableStringSet(s: Set[String]) {
-      def *(that: String) = for {
-        i1 ← s
-        i2 ← Set(that)
-      } yield i1 + i2
-      def *(that: Set[String]) = for {
-        i1 ← s
-        i2 ← that
-      } yield i1 + i2
+trait ActionParser {
+  def r: NotationRules
+
+  def parseAction(a: ChessAction)(
+    implicit rules: ChessRules = ChessRules.default): Set[(String, (ChessAction, NotationRules))] = {
+    val s = a match {
+      case a: MoveAction             ⇒ move(a)
+      case a: EnPassantAction        ⇒ enPassant(a)
+      case a: CaptureAction          ⇒ capture(a)
+      case a: EnPassantCaptureAction ⇒ enPassantCapture(a)
+      case a: CapturePromoteAction   ⇒ capturePromote(a)
+      case a: CastlingAction         ⇒ castling(a)
+      case a: LoseAction             ⇒ lose(a)
+      case a: DrawAction             ⇒ draw(a)
+      case _                         ⇒ Set.empty[String]
     }
 
-    def genericPromotion(toPiece: ChessPiece) =
-      Set(toPiece.toAn.toString, toPiece.toFigurine.toString, s"(${toPiece.toAn})", s"(${toPiece.toFigurine})",
-        s"=${toPiece.toAn}", s"=${toPiece.toFigurine}", s"/${toPiece.toAn}", s"/${toPiece.toFigurine}")
-
-    def genericCastling(a: CastlingAction) =
-      if (a.isKingside)
-        Set("0-0", "O-O")
-      else
-        Set("0-0-0", "O-O")
-
-    def genericDraw(a: DrawAction) = Set("½–½", "draws", "1/2-1/2")
-
-    def genericLoss(a: LoseAction) = if (a.player == BlackChessPlayer) Set("1-0") else Set("0-1")
-
-    def iccfAction(a: ChessAction) =
-      a.fromPiece.pos.toIccf.toString * (a.fromPiece.pos + a.delta).toIccf.toString
-
-    def iccfPromote(a: PromoteAction) =
-      a.fromPiece.pos.toIccf.toString * (a.fromPiece.pos + a.delta).toIccf.toString * a.toPiece.toIccf.toString
-
-    // TODO Missing : at the end as an option
-    def canCapture(a: CaptureAction) =
-      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
-        Set("x", ":", "-") *
-        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Missing : at the end as an option
-    def canEnPassantCapture(a: EnPassantCaptureAction) =
-      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
-        Set("x", ":", "-") *
-        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Missing : at the end as an option
-    def canCapturePromote(a: CapturePromoteAction) =
-      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
-        Set("x", ":", "-") *
-        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
-        genericPromotion(a.promotePiece) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def canAction(a: ChessAction) =
-      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
-        "-" *
-        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def canPromote(a: PromoteAction) =
-      Set(a.fromPiece.pos.toAn.toString.toLowerCase, a.fromPiece.pos.toAn.toString.toUpperCase) *
-        "-" *
-        Set((a.fromPiece.pos + a.delta).toAn.toString.toLowerCase, (a.fromPiece.pos + a.delta).toAn.toString.toUpperCase) *
-        genericPromotion(a.toPiece) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def smithMove(a: ChessAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString
-
-    def smithCapture(a: CaptureAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.toPiece.toDn.map(_.toLowerCase)
-
-    def smithCapturePromote(a: CapturePromoteAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.capturedPiece.toDn.map(_.toLowerCase) * a.promotePiece.toAn
-
-    def smithEnPassantCapture(a: EnPassantCaptureAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.toPawn.toDn.map(_.toLowerCase)
-
-    def smithCastling(a: CastlingAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * (if (a.isKingside) "c" else "C")
-
-    def smithPromote(a: PromoteAction) =
-      a.fromPiece.pos.toAn.toString * (a.fromPiece.pos + a.delta).toAn.toString * a.toPiece.toAn
-
-    def descriptiveMove(a: ChessAction) =
-      (a.fromPiece.toDn * Set("-", "") * (a.fromPiece.pos + a.delta).toDn(a.turn)) * checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Descriptive actions with disambiguations
-    def descriptiveCapture(a: CaptureAction) =
-      a.fromPiece.toDn * "x" * a.toPiece.toDn * checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Descriptive actions with disambiguations
-    def descriptiveEnPassantCapture(a: EnPassantCaptureAction) =
-      a.fromPiece.toDn * "x" * a.toPawn.toDn * checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Descriptive actions with disambiguations
-    def descriptiveCapturePromote(a: CapturePromoteAction) =
-      a.fromPiece.toDn * "x" * a.capturedPiece.toDn * genericPromotion(a.promotePiece) * checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def descriptiveCastling(a: CastlingAction) =
-      (genericCastling(a) ++ Set("Castles", "castles")) * checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def anMove(a: ChessAction) =
-      Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString) *
-        Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
-        (a.fromPiece.pos + a.delta).toAn.toString *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def anPromote(a: PromoteAction) =
-      Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
-        (a.fromPiece.pos + a.delta).toAn.toString *
-        genericPromotion(a.toPiece) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    // TODO Missing : at the end as an option
-    def anCapture(a: CaptureAction) =
-      (if (a.fromPiece.isPawn) Set(a.fromPiece.pos.toAn.x.toString) else Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString)) *
-        Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
-        Set("x", ":", "") *
-        Set((a.fromPiece.pos + a.delta).toAn.toString, (a.fromPiece.pos + a.delta).toAn.x.toString) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def anCapturePromote(a: CapturePromoteAction) =
-      (if (a.fromPiece.isPawn) Set(a.fromPiece.pos.toAn.x.toString) else Set(a.fromPiece.toAn.toString, a.fromPiece.toFigurine.toString)) *
-        Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString) *
-        Set("x", ":", "") *
-        Set((a.fromPiece.pos + a.delta).toAn.toString, (a.fromPiece.pos + a.delta).toAn.x.toString) *
-        genericPromotion(a.promotePiece) *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    def anEnPassantCapture(a: EnPassantCaptureAction) =
-      a.fromPawn.pos.toAn.x.toString *
-        (a.fromPawn.pos + a.delta).toAn.toString *
-        Set("e.p.", "") *
-        checkAndCheckMate(a.isCheck, a.isCheckmate)
-
-    a match {
-      case a: CaptureAction ⇒
-        iccfAction(a) ++ canCapture(a) ++ smithCapture(a) ++ descriptiveCapture(a) ++ anCapture(a)
-      case a: MoveAction ⇒
-        iccfAction(a) ++ canAction(a) ++ smithMove(a) ++ descriptiveMove(a) ++ anMove(a)
-      case a: EnPassantCaptureAction ⇒
-        iccfAction(a) ++ canEnPassantCapture(a) ++ smithEnPassantCapture(a) ++ descriptiveEnPassantCapture(a) ++ anEnPassantCapture(a)
-      case a: EnPassantAction ⇒
-        iccfAction(a) ++ canAction(a) ++ smithMove(a) ++ descriptiveMove(a) ++ anMove(a)
-      case a: PromoteAction ⇒
-        iccfPromote(a) ++ canPromote(a) ++ smithPromote(a) ++ anPromote(a)
-      case a: CastlingAction ⇒
-        iccfAction(a) ++ genericCastling(a) ++ smithCastling(a) ++ descriptiveCastling(a)
-      case a: DrawAction ⇒
-        genericDraw(a)
-      case a: CapturePromoteAction ⇒
-        iccfAction(a) ++ canCapturePromote(a) ++ smithCapturePromote(a) ++ descriptiveCapturePromote(a) ++ anCapturePromote(a)
-      case a: LoseAction ⇒
-        genericLoss(a)
-    }
+    s.map((_, (a, r)))
   }
 
-  private def prepareMatchString(s: String) =
-    s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ").replaceAll(" +", " ").replaceAll("""[\?!]*""", "").trim.split(' ')
+  protected def move(a: MoveAction): Set[String]
+  protected def enPassant(a: EnPassantAction): Set[String]
+  protected def capture(a: CaptureAction): Set[String]
+  protected def enPassantCapture(a: EnPassantCaptureAction): Set[String]
+  protected def capturePromote(a: CapturePromoteAction): Set[String]
+  protected def castling(a: CastlingAction)(implicit rules: ChessRules = ChessRules.default): Set[String]
+  protected def lose(a: LoseAction): Set[String]
+  protected def draw(a: DrawAction): Set[String]
 
-  @tailrec
-  private def doParseMatch(actions: List[String], currentBoard: ChessBoard, states: List[(String, Option[(ChessAction, ChessBoard)])])(
-    implicit rules: ChessRules = ChessRules.default): Either[List[(String, Option[(ChessAction, ChessBoard)])], List[(ChessAction, ChessBoard)]] =
-    actions match {
-      case Nil ⇒
-        Right(states collect { case (_, Some(s)) => s })
-      case a :: as ⇒
-        val allPossibleActions = currentBoard.actions.flatMap(a ⇒ a.allPossibleNotations.map((_, a))).toMap
-          allPossibleActions.get(a) match {
-          case Some(chessAction: ChessAction) ⇒
-            currentBoard.doAction(chessAction) match {
-              case Some(newBoard: ChessBoard) ⇒
-//                println(s"Successfully processed $a with $chessAction", newBoard)
-                doParseMatch(as, newBoard, states :+ (a, Some((chessAction, newBoard))))
-              case None ⇒
-                Left(states ++ (a :: as).map((_, None)))
-            }
-          case None ⇒
-            Left(states ++ (a :: as).map((_, None)))
-        }
-    }
+  implicit class CartesianProductableString(s: String) {
+    def *(that: String) = Set(s + that)
+    def *(that: Set[String]) = for {
+      i1 ← Set(s)
+      i2 ← that
+    } yield i1 + i2
+  }
+  implicit class CartesianProductableStringSet(s: Set[String]) {
+    def *(that: String) = for {
+      i1 ← s
+      i2 ← Set(that)
+    } yield i1 + i2
+    def *(that: Set[String]) = for {
+      i1 ← s
+      i2 ← that
+    } yield i1 + i2
+  }
 
-  def parseMatchString(s: String, board: ChessBoard = ChessGame.defaultGame.board)(implicit rules: ChessRules = ChessRules.default) =
-    doParseMatch(prepareMatchString(s).toList, board, List.empty[(String, Option[(ChessAction, ChessBoard)])])
+  def genericPromotion(toPiece: ChessPiece) =
+    Set(toPiece.toAn.toString, toPiece.toFigurine.toString, s"(${toPiece.toAn})", s"(${toPiece.toFigurine})",
+      s"=${toPiece.toAn}", s"=${toPiece.toFigurine}", s"/${toPiece.toAn}", s"/${toPiece.toFigurine}")
 }

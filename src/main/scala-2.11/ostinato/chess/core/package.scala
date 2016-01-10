@@ -92,8 +92,8 @@ package object core {
 
     def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
       (toAn, turn) match {
-        case (AnPos(x, y), WhiteChessPlayer) => dnConversions(x) map (_ + y)
-        case (AnPos(x, y), BlackChessPlayer) => dnConversions(x) map (_ + (9 - y))
+        case (AnPos(x, y), WhiteChessPlayer) => dnConversions(x) map (DnPos(_, y))
+        case (AnPos(x, y), BlackChessPlayer) => dnConversions(x) map (DnPos(_, 9 - y))
       }
     }
 
@@ -103,12 +103,11 @@ package object core {
     }
   }
 
-  implicit class ChessAnAction(action: ChessAction) {
-    def allPossibleNotations(implicit rules: ChessRules = ChessRules.default): Set[String] =
-      Notation.allPossibleNotations(action)
+  case class AnPos(x: Char, y: Int) {
+    override def toString = s"$x$y"
   }
 
-  case class AnPos(x: Char, y: Int) {
+  case class DnPos(x: String, y: Int) {
     override def toString = s"$x$y"
   }
 

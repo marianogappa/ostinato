@@ -4,7 +4,7 @@ import ostinato.chess.core._
 import ostinato.core.XY
 import org.scalatest.{FunSpec, ShouldMatchers}
 
-class FenNotationTest extends FunSpec with ShouldMatchers {
+class FenNotationParserTest extends FunSpec with ShouldMatchers {
 
   describe("to FEN Notation") {
     it("should go from and to FEN Notation") {
