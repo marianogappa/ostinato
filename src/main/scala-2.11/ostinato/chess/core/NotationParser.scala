@@ -5,6 +5,13 @@ object NotationParser {
   type ParseStep = (String, Option[(ChessAction, ChessBoard)])
   type ParseResult = Either[Option[NotationRules], NotationRules]
 
+  private val cache: collection.mutable.Map[ChessBoard, Set[ChessAction]] = collection.mutable.Map.empty[ChessBoard, Set[ChessAction]]
+  private def store(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) = {
+    val actions = board.actions
+    cache(board) = actions
+    actions
+  }
+
   private def prepareMatchString(s: String) =
     s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ").replaceAll(" +", " ").replaceAll("""[\?!]*""", "").trim.split(' ')
 
@@ -14,7 +21,7 @@ object NotationParser {
       case Nil ⇒
         Set((steps, Right(actionParser.r)))
       case a :: as ⇒
-        val nodes = currentBoard.actions flatMap actionParser.parseAction filter (_._1 == a)
+        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionParser.parseAction filter (_._1 == a)
 
         if (nodes.isEmpty) {
           Set((steps ++ (a :: as).map((_, None)), Left(Some(actionParser.r))))
