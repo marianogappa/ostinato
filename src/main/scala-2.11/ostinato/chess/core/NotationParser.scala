@@ -39,10 +39,12 @@ object NotationParser {
     lazy val hasSuccess = results exists (_._2.isRight)
     lazy val removeFailures = results filter (_._2.isRight)
 
+    def validSteps(steps: List[ParseStep]) = steps.count(_._2.nonEmpty)
+
     lazy val leaveBestAttempts = {
-      val sorted = results.toList.sortWith(_._1.size >= _._1.size)
-      val targetSize = sorted.head._1.size
-      sorted.takeWhile(_._1 == targetSize).toSet
+      val sorted = results.toList.sortWith( (a, b) => validSteps(a._1) > validSteps(b._1))
+      val targetSize = validSteps(sorted.head._1)
+      sorted.takeWhile(r => validSteps(r._1) == targetSize).toSet
     }
 
     if (results.isEmpty)
