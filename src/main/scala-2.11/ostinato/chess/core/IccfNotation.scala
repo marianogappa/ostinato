@@ -1,8 +1,8 @@
 package ostinato.chess.core
 
 case class IccfNotationRules() extends NotationRules {
-  val shortName = "Smith Notation"
-  val fullName = "Smith Notation"
+  val shortName = "ICCF Notation"
+  val fullName = "ICCF Notation"
 }
 
 object IccfNotation extends Notation[IccfNotationRules] {
