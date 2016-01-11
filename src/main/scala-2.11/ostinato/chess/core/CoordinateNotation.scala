@@ -4,7 +4,16 @@ case class CoordinateNotationRules(
   lowerCaseLetters: Boolean,
   useDashDelimiter: Boolean,
   distinguishCaptures: Boolean,
-  castlingNotation: String) extends NotationRules
+  castlingNotation: String) extends NotationRules {
+
+  val shortName = "Coordinate Notation"
+  val fullName =
+    s"""Coordinate Notation (using ${if (lowerCaseLetters) "lowercase" else "uppercase"} letters for files,
+       | ${if (useDashDelimiter) "using" else "not using"} dashes as delimiters,
+       | ${if (distinguishCaptures) "distinguishing" else "not distinguishing"} captures, using $castlingNotation for
+       | castling notation)
+     """.stripMargin
+}
 
 object CoordinateNotation extends Notation[CoordinateNotationRules] {
   def allPossibleRules: Set[CoordinateNotationRules] = for {

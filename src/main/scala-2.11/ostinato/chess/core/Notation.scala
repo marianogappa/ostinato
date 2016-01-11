@@ -1,6 +1,9 @@
 package ostinato.chess.core
 
-trait NotationRules
+trait NotationRules {
+  val shortName: String
+  val fullName: String
+}
 
 abstract class Notation[NR <: NotationRules] {
   def allPossibleRules: Set[NR]

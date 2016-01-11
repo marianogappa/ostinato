@@ -4,7 +4,16 @@ case class DescriptiveNotationRules(
   omitDash: Boolean,
   numericalRankBeforeFile: Boolean,
   omitFirstRank: Boolean,
-  castlingNotation: String) extends NotationRules
+  castlingNotation: String) extends NotationRules {
+
+  val shortName = "Descriptive Notation"
+  val fullName =
+    s"""Descriptive Notation (using ${if (omitDash) "omitting" else "not omitting"} dashes,
+        | ${if (numericalRankBeforeFile) "using" else "not using"} numerical rank before file,
+        | ${if (omitFirstRank) "omitting" else "not omitting"} first rank, using $castlingNotation for
+        | castling notation)
+     """.stripMargin
+}
 
 object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
   def allPossibleRules: Set[DescriptiveNotationRules] = {

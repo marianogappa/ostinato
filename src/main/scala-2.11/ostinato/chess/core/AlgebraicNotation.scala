@@ -5,7 +5,18 @@ case class AlgebraicNotationRules(
   figurine: Boolean,
   distinguishCaptures: Boolean,
   colonForCaptures: Boolean,
-  castlingNotation: String) extends NotationRules
+  castlingNotation: String) extends NotationRules {
+
+  val shortName = "Algebraic Notation"
+  val fullName =
+    s"""Algebraic Notation (using ${if (lowerCaseLetters) "lowercase" else "uppercase"} letters for files,
+        | ${if (figurine) "using" else "not using"} figurines for pieces,
+        | ${if (distinguishCaptures) "distinguishing" else "not distinguishing"} captures,
+        | ${if (colonForCaptures) "using" else "not using"} colon for captures,
+        | using $castlingNotation for
+        | castling notation)
+     """.stripMargin
+}
 
 object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
   def allPossibleRules: Set[AlgebraicNotationRules] = for {

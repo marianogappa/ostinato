@@ -1,6 +1,9 @@
 package ostinato.chess.core
 
-case class SmithNotationRules() extends NotationRules
+case class SmithNotationRules() extends NotationRules {
+  val shortName = "Smith Notation"
+  val fullName = "Smith Notation"
+}
 
 object SmithNotation extends Notation[SmithNotationRules] {
   def allPossibleRules: Set[SmithNotationRules] = Set(SmithNotationRules())
