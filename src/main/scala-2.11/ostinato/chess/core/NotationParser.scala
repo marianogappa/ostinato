@@ -1,5 +1,7 @@
 package ostinato.chess.core
 
+import scala.annotation.tailrec
+
 object NotationParser {
   type ParsedMatch = (List[ParseStep], ParseResult)
   type ParseStep = (String, Option[(ChessAction, ChessBoard)])
@@ -31,7 +33,7 @@ object NotationParser {
               case (_: String, (chessAction: ChessAction, notationRules: NotationRules)) ⇒
                 currentBoard.doAction(chessAction) match {
                   case Some(newBoard: ChessBoard) ⇒
-//                                    println(s"Successfully processed $a with $chessAction", newBoard)
+                    //                                    println(s"Successfully processed $a with $chessAction", newBoard)
                     doParseMatch(as, newBoard, steps :+ (a, Some((chessAction, newBoard))), actionParser)
                   case None ⇒
                     val allSteps: List[ParseStep] = steps ++ (a :: as).map((_, None))
@@ -49,9 +51,9 @@ object NotationParser {
     def validSteps(steps: List[ParseStep]) = steps.count(_._2.nonEmpty)
 
     lazy val leaveBestAttempts = {
-      val sorted = results.toList.sortWith( (a, b) => validSteps(a._1) > validSteps(b._1))
+      val sorted = results.toList.sortWith((a, b) ⇒ validSteps(a._1) > validSteps(b._1))
       val targetSize = validSteps(sorted.head._1)
-      sorted.takeWhile(r => validSteps(r._1) == targetSize).toSet
+      sorted.takeWhile(r ⇒ validSteps(r._1) == targetSize).toSet
     }
 
     if (results.isEmpty)
@@ -62,18 +64,28 @@ object NotationParser {
       leaveBestAttempts
   }
 
-  private def allActionParsers: Set[ActionParser] = {
-    val dap = DescriptiveNotation.allPossibleRules map DescriptiveNotationActionParser
-    val cap = CoordinateNotation.allPossibleRules map CoordinateNotationActionParser
-    val sap = SmithNotation.allPossibleRules map SmithNotationActionParser
-    val aap = AlgebraicNotation.allPossibleRules map AlgebraicNotationActionParser
-    val iap = IccfNotation.allPossibleRules map IccfNotationActionParser
-
-    dap ++ cap ++ sap ++ aap ++ iap
+  private def allActionParsers: List[ActionParser] = {
+    (AlgebraicNotation.allPossibleRules map AlgebraicNotationActionParser).toList ++
+    (SmithNotation.allPossibleRules map SmithNotationActionParser).toList ++
+    (IccfNotation.allPossibleRules map IccfNotationActionParser).toList ++
+    (DescriptiveNotation.allPossibleRules map DescriptiveNotationActionParser).toList ++
+    (CoordinateNotation.allPossibleRules map CoordinateNotationActionParser).toList
   }
 
-  def parseMatchString(s: String, board: ChessBoard = ChessGame.defaultGame.board)(implicit rules: ChessRules = ChessRules.default) =
-    ParseResultsProxy(reduce(allActionParsers.flatMap(doParseMatch(prepareMatchString(s).toList, board, List.empty[ParseStep], _))))
+  @tailrec
+  def parseMatchString(
+    s: String,
+    board: ChessBoard = ChessGame.defaultGame.board,
+    actionParsers: List[ActionParser] = allActionParsers,
+    partialResults: Set[ParsedMatch] = Set())(
+      implicit rules: ChessRules = ChessRules.default): ParseResultsProxy =
+    actionParsers match {
+      case Nil | _ if partialResults exists (_._2.isRight) ⇒
+        ParseResultsProxy(reduce(partialResults))
+      case actionParser :: as ⇒
+        parseMatchString(s, board, as,
+          partialResults ++ doParseMatch(prepareMatchString(s).toList, board, List.empty[ParseStep], actionParser))
+    }
 
   case class ParseResultsProxy(results: Set[ParsedMatch]) {
     val isEmpty = results.isEmpty
