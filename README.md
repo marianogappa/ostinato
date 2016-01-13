@@ -241,11 +241,10 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Chess AI is very slow!!
 - Bug found on Chess Game demo: upon end game, AI changes assigned player?
-- fromString -> fromGridString
 - fromString should return Option[ChessGame]; do some validation (e.g. 2 en passant pawns?; not enough cells?)
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
-- At the moment FEN exporting can only export to "short FEN"; this is enough for ChessboardJS, not for other use cases
 - Complete support for all known notations
 - Research repositories
 
