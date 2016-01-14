@@ -204,6 +204,7 @@ case class ChessBoard(
 
   def nonFinalActions(implicit rules: ChessRules = ChessRules.default) = turn.nonFinalActions(this)
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
+  def actionStream(implicit rules: ChessRules = ChessRules.default) = turn.actionStream(this)
   def rooks = pieces filter (_.isRook)
   def knights = pieces filter (_.isKnight)
   def bishops = pieces filter (_.isBishop)

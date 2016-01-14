@@ -83,6 +83,7 @@ abstract class Player[B <: Board[B, A, PC, PL, R], A <: Action[B, A, PC, PL, R],
   }
 
   def actions(board: B)(implicit rules: R): Set[A] = pieces(board) flatMap (_.actions(board))
+  def actionStream(board: B)(implicit rules: R): Stream[A] = pieces(board).toStream flatMap (_.actions(board))
 }
 
 class Rules {} // TODO this should be abstract... and thought about

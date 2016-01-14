@@ -3,35 +3,46 @@ package ostinato.chess.ai
 import ostinato.chess.core._
 import ostinato.core.Ai
 
-case class ChessBasicAi(player: ChessPlayer, seed: Option[Long] = None)
+case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Option[Long] = None)
     extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules, ChessGame](player, seed) {
 
   override def nextAction(game: ChessGame)(implicit rules: ChessRules = ChessRules.default): Option[ChessAction] = {
-    val actionTree: List[(List[ChessAction], Int)] = tree(game.board, List(), 2)
-    val actionTreeWithoutLeaves: List[(List[ChessAction], Int)] = actionTree.map(t => (t._1.init, t._2))
-    val valuesOfEachPath: Map[List[ChessAction], List[(List[ChessAction], Int)]] = actionTreeWithoutLeaves.groupBy(_._1)
-    val minimumFloorOfEachPath: Map[List[ChessAction], Int] = valuesOfEachPath.map(kv => (kv._1, kv._2.map(_._2).min))
-    val actionWithMaximumMinimumFloor: (List[ChessAction], Int) = minimumFloorOfEachPath.maxBy(_._2)
+    val actions = game.board.actionStream.toSeq
+    val options = actions map (action => (action, {
+      val value = alphabeta(game.board.doAction(action).get, action)
+      if (debug) println(s"Evaluate $action => $value")
+      value
+    }))
 
-    actionWithMaximumMinimumFloor._1.headOption
+    val chosen = options.maxBy(_._2)._1
+    if (debug) println(s"Chose => $chosen")
+    Some(chosen)
   }
 
-  def tree(board: ChessBoard, actions: List[ChessAction], depth: Int): List[(List[ChessAction], Int)] =
-    if (depth == 0) {
-      if (actions.isEmpty)
-        List((List(), evaluate(board, None)))
-      else
-        actions.last match {
-          case a: DrawAction => List((actions, (10000 / 2) * sign(a.player.enemy)))
-          case a: LoseAction => List((actions, 10000 * sign(a.player.enemy)))
-          case a => List((actions, evaluate(board, Some(a))))
-        }
+  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = 4, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue, currentPlayer: ChessPlayer = player): Long = {
+    var a = alpha
+    var b = beta
+
+    if (depth == 0)
+      evaluate(board, action)
+    else if (player == currentPlayer) {
+      var v = -Long.MaxValue
+      board.actionStream.takeWhile { action =>
+        v = math.max(v, alphabeta(board.doAction(action).get, action, depth - 1, a, b, currentPlayer.enemy))
+        a = math.max(a, v)
+        b > a
+      }
+      v
     } else {
-      board.actions.map(a => (a, board.doAction(a))).flatMap {
-        case (a, Some(newBoard)) => tree(newBoard, actions :+ a, depth - 1)
-        case _ => tree(board, actions, depth - 1)
-      }.toList
+      var v = Long.MaxValue
+      board.actionStream.takeWhile { action =>
+        v = math.min(v, alphabeta(board.doAction(action).get, action, depth - 1, a, b, currentPlayer.enemy))
+        b = math.min(a, v)
+        b > a
+      }
+      v
     }
+  }
 
   private def sign(owner: ChessPlayer) = if (owner == player) 1 else -1
 
@@ -44,9 +55,27 @@ case class ChessBasicAi(player: ChessPlayer, seed: Option[Long] = None)
     case p: ♟ ⇒ 1 * sign(piece.owner)
   }
 
-  private def materialValue(board: ChessBoard): Int = board.pieces.map(materialValue).sum
+  private def materialValue(board: ChessBoard): Long = board.pieces.map(materialValue).sum
 
-  def evaluate(board: ChessBoard, action: Option[ChessAction]): Int =
-    materialValue(board) * 100 + action.map(a => (if (a.isCheckmate) 10000 else if (a.isCheck) 100 else 0) * sign(a.turn)).getOrElse(0)
+  private def evaluate(board: ChessBoard, action: ChessAction): Long = {
+    action match {
+      case a: LoseAction => Long.MaxValue * sign(a.player.enemy)
+      case _ =>
+        val undefendedOwnPieces = player.pieces(board).filter(!_.isDefended(board))
+        val undefendedEnemyPieces = player.enemy.pieces(board).filter(!_.isDefended(board))
+
+        val undefendedOwnPieceValue = undefendedOwnPieces.map(materialValue).sum
+        val undefendedThreatenedOwnPieceValue = undefendedOwnPieces.filter(_.isThreatened(board)).map(materialValue).sum
+        val undefendedEnemyPieceValue = math.abs(undefendedEnemyPieces.map(materialValue).sum)
+        val undefendedThreatenedEnemyPieceValue = math.abs(undefendedEnemyPieces.filter(_.isThreatened(board)).map(materialValue).sum)
+
+        (if (action.isCheck) 1000 else 0) * sign(action.turn) +
+          1000000 * materialValue(board) +
+          10000 * undefendedThreatenedEnemyPieceValue +
+          -10000 * undefendedThreatenedOwnPieceValue +
+          1000 * undefendedEnemyPieceValue +
+          -1000 * undefendedOwnPieceValue
+    }
+  }
 }
 

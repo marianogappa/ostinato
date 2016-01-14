@@ -26,6 +26,16 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     }
   }
 
+  // TODO actionStream doesn't have: ++ Set(LoseAction(this), DrawAction(this))
+  override def actionStream(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Stream[ChessAction] = {
+    val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
+    (board.hasInsufficientMaterial, super.actionStream(board)(noDeltaValidation), kingPiece(board)) match {
+      case (true, _, _)                 ⇒ Stream(DrawAction(this))
+      case (_, a, Some(k)) if a.isEmpty ⇒ Stream(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
+      case (_, a, _)                    ⇒ a
+    }
+  }
+
   def nonFinalActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
     actions(board).filter {
       case a: FinalAction ⇒ false

@@ -66,10 +66,10 @@ object NotationParser {
 
   private def allActionParsers: List[ActionParser] = {
     (AlgebraicNotation.allPossibleRules map AlgebraicNotationActionParser).toList ++
-    (SmithNotation.allPossibleRules map SmithNotationActionParser).toList ++
-    (IccfNotation.allPossibleRules map IccfNotationActionParser).toList ++
-    (DescriptiveNotation.allPossibleRules map DescriptiveNotationActionParser).toList ++
-    (CoordinateNotation.allPossibleRules map CoordinateNotationActionParser).toList
+      (SmithNotation.allPossibleRules map SmithNotationActionParser).toList ++
+      (IccfNotation.allPossibleRules map IccfNotationActionParser).toList ++
+      (DescriptiveNotation.allPossibleRules map DescriptiveNotationActionParser).toList ++
+      (CoordinateNotation.allPossibleRules map CoordinateNotationActionParser).toList
   }
 
   @tailrec
@@ -80,7 +80,9 @@ object NotationParser {
     partialResults: Set[ParsedMatch] = Set())(
       implicit rules: ChessRules = ChessRules.default): ParseResultsProxy =
     actionParsers match {
-      case Nil | _ if partialResults exists (_._2.isRight) ⇒
+      case Nil ⇒
+        ParseResultsProxy(reduce(partialResults))
+      case _ if partialResults exists (_._2.isRight) ⇒
         ParseResultsProxy(reduce(partialResults))
       case actionParser :: as ⇒
         parseMatchString(s, board, as,
