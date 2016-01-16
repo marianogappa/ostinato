@@ -239,7 +239,8 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
     Piece.toXYs(Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set()))
 
-  def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.x - 1))(dy)
+  def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.y - 1))(dy)
+  val distanceToPromotion = math.abs(pos.y - promotingPosition(dy))
   val isPromoting = pos.y == promotingPosition(dy)
 
   val toFigurine = owner match {

@@ -129,7 +129,7 @@ case class PromoteAction(
     override val isCheck: Boolean = false,
     override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes to ${toPiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   def toAn(implicit rules: ChessRules = ChessRules.default) =

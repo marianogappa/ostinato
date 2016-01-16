@@ -42,10 +42,10 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
       case _              ⇒ true
     }
 
-  def rooks(board: ChessBoard) = pieces(board) filter (_.isRook)
-  def knights(board: ChessBoard) = pieces(board) filter (_.isKnight)
-  def bishops(board: ChessBoard) = pieces(board) filter (_.isBishop)
-  def queens(board: ChessBoard) = pieces(board) filter (_.isQueen)
-  def kings(board: ChessBoard) = pieces(board) filter (_.isKing)
-  def pawns(board: ChessBoard) = pieces(board) filter (_.isPawn)
+  def rooks(board: ChessBoard): Set[♜] = pieces(board) flatMap { case p: ♜ ⇒ Set(p); case _ ⇒ Set.empty[♜] }
+  def knights(board: ChessBoard): Set[♞] = pieces(board) flatMap { case p: ♞ ⇒ Set(p); case _ ⇒ Set.empty[♞] }
+  def bishops(board: ChessBoard): Set[♝] = pieces(board) flatMap { case p: ♝ ⇒ Set(p); case _ ⇒ Set.empty[♝] }
+  def queens(board: ChessBoard): Set[♛] = pieces(board) flatMap { case p: ♛ ⇒ Set(p); case _ ⇒ Set.empty[♛] }
+  def kings(board: ChessBoard): Set[♚] = pieces(board) flatMap { case p: ♚ ⇒ Set(p); case _ ⇒ Set.empty[♚] }
+  def pawns(board: ChessBoard): Set[♟] = pieces(board) flatMap { case p: ♟ ⇒ Set(p); case _ ⇒ Set.empty[♟] }
 }

@@ -205,12 +205,12 @@ case class ChessBoard(
   def nonFinalActions(implicit rules: ChessRules = ChessRules.default) = turn.nonFinalActions(this)
   def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
   def actionStream(implicit rules: ChessRules = ChessRules.default) = turn.actionStream(this)
-  def rooks = pieces filter (_.isRook)
-  def knights = pieces filter (_.isKnight)
-  def bishops = pieces filter (_.isBishop)
-  def queens = pieces filter (_.isQueen)
-  def kings = pieces filter (_.isKing)
-  def pawns = pieces filter (_.isPawn)
+  def rooks: Vector[♜] = pieces flatMap { case p: ♜ ⇒ Vector(p); case _ ⇒ Vector() }
+  def knights: Vector[♞] = pieces flatMap { case p: ♞ ⇒ Vector(p); case _ ⇒ Vector() }
+  def bishops: Vector[♝] = pieces flatMap { case p: ♝ ⇒ Vector(p); case _ ⇒ Vector() }
+  def queens: Vector[♛] = pieces flatMap { case p: ♛ ⇒ Vector(p); case _ ⇒ Vector() }
+  def kings: Vector[♚] = pieces flatMap { case p: ♚ ⇒ Vector(p); case _ ⇒ Vector() }
+  def pawns: Vector[♟] = pieces flatMap { case p: ♟ ⇒ Vector(p); case _ ⇒ Vector() }
   def game(implicit rules: ChessRules = ChessRules.default) = ChessGame(this, rules)
 
   override def equals(any: Any) = any match {
