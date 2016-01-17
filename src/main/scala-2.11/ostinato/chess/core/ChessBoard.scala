@@ -97,13 +97,13 @@ case class ChessBoard(
 
       case (Some(Some(p: ♟)), Some(Some(toP: ChessPiece)), _) if delta.x != 0 && (!toP.isKing || rules.kingIsTakeable) && toP.owner != p.owner && to.y == p.promotingPosition(delta.y) ⇒
         Set(
-          ♜(from + delta, p.owner), ♝(from + delta, p.owner),
-          ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (CapturePromoteActionFactory(p, delta, toP, _))
+          ♛(from + delta, p.owner), ♝(from + delta, p.owner),
+          ♞(from + delta, p.owner), ♜(from + delta, p.owner)) map (CapturePromoteActionFactory(p, delta, toP, _))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 && to.y == p.promotingPosition(delta.y) ⇒
         Set(
-          ♜(from + delta, p.owner), ♝(from + delta, p.owner),
-          ♞(from + delta, p.owner), ♛(from + delta, p.owner)) map (PromoteActionFactory(p, delta, _))
+          ♛(from + delta, p.owner), ♝(from + delta, p.owner),
+          ♞(from + delta, p.owner), ♜(from + delta, p.owner)) map (PromoteActionFactory(p, delta, _))
 
       case (Some(Some(p: ♟)), Some(None), _) if delta.x == 0 && math.abs(delta.y) == 1 ⇒
         Set(MoveActionFactory(p, delta))
