@@ -81,7 +81,46 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="ostinato.chess.core.AnPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="ostinato.chess.core.ActionParser" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ActionParserextendsAnyRef"></a>
+      <a id="ActionParser:ActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ActionParser.html"><span class="name">ActionParser</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.AlgebraicNotationActionParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlgebraicNotationActionParserextendsActionParserwithProductwithSerializable"></a>
+      <a id="AlgebraicNotationActionParser:AlgebraicNotationActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AlgebraicNotationActionParser.html"><span class="name">AlgebraicNotationActionParser</span></a><span class="params">(<span name="r">r: <a href="AlgebraicNotationRules.html" class="extype" name="ostinato.chess.core.AlgebraicNotationRules">AlgebraicNotationRules</a></span>)</span><span class="result"> extends <a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.AlgebraicNotationRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlgebraicNotationRulesextendsNotationRuleswithProductwithSerializable"></a>
+      <a id="AlgebraicNotationRules:AlgebraicNotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AlgebraicNotationRules.html"><span class="name">AlgebraicNotationRules</span></a><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="figurine">figurine: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="colonForCaptures">colonForCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.AnPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AnPosextendsProductwithSerializable"></a>
       <a id="AnPos:AnPos"></a>
       <h4 class="signature">
@@ -198,19 +237,6 @@
       </span>
       </h4>
       
-    </li><li name="ostinato.chess.core.ChessAnAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ChessAnActionextendsAnyRef"></a>
-      <a id="ChessAnAction:ChessAnAction"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="package$$ChessAnAction.html"><span class="name">ChessAnAction</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      
     </li><li name="ostinato.chess.core.ChessBoard" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ChessBoardextendsBoard[ostinato.chess.core.ChessBoard,ostinato.chess.core.ChessAction,ostinato.chess.core.ChessPiece,ostinato.chess.core.ChessPlayer,ostinato.chess.core.ChessRules]withProductwithSerializable"></a>
       <a id="ChessBoard:ChessBoard"></a>
@@ -286,6 +312,71 @@
       </span>
       <span class="symbol">
         <a href="package$$ChessXY.html"><span class="name">ChessXY</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.CoordinateNotationActionParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoordinateNotationActionParserextendsActionParserwithProductwithSerializable"></a>
+      <a id="CoordinateNotationActionParser:CoordinateNotationActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoordinateNotationActionParser.html"><span class="name">CoordinateNotationActionParser</span></a><span class="params">(<span name="r">r: <a href="CoordinateNotationRules.html" class="extype" name="ostinato.chess.core.CoordinateNotationRules">CoordinateNotationRules</a></span>)</span><span class="result"> extends <a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.CoordinateNotationRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoordinateNotationRulesextendsNotationRuleswithProductwithSerializable"></a>
+      <a id="CoordinateNotationRules:CoordinateNotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoordinateNotationRules.html"><span class="name">CoordinateNotationRules</span></a><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="useDashDelimiter">useDashDelimiter: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.DescriptiveNotationActionParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DescriptiveNotationActionParserextendsActionParserwithProductwithSerializable"></a>
+      <a id="DescriptiveNotationActionParser:DescriptiveNotationActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DescriptiveNotationActionParser.html"><span class="name">DescriptiveNotationActionParser</span></a><span class="params">(<span name="r">r: <a href="DescriptiveNotationRules.html" class="extype" name="ostinato.chess.core.DescriptiveNotationRules">DescriptiveNotationRules</a></span>)</span><span class="result"> extends <a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.DescriptiveNotationRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DescriptiveNotationRulesextendsNotationRuleswithProductwithSerializable"></a>
+      <a id="DescriptiveNotationRules:DescriptiveNotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DescriptiveNotationRules.html"><span class="name">DescriptiveNotationRules</span></a><span class="params">(<span name="omitDash">omitDash: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="numericalRankBeforeFile">numericalRankBeforeFile: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="omitFirstRank">omitFirstRank: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.DnPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DnPosextendsProductwithSerializable"></a>
+      <a id="DnPos:DnPos"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$DnPos.html"><span class="name">DnPos</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -406,6 +497,32 @@
       </span>
       </h4>
       
+    </li><li name="ostinato.chess.core.IccfNotationActionParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IccfNotationActionParserextendsActionParserwithProductwithSerializable"></a>
+      <a id="IccfNotationActionParser:IccfNotationActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IccfNotationActionParser.html"><span class="name">IccfNotationActionParser</span></a><span class="params">(<span name="r">r: <a href="IccfNotationRules.html" class="extype" name="ostinato.chess.core.IccfNotationRules">IccfNotationRules</a></span>)</span><span class="result"> extends <a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.IccfNotationRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IccfNotationRulesextendsNotationRuleswithProductwithSerializable"></a>
+      <a id="IccfNotationRules:IccfNotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IccfNotationRules.html"><span class="name">IccfNotationRules</span></a><span class="params">()</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
     </li><li name="ostinato.chess.core.IccfPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="IccfPosextendsProductwithSerializable"></a>
       <a id="IccfPos:IccfPos"></a>
@@ -458,6 +575,32 @@
       </span>
       </h4>
       
+    </li><li name="ostinato.chess.core.Notation" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Notation[NR&lt;:ostinato.chess.core.NotationRules]extendsAnyRef"></a>
+      <a id="Notation[NR&lt;:NotationRules]:Notation[NR]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Notation.html"><span class="name">Notation</span></a><span class="tparams">[<span name="NR">NR &lt;: <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.NotationRules" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NotationRulesextendsAnyRef"></a>
+      <a id="NotationRules:NotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NotationRules.html"><span class="name">NotationRules</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="ostinato.chess.core.PastBoards" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PastBoardsextendsProductwithSerializable"></a>
       <a id="PastBoards:PastBoards"></a>
@@ -494,6 +637,32 @@
       </span>
       <span class="symbol">
         <a href="PromoteActionFactory.html"><span class="name">PromoteActionFactory</span></a><span class="params">(<span name="fromPiece">fromPiece: <a href="$u265F.html" class="extype" name="ostinato.chess.core.♟">♟</a></span>, <span name="delta">delta: <a href="../../core/XY.html" class="extype" name="ostinato.core.XY">XY</a></span>, <span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>)</span><span class="result"> extends <a href="ChessActionFactory.html" class="extype" name="ostinato.chess.core.ChessActionFactory">ChessActionFactory</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.SmithNotationActionParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SmithNotationActionParserextendsActionParserwithProductwithSerializable"></a>
+      <a id="SmithNotationActionParser:SmithNotationActionParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SmithNotationActionParser.html"><span class="name">SmithNotationActionParser</span></a><span class="params">(<span name="r">r: <a href="SmithNotationRules.html" class="extype" name="ostinato.chess.core.SmithNotationRules">SmithNotationRules</a></span>)</span><span class="result"> extends <a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.SmithNotationRules" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SmithNotationRulesextendsNotationRuleswithProductwithSerializable"></a>
+      <a id="SmithNotationRules:SmithNotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SmithNotationRules.html"><span class="name">SmithNotationRules</span></a><span class="params">()</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -582,7 +751,20 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="ostinato.chess.core.BlackChessPlayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="ostinato.chess.core.AlgebraicNotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlgebraicNotation"></a>
+      <a id="AlgebraicNotation:AlgebraicNotation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlgebraicNotation$.html"><span class="name">AlgebraicNotation</span></a><span class="result"> extends <a href="Notation.html" class="extype" name="ostinato.chess.core.Notation">Notation</a>[<a href="AlgebraicNotationRules.html" class="extype" name="ostinato.chess.core.AlgebraicNotationRules">AlgebraicNotationRules</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.BlackChessPlayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="BlackChessPlayer"></a>
       <a id="BlackChessPlayer:BlackChessPlayer"></a>
       <h4 class="signature">
@@ -673,6 +855,32 @@
       </span>
       </h4>
       
+    </li><li name="ostinato.chess.core.CoordinateNotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoordinateNotation"></a>
+      <a id="CoordinateNotation:CoordinateNotation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CoordinateNotation$.html"><span class="name">CoordinateNotation</span></a><span class="result"> extends <a href="Notation.html" class="extype" name="ostinato.chess.core.Notation">Notation</a>[<a href="CoordinateNotationRules.html" class="extype" name="ostinato.chess.core.CoordinateNotationRules">CoordinateNotationRules</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.DescriptiveNotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DescriptiveNotation"></a>
+      <a id="DescriptiveNotation:DescriptiveNotation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DescriptiveNotation$.html"><span class="name">DescriptiveNotation</span></a><span class="result"> extends <a href="Notation.html" class="extype" name="ostinato.chess.core.Notation">Notation</a>[<a href="DescriptiveNotationRules.html" class="extype" name="ostinato.chess.core.DescriptiveNotationRules">DescriptiveNotationRules</a>]</span>
+      </span>
+      </h4>
+      
     </li><li name="ostinato.chess.core.EnPassantPawn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EnPassantPawn"></a>
       <a id="EnPassantPawn:EnPassantPawn"></a>
@@ -712,16 +920,42 @@
       </span>
       </h4>
       
-    </li><li name="ostinato.chess.core.Notation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Notation"></a>
-      <a id="Notation:Notation"></a>
+    </li><li name="ostinato.chess.core.IccfNotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IccfNotation"></a>
+      <a id="IccfNotation:IccfNotation"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Notation$.html"><span class="name">Notation</span></a>
+        <a href="IccfNotation$.html"><span class="name">IccfNotation</span></a><span class="result"> extends <a href="Notation.html" class="extype" name="ostinato.chess.core.Notation">Notation</a>[<a href="IccfNotationRules.html" class="extype" name="ostinato.chess.core.IccfNotationRules">IccfNotationRules</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.NotationParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotationParser"></a>
+      <a id="NotationParser:NotationParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NotationParser$.html"><span class="name">NotationParser</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.SmithNotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SmithNotation"></a>
+      <a id="SmithNotation:SmithNotation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SmithNotation$.html"><span class="name">SmithNotation</span></a><span class="result"> extends <a href="Notation.html" class="extype" name="ostinato.chess.core.Notation">Notation</a>[<a href="SmithNotationRules.html" class="extype" name="ostinato.chess.core.SmithNotationRules">SmithNotationRules</a>]</span>
       </span>
       </h4>
       

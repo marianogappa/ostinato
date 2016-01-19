@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>ChessBasicAi - Ostinato Documentation - ostinato.chess.ai.ChessBasicAi</title>
-          <meta name="description" content="ChessBasicAi - Ostinato Documentation - ostinato.chess.ai.ChessBasicAi" />
-          <meta name="keywords" content="ChessBasicAi Ostinato Documentation ostinato.chess.ai.ChessBasicAi" />
+          <title>ActionParser - Ostinato Documentation - ostinato.chess.core.ActionParser</title>
+          <meta name="description" content="ActionParser - Ostinato Documentation - ostinato.chess.core.ActionParser" />
+          <meta name="keywords" content="ActionParser Ostinato Documentation ostinato.chess.core.ActionParser" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
-            var hash = 'ostinato.chess.ai.ChessBasicAi';
+            var hash = 'ostinato.chess.core.ActionParser';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,24 +24,27 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
-        <p id="owner"><a href="../../package.html" class="extype" name="ostinato">ostinato</a>.<a href="../package.html" class="extype" name="ostinato.chess">chess</a>.<a href="package.html" class="extype" name="ostinato.chess.ai">ai</a></p>
-        <h1>ChessBasicAi</h1>
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="ostinato">ostinato</a>.<a href="../package.html" class="extype" name="ostinato.chess">chess</a>.<a href="package.html" class="extype" name="ostinato.chess.core">core</a></p>
+        <h1>ActionParser</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessBasicAi</span><span class="params">(<span name="player">player: <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>, <span name="debug">debug: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="seed">seed: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="../../core/Ai.html" class="extype" name="ostinato.core.Ai">Ai</a>[<a href="../core/ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="../core/ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="../core/ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>, <a href="../core/ChessGame.html" class="extype" name="ostinato.chess.core.ChessGame">ChessGame</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ActionParser</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../core/Ai.html" class="extype" name="ostinato.core.Ai">Ai</a>[<a href="../core/ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="../core/ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="../core/ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>, <a href="../core/ChessGame.html" class="extype" name="ostinato.chess.core.ChessGame">ChessGame</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="AlgebraicNotationActionParser.html" class="extype" name="ostinato.chess.core.AlgebraicNotationActionParser">AlgebraicNotationActionParser</a>, <a href="CoordinateNotationActionParser.html" class="extype" name="ostinato.chess.core.CoordinateNotationActionParser">CoordinateNotationActionParser</a>, <a href="DescriptiveNotationActionParser.html" class="extype" name="ostinato.chess.core.DescriptiveNotationActionParser">DescriptiveNotationActionParser</a>, <a href="IccfNotationActionParser.html" class="extype" name="ostinato.chess.core.IccfNotationActionParser">IccfNotationActionParser</a>, <a href="SmithNotationActionParser.html" class="extype" name="ostinato.chess.core.SmithNotationActionParser">SmithNotationActionParser</a></div>
         </div></div>
         
 
@@ -59,7 +62,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="ostinato.chess.ai.ChessBasicAi"><span>ChessBasicAi</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="ostinato.core.Ai"><span>Ai</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="ostinato.chess.core.ActionParser"><span>ActionParser</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -77,30 +80,163 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="ostinato.chess.ai.ChessBasicAi#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(player:ostinato.chess.core.ChessPlayer,debug:Boolean,seed:Option[Long]):ostinato.chess.ai.ChessBasicAi"></a>
-      <a id="&lt;init&gt;:ChessBasicAi"></a>
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="ostinato.chess.core.ActionParser.CartesianProductableString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CartesianProductableStringextendsAnyRef"></a>
+      <a id="CartesianProductableString:CartesianProductableString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessBasicAi</span><span class="params">(<span name="player">player: <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>, <span name="debug">debug: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="seed">seed: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>] = <span class="symbol">scala.None</span></span>)</span>
+        <a href="ActionParser$CartesianProductableString.html"><span class="name">CartesianProductableString</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.ActionParser.CartesianProductableStringSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CartesianProductableStringSetextendsAnyRef"></a>
+      <a id="CartesianProductableStringSet:CartesianProductableStringSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ActionParser$CartesianProductableStringSet.html"><span class="name">CartesianProductableStringSet</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
     </li></ol>
             </div>
 
-        
-
-        
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="ostinato.chess.core.ActionParser#capture" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="capture(a:ostinato.chess.core.CaptureAction):Set[String]"></a>
+      <a id="capture(CaptureAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">capture</span><span class="params">(<span name="a">a: <a href="CaptureAction.html" class="extype" name="ostinato.chess.core.CaptureAction">CaptureAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#capturePromote" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="capturePromote(a:ostinato.chess.core.CapturePromoteAction):Set[String]"></a>
+      <a id="capturePromote(CapturePromoteAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">capturePromote</span><span class="params">(<span name="a">a: <a href="CapturePromoteAction.html" class="extype" name="ostinato.chess.core.CapturePromoteAction">CapturePromoteAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#castling" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="castling(a:ostinato.chess.core.CastlingAction)(implicitrules:ostinato.chess.core.ChessRules):Set[String]"></a>
+      <a id="castling(CastlingAction)(ChessRules):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">castling</span><span class="params">(<span name="a">a: <a href="CastlingAction.html" class="extype" name="ostinato.chess.core.CastlingAction">CastlingAction</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#draw" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="draw(a:ostinato.chess.core.DrawAction):Set[String]"></a>
+      <a id="draw(DrawAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">draw</span><span class="params">(<span name="a">a: <a href="DrawAction.html" class="extype" name="ostinato.chess.core.DrawAction">DrawAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#enPassant" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="enPassant(a:ostinato.chess.core.EnPassantAction):Set[String]"></a>
+      <a id="enPassant(EnPassantAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">enPassant</span><span class="params">(<span name="a">a: <a href="EnPassantAction.html" class="extype" name="ostinato.chess.core.EnPassantAction">EnPassantAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#enPassantCapture" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="enPassantCapture(a:ostinato.chess.core.EnPassantCaptureAction):Set[String]"></a>
+      <a id="enPassantCapture(EnPassantCaptureAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">enPassantCapture</span><span class="params">(<span name="a">a: <a href="EnPassantCaptureAction.html" class="extype" name="ostinato.chess.core.EnPassantCaptureAction">EnPassantCaptureAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#lose" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="lose(a:ostinato.chess.core.LoseAction):Set[String]"></a>
+      <a id="lose(LoseAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lose</span><span class="params">(<span name="a">a: <a href="LoseAction.html" class="extype" name="ostinato.chess.core.LoseAction">LoseAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#move" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="move(a:ostinato.chess.core.MoveAction):Set[String]"></a>
+      <a id="move(MoveAction):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">move</span><span class="params">(<span name="a">a: <a href="MoveAction.html" class="extype" name="ostinato.chess.core.MoveAction">MoveAction</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#r" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="r:ostinato.chess.core.NotationRules"></a>
+      <a id="r:NotationRules"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">r</span><span class="result">: <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -166,19 +302,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="ostinato.chess.ai.ChessBasicAi#alphabeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="alphabeta(board:ostinato.chess.core.ChessBoard,action:ostinato.chess.core.ChessAction,depth:Int,alpha:Long,beta:Long):Long"></a>
-      <a id="alphabeta(ChessBoard,ChessAction,Int,Long,Long):Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">alphabeta</span><span class="params">(<span name="board">board: <a href="../core/ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a></span>, <span name="action">action: <a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a></span>, <span name="depth">depth: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="alpha">alpha: <span class="extype" name="scala.Long">Long</span> = <span class="symbol">-Long.MaxValue</span></span>, <span name="beta">beta: <span class="extype" name="scala.Long">Long</span> = <span class="symbol">Long.MaxValue</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -211,19 +334,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="ostinato.chess.ai.ChessBasicAi#debug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="debug:Boolean"></a>
-      <a id="debug:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">debug</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -237,6 +347,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -256,6 +379,19 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="ostinato.chess.core.ActionParser#genericPromotion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="genericPromotion(toPiece:ostinato.chess.core.ChessPiece):scala.collection.immutable.Set[String]"></a>
+      <a id="genericPromotion(ChessPiece):Set[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">genericPromotion</span><span class="params">(<span name="toPiece">toPiece: <a href="ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -266,6 +402,19 @@
       </span>
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -295,19 +444,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="ostinato.chess.ai.ChessBasicAi#nextAction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="nextAction(game:ostinato.chess.core.ChessGame)(implicitrules:ostinato.chess.core.ChessRules):Option[ostinato.chess.core.ChessAction]"></a>
-      <a id="nextAction(ChessGame)(ChessRules):Option[ChessAction]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">nextAction</span><span class="params">(<span name="game">game: <a href="../core/ChessGame.html" class="extype" name="ostinato.chess.core.ChessGame">ChessGame</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="../core/ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="../../package.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ostinato.chess.ai.ChessBasicAi">ChessBasicAi</a> → <a href="../../core/Ai.html" class="extype" name="ostinato.core.Ai">Ai</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -334,55 +470,16 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="ostinato.chess.ai.ChessBasicAi#player" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="player:ostinato.chess.core.ChessPlayer"></a>
-      <a id="player:ChessPlayer"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">player</span><span class="result">: <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="ostinato.core.Ai#random" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="random:scala.util.Random"></a>
-      <a id="random:Random"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">random</span><span class="result">: <span class="extype" name="scala.util.Random">Random</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../core/Ai.html" class="extype" name="ostinato.core.Ai">Ai</a></dd></dl></div>
-    </li><li name="ostinato.chess.ai.ChessBasicAi#seed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="seed:Option[Long]"></a>
-      <a id="seed:Option[Long]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">seed</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="ostinato.chess.ai.ChessBasicAi#sort" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sort(a:(ostinato.chess.core.ChessAction,Long),b:(ostinato.chess.core.ChessAction,Long)):Boolean"></a>
-      <a id="sort((ChessAction,Long),(ChessAction,Long)):Boolean"></a>
+    </li><li name="ostinato.chess.core.ActionParser#parseAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseAction(a:ostinato.chess.core.ChessAction)(implicitrules:ostinato.chess.core.ChessRules):Set[(String,(ostinato.chess.core.ChessAction,ostinato.chess.core.NotationRules))]"></a>
+      <a id="parseAction(ChessAction)(ChessRules):Set[(String,(ChessAction,NotationRules))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sort</span><span class="params">(<span name="a">a: (<a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <span class="extype" name="scala.Long">Long</span>)</span>, <span name="b">b: (<a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <span class="extype" name="scala.Long">Long</span>)</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">parseAction</span><span class="params">(<span name="a">a: <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[(<span class="extype" name="scala.Predef.String">String</span>, (<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a>))]</span>
       </span>
       </h4>
       
@@ -399,6 +496,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -465,17 +575,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="ostinato.core.Ai">
-              <h3>Inherited from <a href="../../core/Ai.html" class="extype" name="ostinato.core.Ai">Ai</a>[<a href="../core/ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>, <a href="../core/ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="../core/ChessPiece.html" class="extype" name="ostinato.chess.core.ChessPiece">ChessPiece</a>, <a href="../core/ChessPlayer.html" class="extype" name="ostinato.chess.core.ChessPlayer">ChessPlayer</a>, <a href="../core/ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a>, <a href="../core/ChessGame.html" class="extype" name="ostinato.chess.core.ChessGame">ChessGame</a>]</h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
