@@ -44,24 +44,20 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
     } else {
       if (player != action.turn) {
         var v = -Long.MaxValue
-        try {
           board.actionStream.foreach { newAction ⇒
             v = math.max(v, alphabeta(board.doAction(newAction).get, newAction, depth - 1, a, b))
             a = math.max(a, v)
-            if (b <= a) throw new RuntimeException
+            if (b <= a) return v
           }
           v
-        } catch { case _: Throwable => v }
       } else {
         var v = Long.MaxValue
-        try {
           board.actionStream.foreach { newAction ⇒
             v = math.min(v, alphabeta(board.doAction(newAction).get, newAction, depth - 1, a, b))
             b = math.min(b, v)
-            if (b <= a) throw new RuntimeException
+            if (b <= a) return v
           }
           v
-        } catch { case _: Throwable => v }
       }
     }
   }
