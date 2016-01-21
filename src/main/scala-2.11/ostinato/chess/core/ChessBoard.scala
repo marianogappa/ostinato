@@ -132,16 +132,18 @@ case class ChessBoard(
       case _ ⇒ Set()
     }
 
-    def validateAfterAction(mf: ChessActionFactory): Set[ChessAction] = doAction(mf.complete()).toSet.flatMap { newBoard: ChessBoard ⇒
+    def validateAfterAction(mf: ChessActionFactory): Set[ChessAction] = {
       val m = mf.complete()
+      val newBoard = this.copy(grid = m.gridUpdates.foldLeft(this.grid)(applyUpdate))
       val isPlayersKingThreatened = rules.checkForThreatens && m.fromPiece.owner.kingPiece(newBoard).exists(_.isThreatened(newBoard))
-      lazy val isCheck = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
 
-      Set(m) filter (_ ⇒ !isPlayersKingThreatened) map { _ ⇒
-        val check = isCheck
+      if (!isPlayersKingThreatened) {
+        val check = rules.checkForThreatens && m.fromPiece.enemy.kingPiece(newBoard).exists(_.isThreatened(newBoard))
         val mate = check && newBoard.isLossFor(m.fromPiece.enemy, basedOnCheckKnown = true)
 
-        mf.complete(check, mate)
+        Set(mf.complete(check, mate))
+      } else {
+        Set()
       }
     }
 
