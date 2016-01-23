@@ -17,24 +17,22 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
   def isThreatened(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = threatenedBy(board).nonEmpty
   def isDefended(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean = defendedBy(board).nonEmpty
 
-  def threatenedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] =
-    enemy.pieces(board).find(_.canMoveTo(pos, board.copy(turn = enemy))(
-      rules.copy(kingIsTakeable = true, checkForThreatens = false)))
+  def threatenedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] = {
+    posThreatenedBy(pos, owner, board)
+  }
 
   def defendedBy(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] =
-    (owner.pieces(board) - this).find(
-      _.canMoveTo(pos, board.copy(turn = owner, grid = board.grid.updated(pos.toI, Some(withOwner(enemy)))))(
-        rules.copy(checkForThreatens = false))
-    )
+    withOwner(enemy).threatenedBy(board)
 
-  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) = {
     !cantMove(to, board) && actions(board).exists {
       m ⇒ (pos + m.delta) == to
     }
+  }
 
   def cantMove(to: XY, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Boolean
 
-  def enemy: ChessPlayer = this.owner.enemy
+  val enemy: ChessPlayer = this.owner.enemy
   def withOwner(newOwner: ChessPlayer): ChessPiece
   def equals(that: ChessPiece) = pos == that.pos && owner == that.owner
   override def toString = s"${owner.name}'s $pieceName on (${pos.x}, ${pos.y})"

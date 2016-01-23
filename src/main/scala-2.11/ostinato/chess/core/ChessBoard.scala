@@ -79,6 +79,8 @@ case class ChessBoard(
     val toPiece = get(to)
     def betweenLocationsFree(f: XY = from, t: XY = to) = between(f, t) forall isEmptyCell
     def betweenLocationsNotThreatenedBy(player: ChessPlayer) =
+      xyBetween(from, to) forall (pos ⇒ posThreatenedBy(pos, player.enemy, this).isEmpty)
+    def betweenLocationsNotThreatenedBy2(player: ChessPlayer) =
       xyBetween(from, to) forall (pos ⇒ player.pieces(this) forall (!_.canMoveTo(pos, this.copy(turn = player))))
 
     def isEnPassantPawn(pos: XY) = enPassantPawn.exists(epp ⇒ epp.from == pos)

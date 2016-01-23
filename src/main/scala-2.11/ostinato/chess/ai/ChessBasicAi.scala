@@ -1,14 +1,15 @@
 package ostinato.chess.ai
 
 import ostinato.chess.core._
-import ostinato.core.Ai
+import ostinato.core.{XY, Ai}
 
 case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Option[Long] = None)
     extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules, ChessGame](player, seed) {
 
   override def nextAction(game: ChessGame)(implicit rules: ChessRules = ChessRules.default): Option[ChessAction] = {
+    val noExtraValidation = rules.copy(extraValidationOnActionApply = false)
     val actions = game.board.actionStream.force.toSeq
-    val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action).get, action)))
+    val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(noExtraValidation).get, action)(noExtraValidation)))
 
     if (debug)
       options foreach println
@@ -34,7 +35,7 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
     case _ => a._2 > b._2
   }
 
-  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = 1, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue): Long = {
+  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = 2, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit rules: ChessRules = ChessRules.default): Long = {
     var a = alpha
     var b = beta
 

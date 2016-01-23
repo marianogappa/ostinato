@@ -1,10 +1,7 @@
-package ostinato.chess
+package ostinato.chess.core
 
-import ostinato.chess.core.{ChessBoard, WhiteChessPlayer, BlackChessPlayer, ChessGame, ChessXY, SquareColor}
 import org.scalatest._
 import ostinato.core.XY
-
-import scala.util.Random
 
 class ChessBoardTest extends FunSpec with ShouldMatchers {
   describe("ChessBoard") {

@@ -70,7 +70,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |♗♖.....♔""".stripMargin)
+          |♘♖.....♔""".stripMargin)
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(PromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(0, -1), ♞(XY(2, 0), WhiteChessPlayer), isCheck = true, isCheckmate = true))
@@ -91,16 +91,3 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
     }
   }
 }
-
-//case ('♜', i) ⇒ Some(♜(XY.fromI(i), BlackChessPlayer))
-//case ('♞', i) ⇒ Some(♞(XY.fromI(i), BlackChessPlayer))
-//case ('♝', i) ⇒ Some(♝(XY.fromI(i), BlackChessPlayer))
-//case ('♛', i) ⇒ Some(♛(XY.fromI(i), BlackChessPlayer))
-//case ('♚', i) ⇒ Some(♚(XY.fromI(i), BlackChessPlayer))
-//case ('♟', i) ⇒ Some(♟(XY.fromI(i), BlackChessPlayer, rules.whitePawnDirection * -1))
-//case ('♖', i) ⇒ Some(♜(XY.fromI(i), WhiteChessPlayer))
-//case ('♘', i) ⇒ Some(♞(XY.fromI(i), WhiteChessPlayer))
-//case ('♗', i) ⇒ Some(♝(XY.fromI(i), WhiteChessPlayer))
-//case ('♕', i) ⇒ Some(♛(XY.fromI(i), WhiteChessPlayer))
-//case ('♔', i) ⇒ Some(♚(XY.fromI(i), WhiteChessPlayer))
-//case ('♙', i) ⇒ Some(♟(XY.fromI(i), WhiteChessPlayer, rules.whitePawnDirection))

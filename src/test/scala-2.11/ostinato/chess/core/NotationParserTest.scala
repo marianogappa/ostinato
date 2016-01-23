@@ -1,7 +1,6 @@
 package ostinato.chess.core
 
 import org.scalatest.{ FunSpec, ShouldMatchers }
-import ostinato.core.XY
 
 class NotationParserTest extends FunSpec with ShouldMatchers {
   describe("Descriptive notation") {

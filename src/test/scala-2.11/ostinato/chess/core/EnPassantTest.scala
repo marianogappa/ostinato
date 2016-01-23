@@ -1,7 +1,5 @@
-package ostinato.chess
+package ostinato.chess.core
 
-import ostinato.chess.core._
-import ostinato.core.XY
 import org.scalatest.{ShouldMatchers, FunSpec}
 
 class EnPassantTest extends FunSpec with ShouldMatchers{

@@ -136,4 +136,288 @@ package object core {
         PastBoards(boards ++ Map(serialisedBoard -> 1))
     }
   }
+
+  // N.B. this optimisation can appear ugly, but it's the only reason this library is fast
+  def posThreatenedBy(pos: XY, player: ChessPlayer, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] = {
+
+    def isEnemyKnight(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && p.isKnight ⇒ true; case _ ⇒ false }
+    def isEnemyQueenOrKingOrRook(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isKing || p.isRook) ⇒ true; case _ ⇒ false }
+    def isEnemyQueenOrKingOrBishop(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isKing || p.isBishop) ⇒ true; case _ ⇒ false }
+    def isEnemyQueenOrKingOrBishopOrPawn(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isKing || p.isBishop || p.isPawn) ⇒ true; case _ ⇒ false }
+    def isEnemyQueenOrRook(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isRook) ⇒ true; case _ ⇒ false }
+    def isEnemyQueenOrBishop(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isBishop) ⇒ true; case _ ⇒ false }
+    def isPiece(pos: XY) = board.isPiece(board.get(pos))
+
+    if (isEnemyKnight(pos + XY(-1, -2)))
+      board.get(pos + XY(-1, -2)).flatten
+    else if (isEnemyKnight(pos + XY(1, -2)))
+      board.get(pos + XY(1, -2)).flatten
+    else if (isEnemyKnight(pos + XY(-1, 2)))
+      board.get(pos + XY(-1, 2)).flatten
+    else if (isEnemyKnight(pos + XY(1, 2)))
+      board.get(pos + XY(1, 2)).flatten
+    else if (isEnemyKnight(pos + XY(-2, -1)))
+      board.get(pos + XY(-2, -1)).flatten
+    else if (isEnemyKnight(pos + XY(-2, 1)))
+      board.get(pos + XY(-2, 1)).flatten
+    else if (isEnemyKnight(pos + XY(2, -1)))
+      board.get(pos + XY(2, -1)).flatten
+    else if (isEnemyKnight(pos + XY(2, 1)))
+      board.get(pos + XY(2, 1)).flatten
+    else {
+
+      if (isEnemyQueenOrKingOrRook(pos + XY(0, -1))) {
+        return board.get(pos + XY(0, -1)).flatten
+      } else if ((pos + XY(0, -1)).exists && !isPiece(pos + XY(0, -1))) {
+        if (isEnemyQueenOrRook(pos + XY(0, -2))) {
+          return board.get(pos + XY(0, -2)).flatten
+        } else if ((pos + XY(0, -2)).exists && !isPiece(pos + XY(0, -2))) {
+          if (isEnemyQueenOrRook(pos + XY(0, -3))) {
+            return board.get(pos + XY(0, -3)).flatten
+          } else if ((pos + XY(0, -3)).exists && !isPiece(pos + XY(0, -3))) {
+            if (isEnemyQueenOrRook(pos + XY(0, -4))) {
+              return board.get(pos + XY(0, -4)).flatten
+            } else if ((pos + XY(0, -4)).exists && !isPiece(pos + XY(0, -4))) {
+              if (isEnemyQueenOrRook(pos + XY(0, -5))) {
+                return board.get(pos + XY(0, -5)).flatten
+              } else if ((pos + XY(0, -5)).exists && !isPiece(pos + XY(0, -5))) {
+                if (isEnemyQueenOrRook(pos + XY(0, -6))) {
+                  return board.get(pos + XY(0, -6)).flatten
+                } else if ((pos + XY(0, -6)).exists && !isPiece(pos + XY(0, -6))) {
+                  if (isEnemyQueenOrRook(pos + XY(0, -7)))
+                    return board.get(pos + XY(0, -7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrRook(pos + XY(0, 1))) {
+        return board.get(pos + XY(0, 1)).flatten
+      } else if ((pos + XY(0, 1)).exists && !isPiece(pos + XY(0, 1))) {
+        if (isEnemyQueenOrRook(pos + XY(0, 2))) {
+          return board.get(pos + XY(0, 2)).flatten
+        } else if ((pos + XY(0, 2)).exists && !isPiece(pos + XY(0, 2))) {
+          if (isEnemyQueenOrRook(pos + XY(0, 3))) {
+            return board.get(pos + XY(0, 3)).flatten
+          } else if ((pos + XY(0, 3)).exists && !isPiece(pos + XY(0, 3))) {
+            if (isEnemyQueenOrRook(pos + XY(0, 4))) {
+              return board.get(pos + XY(0, 4)).flatten
+            } else if ((pos + XY(0, 4)).exists && !isPiece(pos + XY(0, 4))) {
+              if (isEnemyQueenOrRook(pos + XY(0, 5))) {
+                return board.get(pos + XY(0, 5)).flatten
+              } else if ((pos + XY(0, 5)).exists && !isPiece(pos + XY(0, 5))) {
+                if (isEnemyQueenOrRook(pos + XY(0, 6))) {
+                  return board.get(pos + XY(0, 6)).flatten
+                } else if ((pos + XY(0, 6)).exists && !isPiece(pos + XY(0, 6))) {
+                  if (isEnemyQueenOrRook(pos + XY(0, 7)))
+                    return board.get(pos + XY(0, 7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrBishopOrPawn(pos + XY(1, 1))) {
+        val enemyPos = pos + XY(1, 1)
+        val enemy = player.enemy
+        board.get(enemyPos) match {
+          case Some(Some(p)) if !p.isPawn ⇒
+            return board.get(enemyPos).flatten
+          case Some(Some(♟(`enemyPos`, `enemy`, -1))) ⇒
+            return board.get(enemyPos).flatten
+          case _ ⇒
+        }
+      } else if ((pos + XY(1, 1)).exists && !isPiece(pos + XY(1, 1))) {
+        if (isEnemyQueenOrBishop(pos + XY(2, 2))) {
+          return board.get(pos + XY(2, 2)).flatten
+        } else if ((pos + XY(2, 2)).exists && !isPiece(pos + XY(2, 2))) {
+          if (isEnemyQueenOrBishop(pos + XY(3, 3))) {
+            return board.get(pos + XY(3, 3)).flatten
+          } else if ((pos + XY(3, 3)).exists && !isPiece(pos + XY(3, 3))) {
+            if (isEnemyQueenOrBishop(pos + XY(4, 4))) {
+              return board.get(pos + XY(4, 4)).flatten
+            } else if ((pos + XY(4, 4)).exists && !isPiece(pos + XY(4, 4))) {
+              if (isEnemyQueenOrBishop(pos + XY(5, 5))) {
+                return board.get(pos + XY(5, 5)).flatten
+              } else if ((pos + XY(5, 5)).exists && !isPiece(pos + XY(5, 5))) {
+                if (isEnemyQueenOrBishop(pos + XY(6, 6))) {
+                  return board.get(pos + XY(6, 6)).flatten
+                } else if ((pos + XY(6, 6)).exists && !isPiece(pos + XY(6, 6))) {
+                  if (isEnemyQueenOrBishop(pos + XY(7, 7)))
+                    return board.get(pos + XY(7, 7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrBishopOrPawn(pos + XY(-1, 1))) {
+        val enemyPos = pos + XY(-1, 1)
+        val enemy = player.enemy
+        board.get(enemyPos) match {
+          case Some(Some(p)) if !p.isPawn ⇒
+            return board.get(enemyPos).flatten
+          case Some(Some(♟(`enemyPos`, `enemy`, -1))) ⇒
+            return board.get(enemyPos).flatten
+          case _ ⇒
+        }
+        return board.get(pos + XY(-1, 1)).flatten
+      } else if ((pos + XY(-1, 1)).exists && !isPiece(pos + XY(-1, 1))) {
+        if (isEnemyQueenOrBishop(pos + XY(-2, 2))) {
+          return board.get(pos + XY(-2, 2)).flatten
+        } else if ((pos + XY(-2, 2)).exists && !isPiece(pos + XY(-2, 2))) {
+          if (isEnemyQueenOrBishop(pos + XY(-3, 3))) {
+            return board.get(pos + XY(-3, 3)).flatten
+          } else if ((pos + XY(-3, 3)).exists && !isPiece(pos + XY(-3, 3))) {
+            if (isEnemyQueenOrBishop(pos + XY(-4, 4))) {
+              return board.get(pos + XY(-4, 4)).flatten
+            } else if ((pos + XY(-4, 4)).exists && !isPiece(pos + XY(-4, 4))) {
+              if (isEnemyQueenOrBishop(pos + XY(-5, 5))) {
+                return board.get(pos + XY(-5, 5)).flatten
+              } else if ((pos + XY(-5, 5)).exists && !isPiece(pos + XY(-5, 5))) {
+                if (isEnemyQueenOrBishop(pos + XY(-6, 6))) {
+                  return board.get(pos + XY(-6, 6)).flatten
+                } else if ((pos + XY(-6, 6)).exists && !isPiece(pos + XY(-6, 6))) {
+                  if (isEnemyQueenOrBishop(pos + XY(-7, 7)))
+                    return board.get(pos + XY(-7, 7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrBishopOrPawn(pos + XY(-1, -1))) {
+        val enemyPos = pos + XY(-1, -1)
+        val enemy = player.enemy
+        board.get(enemyPos) match {
+          case Some(Some(p)) if !p.isPawn ⇒
+            return board.get(enemyPos).flatten
+          case Some(Some(♟(`enemyPos`, `enemy`, 1))) ⇒
+            return board.get(enemyPos).flatten
+          case _ ⇒
+        }
+        return board.get(pos + XY(-1, -1)).flatten
+      } else if ((pos + XY(-1, -1)).exists && !isPiece(pos + XY(-1, -1))) {
+        if (isEnemyQueenOrBishop(pos + XY(-2, -2))) {
+          return board.get(pos + XY(-2, -2)).flatten
+        } else if ((pos + XY(-2, -2)).exists && !isPiece(pos + XY(-2, -2))) {
+          if (isEnemyQueenOrBishop(pos + XY(-3, -3))) {
+            return board.get(pos + XY(-3, -3)).flatten
+          } else if ((pos + XY(-3, -3)).exists && !isPiece(pos + XY(-3, -3))) {
+            if (isEnemyQueenOrBishop(pos + XY(-4, -4))) {
+              return board.get(pos + XY(-4, -4)).flatten
+            } else if ((pos + XY(-4, -4)).exists && !isPiece(pos + XY(-4, -4))) {
+              if (isEnemyQueenOrBishop(pos + XY(-5, -5))) {
+                return board.get(pos + XY(-5, -5)).flatten
+              } else if ((pos + XY(-5, -5)).exists && !isPiece(pos + XY(-5, -5))) {
+                if (isEnemyQueenOrBishop(pos + XY(-6, -6))) {
+                  return board.get(pos + XY(-6, -6)).flatten
+                } else if ((pos + XY(-6, -6)).exists && !isPiece(pos + XY(-6, -6))) {
+                  if (isEnemyQueenOrBishop(pos + XY(-7, -7)))
+                    return board.get(pos + XY(-7, -7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrBishopOrPawn(pos + XY(1, -1))) {
+        val enemyPos = pos + XY(1, -1)
+        val enemy = player.enemy
+        board.get(enemyPos) match {
+          case Some(Some(p)) if !p.isPawn ⇒
+            return board.get(enemyPos).flatten
+          case Some(Some(♟(`enemyPos`, `enemy`, 1))) ⇒
+            return board.get(enemyPos).flatten
+          case _ ⇒
+        }
+        return board.get(pos + XY(1, -1)).flatten
+      } else if ((pos + XY(1, -1)).exists && !isPiece(pos + XY(1, -1))) {
+        if (isEnemyQueenOrBishop(pos + XY(2, -2))) {
+          return board.get(pos + XY(2, -2)).flatten
+        } else if ((pos + XY(2, -2)).exists && !isPiece(pos + XY(2, -2))) {
+          if (isEnemyQueenOrBishop(pos + XY(3, -3))) {
+            return board.get(pos + XY(3, -3)).flatten
+          } else if ((pos + XY(3, -3)).exists && !isPiece(pos + XY(3, -3))) {
+            if (isEnemyQueenOrBishop(pos + XY(4, -4))) {
+              return board.get(pos + XY(4, -4)).flatten
+            } else if ((pos + XY(4, -4)).exists && !isPiece(pos + XY(4, -4))) {
+              if (isEnemyQueenOrBishop(pos + XY(5, -5))) {
+                return board.get(pos + XY(5, -5)).flatten
+              } else if ((pos + XY(5, -5)).exists && !isPiece(pos + XY(5, -5))) {
+                if (isEnemyQueenOrBishop(pos + XY(6, -6))) {
+                  return board.get(pos + XY(6, -6)).flatten
+                } else if ((pos + XY(6, -6)).exists && !isPiece(pos + XY(6, -6))) {
+                  if (isEnemyQueenOrBishop(pos + XY(7, -7)))
+                    return board.get(pos + XY(7, -7)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrRook(pos + XY(1, 0))) {
+        return board.get(pos + XY(1, 0)).flatten
+      } else if ((pos + XY(1, 0)).exists && !isPiece(pos + XY(1, 0))) {
+        if (isEnemyQueenOrRook(pos + XY(2, 0))) {
+          return board.get(pos + XY(2, 0)).flatten
+        } else if ((pos + XY(2, 0)).exists && !isPiece(pos + XY(2, 0))) {
+          if (isEnemyQueenOrRook(pos + XY(3, 0))) {
+            return board.get(pos + XY(3, 0)).flatten
+          } else if ((pos + XY(3, 0)).exists && !isPiece(pos + XY(3, 0))) {
+            if (isEnemyQueenOrRook(pos + XY(4, 0))) {
+              return board.get(pos + XY(4, 0)).flatten
+            } else if ((pos + XY(4, 0)).exists && !isPiece(pos + XY(4, 0))) {
+              if (isEnemyQueenOrRook(pos + XY(5, 0))) {
+                return board.get(pos + XY(5, 0)).flatten
+              } else if ((pos + XY(5, 0)).exists && !isPiece(pos + XY(5, 0))) {
+                if (isEnemyQueenOrRook(pos + XY(6, 0))) {
+                  return board.get(pos + XY(6, 0)).flatten
+                } else if ((pos + XY(6, 0)).exists && !isPiece(pos + XY(6, 0))) {
+                  if (isEnemyQueenOrRook(pos + XY(7, 0)))
+                    return board.get(pos + XY(7, 0)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (isEnemyQueenOrKingOrRook(pos + XY(-1, 0))) {
+        return board.get(pos + XY(-1, 0)).flatten
+      } else if ((pos + XY(-1, 0)).exists && !isPiece(pos + XY(-1, 0))) {
+        if (isEnemyQueenOrRook(pos + XY(-2, 0))) {
+          return board.get(pos + XY(-2, 0)).flatten
+        } else if ((pos + XY(-2, 0)).exists && !isPiece(pos + XY(-2, 0))) {
+          if (isEnemyQueenOrRook(pos + XY(-3, 0))) {
+            return board.get(pos + XY(-3, 0)).flatten
+          } else if ((pos + XY(-3, 0)).exists && !isPiece(pos + XY(-3, 0))) {
+            if (isEnemyQueenOrRook(pos + XY(-4, 0))) {
+              return board.get(pos + XY(-4, 0)).flatten
+            } else if ((pos + XY(-4, 0)).exists && !isPiece(pos + XY(-4, 0))) {
+              if (isEnemyQueenOrRook(pos + XY(-5, 0))) {
+                return board.get(pos + XY(-5, 0)).flatten
+              } else if ((pos + XY(-5, 0)).exists && !isPiece(pos + XY(-5, 0))) {
+                if (isEnemyQueenOrRook(pos + XY(-6, 0))) {
+                  return board.get(pos + XY(-6, 0)).flatten
+                } else if ((pos + XY(-6, 0)).exists && !isPiece(pos + XY(-6, 0))) {
+                  if (isEnemyQueenOrRook(pos + XY(-7, 0)))
+                    return board.get(pos + XY(-7, 0)).flatten
+                }
+              }
+            }
+          }
+        }
+      }
+
+      None
+    }
+  }
 }
