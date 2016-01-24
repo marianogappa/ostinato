@@ -11,10 +11,13 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
     val actions = game.board.actionStream.force.toSeq
     val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(noExtraValidation).get, action)(noExtraValidation)))
 
-    if (debug)
-      options foreach println
+    if (debug) { options foreach println }
 
-    Some(options.sortWith(sort).head._1)
+    val chosenAction = options.sortWith(sort).head._1
+
+    if (debug) { println(s"Chosen action: $chosenAction") }
+
+    Some(chosenAction)
   }
 
   def sort(a: (ChessAction, Long), b: (ChessAction, Long)) = (a, b) match {
