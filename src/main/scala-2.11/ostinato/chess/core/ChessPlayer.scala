@@ -17,6 +17,11 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   def enemy: ChessPlayer
   def toFen: Char
 
+  def initialY(implicit rules: ChessRules = ChessRules.default) = (this, rules.whitePawnDirection) match {
+    case (WhiteChessPlayer, -1) | (BlackChessPlayer, 1) => 7
+    case (WhiteChessPlayer, 1) | (BlackChessPlayer, -1) => 0
+  }
+
   override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
     val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
     (board.hasInsufficientMaterial, super.actions(board)(noDeltaValidation), kingPiece(board)) match {

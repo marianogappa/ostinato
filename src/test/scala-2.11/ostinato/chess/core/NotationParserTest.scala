@@ -3,7 +3,7 @@ package ostinato.chess.core
 import org.scalatest.{ FunSpec, ShouldMatchers }
 
 class NotationParserTest extends FunSpec with ShouldMatchers {
-  describe("Descriptive notation") {
+  describe("Notation parsing") {
     it("should parse descriptive notation") {
       val descriptive =
         NotationParser.parseMatchString("""

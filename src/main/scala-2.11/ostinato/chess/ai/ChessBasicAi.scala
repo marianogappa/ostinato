@@ -3,8 +3,8 @@ package ostinato.chess.ai
 import ostinato.chess.core._
 import ostinato.core.{XY, Ai}
 
-case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Option[Long] = None)
-    extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules, ChessGame](player, seed) {
+case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = false)
+    extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules, ChessGame](player) {
 
   override def nextAction(game: ChessGame)(implicit rules: ChessRules = ChessRules.default): Option[ChessAction] = {
     val noExtraValidation = rules.copy(extraValidationOnActionApply = false)
@@ -35,7 +35,7 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
     case _ => a._2 > b._2
   }
 
-  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = 2, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit rules: ChessRules = ChessRules.default): Long = {
+  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = depth, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit rules: ChessRules = ChessRules.default): Long = {
     var a = alpha
     var b = beta
 
@@ -79,7 +79,7 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
 
   private def int(b: Boolean) = if (b) 1 else 0
 
-  private def evaluate(board: ChessBoard, action: ChessAction): Long = {
+  private def evaluate(board: ChessBoard, action: ChessAction)(implicit rules: ChessRules = ChessRules.default): Long = {
     action match {
 
       // PRIORITY #1: GAME END
@@ -93,10 +93,31 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
           // PRIORITY #2: MATERIAL VALUE
           val undefendedOwnPieces = action.turn.pieces(board).filter(!_.isDefended(board))
           val undefendedThreatenedOwnPieces = undefendedOwnPieces.filter(_.isThreatened(board))
-          val likelyLostValue = undefendedThreatenedOwnPieces.toList.sortBy(materialValue).lastOption.map(materialValue).getOrElse(0)
 
-          val playerMaterialValue = action.turn.pieces(board).toList.map(materialValue).sum - likelyLostValue
           val enemyMaterialValue = action.turn.enemy.pieces(board).toList.map(materialValue).sum
+          val playerMaterialValueWithoutLikelyLostValue = action.turn.pieces(board).toList.map(materialValue).sum
+          val enemyHasMaterialValueAdvantage = enemyMaterialValue > playerMaterialValueWithoutLikelyLostValue
+
+          val likelyLostValue = undefendedThreatenedOwnPieces.toList.sortBy(materialValue).lastOption.map(materialValue).getOrElse {
+            if (enemyHasMaterialValueAdvantage) {
+              val threatenedOwnPieces = action.turn.pieces(board).flatMap { ownPiece =>
+                ownPiece.threatenedBy(board) match {
+                  case Some(enemyPiece) if materialValue(ownPiece) >= materialValue(enemyPiece) => Set(materialValue(ownPiece))
+                  case _ => Set.empty[Int]
+                }
+              } // TODO optimise!
+
+              if (threatenedOwnPieces.isEmpty) {
+                0
+              } else {
+                threatenedOwnPieces.max
+              }
+            } else {
+              0
+            }
+          }
+
+          val playerMaterialValue = playerMaterialValueWithoutLikelyLostValue - likelyLostValue
           val totalMaterialValue = playerMaterialValue * sign(action.turn) + enemyMaterialValue * sign(action.turn.enemy)
 
           // PRIORITY #3: MAKES CHECK
@@ -147,8 +168,23 @@ case class ChessBasicAi(player: ChessPlayer, debug: Boolean = false, seed: Optio
             case _ ⇒ false
           }
 
-          val value: Long = int(castles) * 100 * sign(action.turn) +
+          val idleBishopKnightPenalty =
+            if (gameStage == "early")
+              (action.turn.knights(board) ++ action.turn.bishops(board)).count(_.pos.y == action.turn.initialY)
+            else
+              0
+
+          val nonIdleRookPenalty =
+            if (gameStage == "early")
+              action.turn.rooks(board).count(r => r.pos.y != action.turn.initialY || (r.pos.x != 0 && r.pos.x != 7))
+            else
+              0
+
+          val value: Long =
+            int(castles) * 100 * sign(action.turn) +
             int(couldCastleButMovesKing) * -100 * sign(action.turn) +
+            idleBishopKnightPenalty * -100 * sign(action.turn) +
+            nonIdleRookPenalty * -100 * sign(action.turn) +
             int(hasMiddle) * 100 * hasMiddleMultiplier * sign(action.turn) +
             int(enemyHasMiddle) * -100 * hasMiddleMultiplier * sign(action.turn) +
             totalDistanceToPromotion * totalDistanceToPromotionMultiplier * sign(action.turn) +
