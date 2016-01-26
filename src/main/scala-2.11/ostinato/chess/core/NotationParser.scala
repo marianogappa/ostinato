@@ -3,9 +3,21 @@ package ostinato.chess.core
 import scala.annotation.tailrec
 
 object NotationParser {
-  type ParsedMatch = (List[ParseStep], ParseResult)
-  type ParseStep = (String, Option[(ChessAction, ChessBoard)])
-  type ParseResult = Either[Option[NotationRules], NotationRules]
+  case class GameStep(action: ChessAction, board: ChessBoard)
+  case class ParseStep(stringToParse: String, maybeGameStep: Option[GameStep])
+  abstract class ParsingResult {
+    val isSuccess: Boolean
+  }
+  case class FailedParse(nr: Option[NotationRules]) extends ParsingResult {
+    val isSuccess = false
+  }
+  case class SuccessfulParse(nr: NotationRules) extends ParsingResult {
+    val isSuccess = true
+  }
+  case class ParsedMatch(steps: List[ParseStep], result: ParsingResult) {
+    val isSuccess = result.isSuccess
+    val validStepCount = steps count (_.maybeGameStep.nonEmpty)
+  }
 
   private val cache: collection.mutable.Map[ChessBoard, Set[ChessAction]] = collection.mutable.Map.empty[ChessBoard, Set[ChessAction]]
   private def store(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) = {
@@ -21,12 +33,12 @@ object NotationParser {
     implicit rules: ChessRules = ChessRules.default): Set[ParsedMatch] =
     actions match {
       case Nil ⇒
-        Set((steps, Right(actionParser.r)))
+        Set(ParsedMatch(steps, SuccessfulParse(actionParser.r)))
       case a :: as ⇒
         val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionParser.parseAction filter (_._1 == a)
 
         if (nodes.isEmpty) {
-          Set((steps ++ (a :: as).map((_, None)), Left(Some(actionParser.r))))
+          Set(ParsedMatch(steps ++ (a :: as).map(ParseStep(_, None)), FailedParse(Some(actionParser.r))))
         } else {
           reduce {
             nodes.flatMap[ParsedMatch, Set[ParsedMatch]] {
@@ -34,10 +46,10 @@ object NotationParser {
                 currentBoard.doAction(chessAction) match {
                   case Some(newBoard: ChessBoard) ⇒
                     //                                    println(s"Successfully processed $a with $chessAction", newBoard)
-                    doParseMatch(as, newBoard, steps :+ (a, Some((chessAction, newBoard))), actionParser)
+                    doParseMatch(as, newBoard, steps :+ ParseStep(a, Some(GameStep(chessAction, newBoard))), actionParser)
                   case None ⇒
-                    val allSteps: List[ParseStep] = steps ++ (a :: as).map((_, None))
-                    Set((allSteps, Left(Some(notationRules))))
+                    val allSteps: List[ParseStep] = steps ++ (a :: as).map(ParseStep(_, None))
+                    Set(ParsedMatch(allSteps, FailedParse(Some(notationRules))))
                 }
             }
           }
@@ -45,15 +57,13 @@ object NotationParser {
     }
 
   private def reduce(results: Set[ParsedMatch]): Set[ParsedMatch] = {
-    lazy val hasSuccess = results exists (_._2.isRight)
-    lazy val removeFailures = results filter (_._2.isRight)
-
-    def validSteps(steps: List[ParseStep]) = steps.count(_._2.nonEmpty)
+    lazy val hasSuccess = results exists (_.isSuccess)
+    lazy val removeFailures = results filter (_.isSuccess)
 
     lazy val leaveBestAttempts = {
-      val sorted = results.toList.sortWith((a, b) ⇒ validSteps(a._1) > validSteps(b._1))
-      val targetSize = validSteps(sorted.head._1)
-      sorted.takeWhile(r ⇒ validSteps(r._1) == targetSize).toSet
+      val sorted = results.toList.sortWith(_.validStepCount > _.validStepCount)
+      val targetSize = sorted.head.validStepCount
+      sorted.takeWhile(_.validStepCount == targetSize).toSet
     }
 
     if (results.isEmpty)
@@ -82,7 +92,7 @@ object NotationParser {
     actionParsers match {
       case Nil ⇒
         ParseResultsProxy(reduce(partialResults))
-      case _ if partialResults exists (_._2.isRight) ⇒
+      case _ if partialResults exists (_.isSuccess) ⇒
         ParseResultsProxy(reduce(partialResults))
       case actionParser :: as ⇒
         parseMatchString(s, board, as,
@@ -91,11 +101,11 @@ object NotationParser {
 
   case class ParseResultsProxy(results: Set[ParsedMatch]) {
     val isEmpty = results.isEmpty
-    val succeeded = results exists (_._2.isRight)
+    val succeeded = results exists (_.isSuccess)
     val failed = !succeeded
-    lazy val suceedingNotations = if (succeeded) results collect { case (_, Right(notation)) ⇒ notation } else Set()
-    lazy val failingNotations = if (failed) results collect { case (_, Left(Some(notation))) ⇒ notation } else Set()
-    lazy val parsedMatches = results map (_._1)
+    lazy val suceedingNotations = if (succeeded) results collect { case ParsedMatch(_, SuccessfulParse(notation)) ⇒ notation } else Set()
+    lazy val failingNotations = if (failed) results collect { case ParsedMatch(_, FailedParse(Some(notation))) ⇒ notation } else Set()
+    lazy val parsedMatches = results map (_.steps)
   }
 }
 

@@ -1,6 +1,7 @@
 package ostinato.chess.core
 
 import org.scalatest.{ FunSpec, ShouldMatchers }
+import ostinato.chess.core.NotationParser.GameStep
 
 class NotationParserTest extends FunSpec with ShouldMatchers {
   describe("Notation parsing") {
@@ -19,9 +20,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       descriptive.succeeded shouldBe true
       descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
       descriptive.parsedMatches.head.size shouldBe 13
-      descriptive.parsedMatches.head.last._2 shouldBe
+      descriptive.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -49,9 +50,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       iccf.succeeded shouldBe true
       iccf.suceedingNotations.head shouldBe a[IccfNotationRules]
       iccf.parsedMatches.head.size shouldBe 13
-      iccf.parsedMatches.head.last._2 shouldBe
+      iccf.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -79,9 +80,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       smith.succeeded shouldBe true
       smith.suceedingNotations.head shouldBe a[SmithNotationRules]
       smith.parsedMatches.head.size shouldBe 13
-      smith.parsedMatches.head.last._2 shouldBe
+      smith.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -109,9 +110,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       coordinate.succeeded shouldBe true
       coordinate.suceedingNotations.head shouldBe a[CoordinateNotationRules]
       coordinate.parsedMatches.head.size shouldBe 13
-      coordinate.parsedMatches.head.last._2 shouldBe
+      coordinate.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -138,9 +139,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       algebraic.succeeded shouldBe true
       algebraic.suceedingNotations.head shouldBe a[AlgebraicNotationRules]
       algebraic.parsedMatches.head.size shouldBe 13
-      algebraic.parsedMatches.head.last._2 shouldBe
+      algebraic.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -167,9 +168,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       figurine.succeeded shouldBe true
       figurine.suceedingNotations.head shouldBe a[AlgebraicNotationRules]
       figurine.parsedMatches.head.size shouldBe 13
-      figurine.parsedMatches.head.last._2 shouldBe
+      figurine.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -200,9 +201,9 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       pgn.succeeded shouldBe true
       pgn.suceedingNotations.head shouldBe a[AlgebraicNotationRules]
       pgn.parsedMatches.head.size shouldBe 13
-      pgn.parsedMatches.head.last._2 shouldBe
+      pgn.parsedMatches.head.last.maybeGameStep shouldBe
         Some(
-          (CastlingAction.whiteKingside(), ChessGame.fromGridString(
+          GameStep(CastlingAction.whiteKingside(), ChessGame.fromGridString(
             """♜♞..♚.♞♜
               |♟♟♟♛.♟♟♟
               |....♟...
@@ -245,6 +246,6 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
       """.stripMargin
 
     val results = NotationParser.parseMatchString(s)
-    results.parsedMatches.head.last._2.get._1 shouldBe LoseAction(WhiteChessPlayer)
+    results.parsedMatches.head.last.maybeGameStep.get.action shouldBe LoseAction(WhiteChessPlayer)
   }
 }
