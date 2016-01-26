@@ -41,7 +41,7 @@ object NotationParser {
           Set(ParsedMatch(steps ++ (a :: as).map(ParseStep(_, None)), FailedParse(Some(actionParser.r))))
         } else {
           reduce {
-            nodes.flatMap[ParsedMatch, Set[ParsedMatch]] {
+            nodes.flatMap {
               case (_: String, (chessAction: ChessAction, notationRules: NotationRules)) ⇒
                 currentBoard.doAction(chessAction) match {
                   case Some(newBoard: ChessBoard) ⇒
