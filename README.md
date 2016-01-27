@@ -5,11 +5,11 @@ A modular, fully tested, very comprehensive helper library for board games, with
 [![Code Coverage](https://img.shields.io/codecov/c/github/MarianoGappa/ostinato.svg)](https://codecov.io/github/MarianoGappa/ostinato)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MarianoGappa/ostinato/master/LICENSE)
 
-[Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser)
-
-[Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
+[Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser) - Also play from any board state against the AI
 
 [Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
+
+[Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
 
@@ -243,17 +243,15 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Chess AI is very slow!!
 - fromString should return Option[ChessGame]; do some validation (e.g. 2 en passant pawns?; not enough cells?)
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
 - Research repositories
+- Implement Chess Game as proof of concept
 
 ## Long term TODO
 
 - Implement PegSolitaireGame as proof of concept
 - Solve PegSolitaireGame as proof of concept
-- Implement Chess Game as proof of concept
-- Implement partial/complete algebraic chess notation to Game: can display and practice from there
 - Invent awesome game using this library
 
 ## Anyway; why "ostinato"?
