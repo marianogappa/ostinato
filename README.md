@@ -243,10 +243,22 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Parse -> Convert notation button
+- Convert notation functionality with all notation variants available
+- Parse -> Play should play with black pieces rotating the board when playing after a white move
+- Investigate rare case where it's possible that Capture + Promote was not a valid move
+- Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
+- UI/UX review with a UI/UX senior
+- Add GA
 - fromString should return Option[ChessGame]; do some validation (e.g. 2 en passant pawns?; not enough cells?)
 - Add `ChessGame.from` and `ChessGame.to` methods for all cases
-- Research repositories
 - Implement Chess Game as proof of concept
+- Research ScalaJS in action 
+- Ostinato Server (possibly dockerised)
+- Research repositories
+- Extensive Scaladoc documentation effort (do after code is not "experimental" anymore)
+- Tutorials (do after code is not "experimental" anymore)
+- Blog post
 
 ## Long term TODO
 
