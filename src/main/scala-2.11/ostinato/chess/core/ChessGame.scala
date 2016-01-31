@@ -87,4 +87,6 @@ case class ChessGame(override val board: ChessBoard, override val rules: ChessRu
 
   def toShortFen = board.toShortFen
   def toFen = board.toFen
+
+  def rotate: ChessGame = copy(board.rotate)
 }

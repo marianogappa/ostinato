@@ -228,4 +228,7 @@ case class ChessBoard(
     case _ ⇒
       false
   }
+
+  def rotate = copy(grid = reverseGrid)
+  private def reverseGrid = grid.reverse
 }

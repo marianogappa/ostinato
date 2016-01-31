@@ -240,5 +240,17 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
 
       game.board.actions.size shouldBe 10
     }
+
+    it("should rotate the default starting game of Chess") {
+      ChessGame.defaultGame.rotate.board.toString shouldBe
+        """♖♘♗♔♕♗♘♖
+          |♙♙♙♙♙♙♙♙
+          |........
+          |........
+          |........
+          |........
+          |♟♟♟♟♟♟♟♟
+          |♜♞♝♚♛♝♞♜""".stripMargin
+    }
   }
 }
