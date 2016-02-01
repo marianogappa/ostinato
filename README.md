@@ -9,7 +9,7 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
 
-[Chess Game Notation Converter](http://marianogappa.github.io/ostinato-examples/converter.html)
+[Chess Game Notation Converter](http://marianogappa.github.io/ostinato-examples/convert)
 
 [Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
 
