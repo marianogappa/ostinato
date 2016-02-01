@@ -9,6 +9,8 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 [Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
 
+[Chess Game Notation Converter](http://marianogappa.github.io/ostinato-examples/converter.html)
+
 [Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
@@ -243,10 +245,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Parse -> Convert notation button
 - Convert notation functionality with all notation variants available
-- Parse -> Play should play with black pieces rotating the board when playing after a white move
-- Investigate rare case where it's possible that Capture + Promote was not a valid move
 - Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
 - UI/UX review with a UI/UX senior
 - Add GA
