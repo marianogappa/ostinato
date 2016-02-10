@@ -5,13 +5,21 @@ A modular, fully tested, very comprehensive helper library for board games, with
 [![Code Coverage](https://img.shields.io/codecov/c/github/MarianoGappa/ostinato.svg)](https://codecov.io/github/MarianoGappa/ostinato)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MarianoGappa/ostinato/master/LICENSE)
 
-[Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser) - Also play from any board state against the AI
+[Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser)
+
+Tool to paste any chess match in any known notation and browse through the moves via Chessboard. Also play from any board state against the AI, or convert to any other notation.
 
 [Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
 
+Play a Chess Match against the AI. A hacker will be able to play from whatever board starting position, as white or black, configuring AI's strength and enabling debug mode.
+
 [Chess Game Notation Converter](http://marianogappa.github.io/ostinato-examples/convert)
 
+Convert any pasted chess match in any known notation to any other known notation.
+
 [Chess Auto-play (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/autoplay)
+
+Two AI's playing each other (making random moves).
 
 [Scaladoc](http://marianogappa.github.io/ostinato/docs)
 
