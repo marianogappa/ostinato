@@ -14,7 +14,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |...♜♜♜..
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.kings.head.deltas(game.board) shouldBe Set()
     }
@@ -27,7 +27,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |...♜.♜..
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.kings.head.deltas(game.board) shouldBe Set(XY(0, 1))
     }
@@ -40,7 +40,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.kings.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1)))
@@ -54,7 +54,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.kings.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((-1, 0), (1, 0), (0, 1), (1, 1), (-1, 1), (2, 0), (-2, 0)))
@@ -68,7 +68,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |...♜♜♜..
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.kings.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((1, 0)))
@@ -82,7 +82,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |...♙....
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.pawns.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((0, -1), (0, -2), (-1, -1), (1, -1)))
@@ -96,7 +96,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |...♙....
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.pawns.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((0, -1), (-1, -1), (1, -1)))
@@ -110,7 +110,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.pawns.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((0, -1), (-1, -1), (1, -1)))
@@ -124,7 +124,7 @@ class PieceDeltasTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       game.board.queens.head.deltas(game.board) shouldBe
         Piece.toXYs(Set((0, -1), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (-1, 0), (-2, 0), (-3, 0), (1, 0),

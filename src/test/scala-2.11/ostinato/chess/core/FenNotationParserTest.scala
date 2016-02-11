@@ -2,6 +2,8 @@ package ostinato.chess.core
 
 import org.scalatest.{FunSpec, ShouldMatchers}
 
+import scala.util.{Failure, Success}
+
 class FenNotationParserTest extends FunSpec with ShouldMatchers {
 
   describe("to FEN Notation") {
@@ -23,16 +25,16 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |""".stripMargin).board.toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
+          |""".stripMargin).get.board.toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
     }
   }
 
   describe("from short FEN Notation") {
     it("should decode a default chess setup in short FEN Notation") {
-      ChessGame.fromShortFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") shouldBe Some(ChessGame.defaultGame)
+      ChessGame.fromShortFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") shouldBe Success(ChessGame.defaultGame)
     }
     it("should decode this chessboard in short FEN Notation") {
-      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Some(ChessGame.fromGridString(
+      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Success(ChessGame.fromGridString(
         """.......♔
           |........
           |♚.♙.....
@@ -41,20 +43,20 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |""".stripMargin))
+          |""".stripMargin).get)
     }
-    ignore("should not decode an incomplete chessboard") {
-      ChessGame.fromShortFen("7K/8/k1P5/7p/8") shouldBe None
+    it("should not decode an incomplete chessboard") {
+      ChessGame.fromShortFen("7K/8/k1P5/7p/8") shouldBe Failure(InvalidChessGridSizeException)
     }
   }
 
   describe("from FEN Notation") {
     it("should decode a default chess setup in FEN Notation") {
-      ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") shouldBe Some(ChessGame.defaultGame)
+      ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") shouldBe Success(ChessGame.defaultGame)
     }
     it("should decode the default chess setup plus an e4 in FEN Notation") {
       ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1") shouldBe
-      Some(ChessGame.fromGridString(
+      Success(ChessGame.fromGridString(
       """♜♞♝♛♚♝♞♜
         |♟♟♟♟♟♟♟♟
         |........
@@ -63,11 +65,11 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
         |....↑...
         |♙♙♙♙.♙♙♙
         |♖♘♗♕♔♗♘♖
-        |""".stripMargin, turn = BlackChessPlayer, castlingFullyAvailable, 1, 0))
+        |""".stripMargin, turn = BlackChessPlayer, castlingFullyAvailable, 1, 0).get)
     }
     it("should decode a chess setup with black en passant in FEN Notation") {
       ChessGame.fromFen("rnbqkbnr/p1pppppp/8/1p6/8/8/PPPPPPPP/RNBQKBNR w KQkq b6 4 5") shouldBe
-      Some(ChessGame.fromGridString(
+      Success(ChessGame.fromGridString(
       """♜♞♝♛♚♝♞♜
         |♟.♟♟♟♟♟♟
         |.↓......
@@ -76,7 +78,7 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
         |........
         |♙♙♙♙♙♙♙♙
         |♖♘♗♕♔♗♘♖
-        |""".stripMargin, turn = WhiteChessPlayer, castlingFullyAvailable, 5, 4))
+        |""".stripMargin, turn = WhiteChessPlayer, castlingFullyAvailable, 5, 4).get)
     }
 
     val Q: Map[(ChessPlayer, CastlingSide.Value), Boolean] =
@@ -94,7 +96,7 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
 
     castlingMap foreach { case (k, v) => it(s"should decode a chess setup with castling '$k'") {
       ChessGame.fromFen(s"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w $k - 0 1") shouldBe
-        Some(ChessGame.defaultGame.copy(board = ChessGame.defaultGame.board.copy(castlingAvailable = v)))
+        Success(ChessGame.defaultGame.copy(board = ChessGame.defaultGame.board.copy(castlingAvailable = v)))
     }}
   }
 }

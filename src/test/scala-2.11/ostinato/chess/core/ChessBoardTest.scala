@@ -54,7 +54,7 @@ class ChessBoardTest extends FunSpec with ShouldMatchers {
                                         |........
                                         |........
                                         |♙♙♙♙♙♙♙♙
-                                        |♖♘♗♕♔♗♘♖""".stripMargin, turn = BlackChessPlayer)
+                                        |♖♘♗♕♔♗♘♖""".stripMargin, turn = BlackChessPlayer).get
 
       game.board.doAction(game.board.nonFinalActions.head).get.turn shouldBe WhiteChessPlayer
     }

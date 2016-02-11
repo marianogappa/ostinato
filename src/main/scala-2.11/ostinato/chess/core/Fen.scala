@@ -3,6 +3,7 @@ package ostinato.chess.core
 import ostinato.core.XY
 
 import scala.util.Try
+import scala.util.control.NoStackTrace
 
 object Fen {
   def +(f: Fen, char: Char) = {
@@ -81,7 +82,7 @@ object Fen {
     }
   }
 
-  def calculateNumber(s: String) = Try(s.trim.toInt).toOption
+  def calculateNumber(s: String) = Try(s.trim.toInt)
 }
 
 case class Fen(partialString: String = "", cellCount: Int = 0, emptyCells: Int = 0) {

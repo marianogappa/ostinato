@@ -2,6 +2,9 @@ package ostinato.chess.core
 
 import ostinato.core._
 
+import scala.util.{Success, Failure, Try}
+import scala.util.control.NoStackTrace
+
 object ChessGame {
   def fromGridString(
     string: String,
@@ -9,7 +12,7 @@ object ChessGame {
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
     halfMoveClock: Int = 0)(
-      implicit rules: ChessRules = ChessRules.default): ChessGame = {
+      implicit rules: ChessRules = ChessRules.default): Try[ChessGame] = {
 
     val grid = ChessGrid.fromGridString(string)
 
@@ -19,11 +22,21 @@ object ChessGame {
       case _        ⇒ None
     }
 
-    // TODO: headOption means keep only the first; this is incorrect: if there's 2 there's a problem!
-    ChessGame(ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock), rules)
+    if (grid.size != 64) {
+      Failure(InvalidChessGridSizeException)
+    } else if (enPassantPawns.size > 1) {
+      Failure(MoreThanOneEnPassantPawnException)
+    } else {
+      Success(
+        ChessGame(
+          ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock),
+          rules
+        )
+      )
+    }
   }
 
-  def fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Option[ChessGame] =
+  def fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
     if (Fen.isValidFen(fenString)) {
       val s = fenString.split(" +")
 
@@ -31,36 +44,38 @@ object ChessGame {
       val castlingAvailable = Fen.calculateCastlingAvailable(castlingAvailableS)
       val turn = Fen.calculateTurn(turnS)
 
-      turn flatMap { turn ⇒
-        (
-          ChessGrid.fromGridString(gridS.map(Fen.shortFenTransformation(_)).mkString),
-          Fen.calculateEnPassantPawn(enPassantS, turn),
-          Fen.calculateNumber(halfMoveCountS),
-          Fen.calculateNumber(fullMoveNumberS)
-        ) match {
-            case (
-              grid: Vector[Option[ChessPiece]],
-              epp: Option[EnPassantPawn],
-              Some(halfMoveCount: Int),
-              Some(fullMoveNumber: Int)
-              ) ⇒
+      val grid = ChessGrid.fromGridString(gridS.map(Fen.shortFenTransformation(_)).mkString)
+      val halfMoveCount = Fen.calculateNumber(halfMoveCountS)
+      val fullMoveNumber = Fen.calculateNumber(fullMoveNumberS)
+      val enPassantPawn = turn flatMap (t => Fen.calculateEnPassantPawn(enPassantS, t))
 
-              Some(ChessGame(ChessBoard(grid, turn, epp, castlingAvailable, fullMoveNumber, halfMoveCount), rules))
-            case _ ⇒
-              None
-          }
+      (grid, turn, enPassantPawn, halfMoveCount, fullMoveNumber) match {
+        case (_, None, _, _, _) =>
+          Failure(InvalidTurnException)
+        case (_grid, _, _, _, _) if _grid.size != 64 =>
+          Failure(InvalidChessGridSizeException)
+        case (_, _, _, Failure(_), _) =>
+          Failure(InvalidHalfMoveCountException)
+        case (_, _, _, _, Failure(_)) =>
+          Failure(InvalidFullMoveNumberException)
+        case (_grid, Some(_turn), _epp, Success(_halfMoveCount), Success(_fullMoveNumber)) =>
+          Success(ChessGame(ChessBoard(_grid, _turn, _epp, castlingAvailable, _fullMoveNumber, _halfMoveCount), rules))
       }
     } else {
-      None
+      Failure(FenStringRegexMismatchException)
     }
 
-  def fromShortFen(shortFenString: String)(implicit rules: ChessRules = ChessRules.default): Option[ChessGame] =
+  def fromShortFen(shortFenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
     if (Fen.isValidShortFen(shortFenString)) {
-      Some(
-        ChessGame(ChessBoard(ChessGrid.fromGridString(shortFenString.map(Fen.shortFenTransformation(_)).mkString)), rules)
-      )
+      val grid = ChessGrid.fromGridString(shortFenString.map(Fen.shortFenTransformation(_)).mkString)
+
+      if (grid.size != 64)
+        Failure(InvalidChessGridSizeException)
+      else
+        Success(ChessGame(ChessBoard(grid), rules))
+
     } else {
-      None
+      Failure(FenStringRegexMismatchException)
     }
 
   val defaultGame: ChessGame = fromGridString(
@@ -72,7 +87,7 @@ object ChessGame {
       |........
       |♙♙♙♙♙♙♙♙
       |♖♘♗♕♔♗♘♖
-      |""".stripMargin)
+      |""".stripMargin).get
 }
 
 case class ChessGame(override val board: ChessBoard, override val rules: ChessRules) extends Game[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](
@@ -90,3 +105,10 @@ case class ChessGame(override val board: ChessBoard, override val rules: ChessRu
 
   def rotate: ChessGame = copy(board.rotate)
 }
+
+case object InvalidTurnException extends RuntimeException with NoStackTrace
+case object InvalidChessGridSizeException extends RuntimeException with NoStackTrace
+case object InvalidFullMoveNumberException extends RuntimeException with NoStackTrace
+case object InvalidHalfMoveCountException extends RuntimeException with NoStackTrace
+case object MoreThanOneEnPassantPawnException extends RuntimeException with NoStackTrace
+case object FenStringRegexMismatchException extends RuntimeException with NoStackTrace

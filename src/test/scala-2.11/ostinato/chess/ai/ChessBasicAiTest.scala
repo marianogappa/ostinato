@@ -15,7 +15,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |♖.......
           |.♖......
-          |.....♚..""".stripMargin)
+          |.....♚..""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(MoveAction(♜(XY(0, 5), WhiteChessPlayer), XY(0, 2), isCheck = true, isCheckmate = true))
@@ -29,7 +29,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |♖...♞...
           |........
-          |.....♚..""".stripMargin)
+          |.....♚..""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(CaptureAction(♜(XY(0, 5), WhiteChessPlayer), XY(4, 0), ♞(XY(4, 5), BlackChessPlayer)))
@@ -43,7 +43,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |♖...♞..♟
           |.....♚..
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) should not be a [CaptureAction]
     }
@@ -56,7 +56,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |........""".stripMargin)
+          |........""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(PromoteAction(♟(XY(4, 1), WhiteChessPlayer, -1), XY(0, -1), ♛(XY(4, 0), WhiteChessPlayer), isCheck = true, isCheckmate = false))
@@ -70,7 +70,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |........
-          |♘♖.....♔""".stripMargin)
+          |♘♖.....♔""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(PromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(0, -1), ♞(XY(2, 0), WhiteChessPlayer), isCheck = true, isCheckmate = true))
@@ -84,7 +84,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |....♜...
           |.....♟..
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
         Some(CaptureAction(♝(XY(2, 2), WhiteChessPlayer), XY(2, 2), ♜(XY(4, 4), BlackChessPlayer)))
@@ -98,7 +98,7 @@ class ChessBasicAiTest extends FunSpec with ShouldMatchers {
           |.....♙..
           |♖.......
           |.♙......
-          |........""".stripMargin, turn = BlackChessPlayer)
+          |........""".stripMargin, turn = BlackChessPlayer).get
 
       ChessBasicAi(BlackChessPlayer, depth = 0).nextAction(game).get shouldBe a[MoveAction]
     }

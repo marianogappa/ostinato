@@ -14,7 +14,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |.....♛♛.
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin).get
       game.isGameOver shouldBe true
       game.isDraw shouldBe false
     }
@@ -28,7 +28,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |......♛.
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin).get
       game.isDraw shouldBe true
       game.isGameOver shouldBe true
     }
@@ -42,7 +42,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |......♛.
           |........
           |........
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin).get
       game.isDraw shouldBe false
       game.isGameOver shouldBe false
     }
@@ -56,7 +56,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |........
           |........
           |......♛.
-          |.......♔""".stripMargin)
+          |.......♔""".stripMargin).get
       game.isGameOver shouldBe false
     }
 
@@ -69,7 +69,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, turn = BlackChessPlayer)
+          |.......♔""".stripMargin, turn = BlackChessPlayer).get
 
       game.blackPlayer.actions(game.board).count {
         case m: ChessAction ⇒ m.isCheckmate
@@ -86,7 +86,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, turn = BlackChessPlayer)
+          |.......♔""".stripMargin, turn = BlackChessPlayer).get
 
       game.board.movementsOfDelta(XY(6, 5), XY(1, 0)) shouldBe
         Set(MoveAction(new ♛(XY(6, 5), BlackChessPlayer), XY(1, 0), isCheck = true, isCheckmate = false))
@@ -101,7 +101,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, turn = BlackChessPlayer)
+          |.......♔""".stripMargin, turn = BlackChessPlayer).get
 
       game.board.movementsOfDelta(XY(5, 4), XY(2, 0)) shouldBe
         Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(2, 0), isCheck = true, isCheckmate = true))
@@ -116,7 +116,7 @@ class GameEndingTest extends FunSpec with ShouldMatchers {
           |.....♛..
           |......♛.
           |........
-          |.......♔""".stripMargin, turn = BlackChessPlayer)
+          |.......♔""".stripMargin, turn = BlackChessPlayer).get
 
       game.board.movementsOfDelta(XY(5, 4), XY(-5, 0)) shouldBe
         Set(MoveAction(new ♛(XY(5, 4), BlackChessPlayer), XY(-5, 0), isCheck = false, isCheckmate = false))

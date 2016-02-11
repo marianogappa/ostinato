@@ -32,7 +32,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -62,7 +62,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -92,7 +92,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -122,7 +122,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -151,7 +151,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -180,7 +180,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
 
@@ -213,7 +213,7 @@ class NotationParserTest extends FunSpec with ShouldMatchers {
               |♙♙♙.♘♙♙♙
               |♖.♗♕.♖♔.""".stripMargin, turn = BlackChessPlayer, castlingAvailable = castlingOnlyBlackAvailable,
             fullMoveNumber = 7, halfMoveClock = 1
-          ).board)
+          ).get.board)
         )
     }
   }
