@@ -81,16 +81,29 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="ostinato.chess.core.NotationParser.ParseResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ParseResult=Either[Option[ostinato.chess.core.NotationRules],ostinato.chess.core.NotationRules]"></a>
-      <a id="ParseResult:ParseResult"></a>
+              <ol><li name="ostinato.chess.core.NotationParser.FailedParse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailedParseextendsNotationParser.ParsingResultwithProductwithSerializable"></a>
+      <a id="FailedParse:FailedParse"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ParseResult</span><span class="result"> = <span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="scala.Option">Option</span>[<a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a>], <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a>]</span>
+        <a href="NotationParser$$FailedParse.html"><span class="name">FailedParse</span></a><span class="params">(<span name="nr">nr: <span class="extype" name="scala.Option">Option</span>[<a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a>]</span>)</span><span class="result"> extends <a href="NotationParser$$ParsingResult.html" class="extype" name="ostinato.chess.core.NotationParser.ParsingResult">ParsingResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.NotationParser.GameStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GameStepextendsProductwithSerializable"></a>
+      <a id="GameStep:GameStep"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotationParser$$GameStep.html"><span class="name">GameStep</span></a><span class="params">(<span name="action">action: <a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a></span>, <span name="board">board: <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -103,33 +116,59 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="NotationParser$$ParseResultsProxy.html"><span class="name">ParseResultsProxy</span></a><span class="params">(<span name="results">results: <span class="extype" name="scala.Predef.Set">Set</span>[(<span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[(<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>)])], <a href="#ParseResult=Either[Option[ostinato.chess.core.NotationRules],ostinato.chess.core.NotationRules]" class="extmbr" name="ostinato.chess.core.NotationParser.ParseResult">ParseResult</a>)]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="NotationParser$$ParseResultsProxy.html"><span class="name">ParseResultsProxy</span></a><span class="params">(<span name="results">results: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="NotationParser$$ParsedMatch.html" class="extype" name="ostinato.chess.core.NotationParser.ParsedMatch">ParsedMatch</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
     </li><li name="ostinato.chess.core.NotationParser.ParseStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ParseStep=(String,Option[(ostinato.chess.core.ChessAction,ostinato.chess.core.ChessBoard)])"></a>
-      <a id="ParseStep:(String,Option[(ChessAction,ChessBoard)])"></a>
+      <a id="ParseStepextendsProductwithSerializable"></a>
+      <a id="ParseStep:ParseStep"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ParseStep</span><span class="result"> = (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[(<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>)])</span>
+        <a href="NotationParser$$ParseStep.html"><span class="name">ParseStep</span></a><span class="params">(<span name="stringToParse">stringToParse: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maybeGameStep">maybeGameStep: <span class="extype" name="scala.Option">Option</span>[<a href="NotationParser$$GameStep.html" class="extype" name="ostinato.chess.core.NotationParser.GameStep">GameStep</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
     </li><li name="ostinato.chess.core.NotationParser.ParsedMatch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ParsedMatch=(List[(String,Option[(ostinato.chess.core.ChessAction,ostinato.chess.core.ChessBoard)])],ostinato.chess.core.NotationParser.ParseResult)"></a>
-      <a id="ParsedMatch:(List[(String,Option[(ChessAction,ChessBoard)])],ParseResult)"></a>
+      <a id="ParsedMatchextendsProductwithSerializable"></a>
+      <a id="ParsedMatch:ParsedMatch"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ParsedMatch</span><span class="result"> = (<span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[(<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>)])], <a href="#ParseResult=Either[Option[ostinato.chess.core.NotationRules],ostinato.chess.core.NotationRules]" class="extmbr" name="ostinato.chess.core.NotationParser.ParseResult">ParseResult</a>)</span>
+        <a href="NotationParser$$ParsedMatch.html"><span class="name">ParsedMatch</span></a><span class="params">(<span name="steps">steps: <span class="extype" name="scala.List">List</span>[<a href="NotationParser$$ParseStep.html" class="extype" name="ostinato.chess.core.NotationParser.ParseStep">ParseStep</a>]</span>, <span name="result">result: <a href="NotationParser$$ParsingResult.html" class="extype" name="ostinato.chess.core.NotationParser.ParsingResult">ParsingResult</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.NotationParser.ParsingResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ParsingResultextendsAnyRef"></a>
+      <a id="ParsingResult:ParsingResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotationParser$$ParsingResult.html"><span class="name">ParsingResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="ostinato.chess.core.NotationParser.SuccessfulParse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SuccessfulParseextendsNotationParser.ParsingResultwithProductwithSerializable"></a>
+      <a id="SuccessfulParse:SuccessfulParse"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotationParser$$SuccessfulParse.html"><span class="name">SuccessfulParse</span></a><span class="params">(<span name="nr">nr: <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a></span>)</span><span class="result"> extends <a href="NotationParser$$ParsingResult.html" class="extype" name="ostinato.chess.core.NotationParser.ParsingResult">ParsingResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -361,15 +400,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.chess.core.NotationParser#parseMatchString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseMatchString(s:String,board:ostinato.chess.core.ChessBoard,actionParsers:List[ostinato.chess.core.ActionParser],partialResults:Set[(List[(String,Option[(ostinato.chess.core.ChessAction,ostinato.chess.core.ChessBoard)])],ostinato.chess.core.NotationParser.ParseResult)])(implicitrules:ostinato.chess.core.ChessRules):ostinato.chess.core.NotationParser.ParseResultsProxy"></a>
-      <a id="parseMatchString(String,ChessBoard,List[ActionParser],Set[(List[(String,Option[(ChessAction,ChessBoard)])],ParseResult)])(ChessRules):ParseResultsProxy"></a>
+      <a id="parseMatchString(s:String,board:ostinato.chess.core.ChessBoard,actionParsers:List[ostinato.chess.core.ActionParser],partialResults:Set[ostinato.chess.core.NotationParser.ParsedMatch])(implicitrules:ostinato.chess.core.ChessRules):ostinato.chess.core.NotationParser.ParseResultsProxy"></a>
+      <a id="parseMatchString(String,ChessBoard,List[ActionParser],Set[ParsedMatch])(ChessRules):ParseResultsProxy"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseMatchString</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="board">board: <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> = <span class="symbol"><span class="name"><a href="ChessGame$.html">ChessGame.defaultGame.board</a></span></span></span>, <span name="actionParsers">actionParsers: <span class="extype" name="scala.List">List</span>[<a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a>] = <span class="symbol">allActionParsers</span></span>, <span name="partialResults">partialResults: <span class="extype" name="scala.Predef.Set">Set</span>[(<span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[(<a href="ChessAction.html" class="extype" name="ostinato.chess.core.ChessAction">ChessAction</a>, <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a>)])], <a href="#ParseResult=Either[Option[ostinato.chess.core.NotationRules],ostinato.chess.core.NotationRules]" class="extmbr" name="ostinato.chess.core.NotationParser.ParseResult">ParseResult</a>)] = <span class="symbol">Set()</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <a href="NotationParser$$ParseResultsProxy.html" class="extype" name="ostinato.chess.core.NotationParser.ParseResultsProxy">ParseResultsProxy</a></span>
+        <span class="name">parseMatchString</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="board">board: <a href="ChessBoard.html" class="extype" name="ostinato.chess.core.ChessBoard">ChessBoard</a> = <span class="symbol"><span class="name"><a href="ChessGame$.html">ChessGame.defaultGame.board</a></span></span></span>, <span name="actionParsers">actionParsers: <span class="extype" name="scala.List">List</span>[<a href="ActionParser.html" class="extype" name="ostinato.chess.core.ActionParser">ActionParser</a>] = <span class="symbol">allActionParsers</span></span>, <span name="partialResults">partialResults: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="NotationParser$$ParsedMatch.html" class="extype" name="ostinato.chess.core.NotationParser.ParsedMatch">ParsedMatch</a>] = <span class="symbol">Set()</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rules">rules: <a href="ChessRules.html" class="extype" name="ostinato.chess.core.ChessRules">ChessRules</a> = <span class="symbol"><span class="name"><a href="ChessRules$.html">ChessRules.default</a></span></span></span>)</span><span class="result">: <a href="NotationParser$$ParseResultsProxy.html" class="extype" name="ostinato.chess.core.NotationParser.ParseResultsProxy">ParseResultsProxy</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
