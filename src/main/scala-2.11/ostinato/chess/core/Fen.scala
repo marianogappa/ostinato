@@ -1,6 +1,6 @@
 package ostinato.chess.core
 
-import ostinato.core.{ XY, BoardSize }
+import ostinato.core.XY
 
 import scala.util.Try
 
@@ -68,8 +68,8 @@ object Fen {
   )
 
   def calculateEnPassantPawn(s: String, turn: ChessPlayer)(
-    implicit rules: ChessRules = ChessRules.default, boardSize: BoardSize): Option[EnPassantPawn] = {
-    val (upperRow, lowerRow) = (2, boardSize.y - 3)
+    implicit rules: ChessRules = ChessRules.default): Option[EnPassantPawn] = {
+    val (upperRow, lowerRow) = (2, 5)
 
     (s.trim, ChessXY.fromAn(s)) match {
       case ("-", _)  ⇒ None

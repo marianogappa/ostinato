@@ -1,6 +1,6 @@
 package ostinato.chess.core
 
-import ostinato.core.{ BoardSize, Action, XY }
+import ostinato.core.{ Action, XY }
 
 abstract class ChessAction(
     val fromPiece: ChessPiece,

@@ -1,7 +1,7 @@
 package ostinato.chess.core
 
 import ostinato.chess.core.CastlingSide.CastlingSide
-import ostinato.core.{ BoardSize, XY, Piece }
+import ostinato.core.{ XY, Piece }
 
 import scala.util.control.NoStackTrace
 
@@ -68,7 +68,7 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer) extends Ch
   lazy val castlingSide =
     if (pos.x == 0)
       Some(CastlingSide.Queenside)
-    else if (pos.x == implicitly[BoardSize].x - 1)
+    else if (pos.x == 7)
       Some(CastlingSide.Kingside)
     else
       None
@@ -162,7 +162,7 @@ object ♚ {
   def initialY(owner: ChessPlayer, whitePawnDirection: Int) =
     (owner, whitePawnDirection) match {
       case (WhiteChessPlayer, 1) | (BlackChessPlayer, -1) ⇒ 0
-      case _ ⇒ chessBoardSize.y - 1
+      case _ ⇒ 7
     }
 
   def rookDelta(kingDelta: XY, whitePawnDirection: Int) =
@@ -183,7 +183,7 @@ object ♚ {
 
   def rookX(castlingSide: CastlingSide, whitePawnDirection: Int) =
     (castlingSide, whitePawnDirection) match {
-      case (CastlingSide.Kingside, -1) | (CastlingSide.Queenside, 1) ⇒ chessBoardSize.x - 1
+      case (CastlingSide.Kingside, -1) | (CastlingSide.Queenside, 1) ⇒ 7
       case _ ⇒ 0
     }
 
@@ -201,14 +201,14 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
     Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1))) ++
       (if (isInInitialPosition) Piece.toXYs(Set((-2, 0), (2, 0))) else Set())
 
-  def initialY(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
+  def initialY(implicit rules: ChessRules = ChessRules.default) =
     ♚.initialY(owner, rules.whitePawnDirection)
 
-  def initialX(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) =
+  def initialX(implicit rules: ChessRules = ChessRules.default) =
     ♚.initialX(rules.whitePawnDirection)
 
   def targetRookPosition(dx: Int)(implicit rules: ChessRules = ChessRules.default) =
-    XY(if (dx < 0) 0 else chessBoardSize.x - 1, initialY)
+    XY(if (dx < 0) 0 else 7, initialY)
 
   def rookDeltaFor(kingDelta: XY)(implicit rules: ChessRules = ChessRules.default) =
     ♚.rookDelta(kingDelta, rules.whitePawnDirection)
@@ -232,12 +232,12 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
     pos.chebyshevDistance(to) > 1
 }
 case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) {
-  val isInInitialPosition = dy == 1 && pos.y == 1 || dy == -1 && pos.y == chessBoardSize.y - 2
+  val isInInitialPosition = dy == 1 && pos.y == 1 || dy == -1 && pos.y == 6
   protected val hasRecursiveDeltas = false
   protected def deltaPatterns(implicit rules: ChessRules = ChessRules.default) =
     Piece.toXYs(Set((-1, dy), (0, dy), (1, dy)) ++ (if (isInInitialPosition) Set((0, 2 * dy)) else Set()))
 
-  def promotingPosition(dy: Int)(implicit boardSize: BoardSize) = Map(-1 -> 0, 1 -> (boardSize.y - 1))(dy)
+  def promotingPosition(dy: Int) = Map(-1 -> 0, 1 -> 7)(dy)
   val distanceToPromotion = math.abs(pos.y - promotingPosition(dy))
   val isPromoting = pos.y == promotingPosition(dy)
 

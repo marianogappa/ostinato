@@ -46,7 +46,7 @@ package object core {
         if (rules.whitePawnDirection == 1)
           Some(XY(chars.indexOf(s(0)), s(1).asDigit - 1))
         else
-          Some(XY(chars.indexOf(s(0)), chessBoardSize.y - 1 - (s(1).asDigit - 1)))
+          Some(XY(chars.indexOf(s(0)), 7 - (s(1).asDigit - 1)))
       else
         None
     }
@@ -76,11 +76,11 @@ package object core {
   implicit class ChessXY(pos: XY) {
     def squareColor = if ((pos.x + pos.y) % 2 == 0) SquareColor.Light else SquareColor.Dark
 
-    def toAn(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
+    def toAn(implicit rules: ChessRules = ChessRules.default) = {
       if (rules.whitePawnDirection == 1)
-        AnPos(ChessXY.chars(chessBoardSize.x - 1 - pos.x), pos.y + 1)
+        AnPos(ChessXY.chars(7 - pos.x), pos.y + 1)
       else
-        AnPos(ChessXY.chars(pos.x), chessBoardSize.y - pos.y)
+        AnPos(ChessXY.chars(pos.x), 8 - pos.y)
     }
 
     lazy val dnConversions =
@@ -90,14 +90,14 @@ package object core {
     lazy val iccfConversions =
       Map('a' -> 1, 'b' -> 2, 'c' -> 3, 'd' -> 4, 'e' -> 5, 'f' -> 6, 'g' -> 7, 'h' -> 8)
 
-    def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
+    def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = {
       (toAn, turn) match {
         case (AnPos(x, y), WhiteChessPlayer) => dnConversions(x) map (DnPos(_, y))
         case (AnPos(x, y), BlackChessPlayer) => dnConversions(x) map (DnPos(_, 9 - y))
       }
     }
 
-    def toIccf(implicit rules: ChessRules = ChessRules.default, chessBoardSize: BoardSize) = {
+    def toIccf(implicit rules: ChessRules = ChessRules.default) = {
       val an = toAn
       IccfPos(iccfConversions(an.x), an.y)
     }
