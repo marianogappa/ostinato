@@ -253,14 +253,12 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Proper ScalaJS crossProject build
+- Remove concept of whitePawnDirection; replace with orientation
 - Convert notation functionality with all notation variants available
 - Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
 - UI/UX review with a UI/UX senior
-- Add GA
-- fromString should return Option[ChessGame]; do some validation (e.g. 2 en passant pawns?; not enough cells?)
-- Add `ChessGame.from` and `ChessGame.to` methods for all cases
-- Implement Chess Game as proof of concept
-- Research ScalaJS in action 
+- Research Hands on ScalaJS
 - Ostinato Server (possibly dockerised)
 - Research repositories
 - Extensive Scaladoc documentation effort (do after code is not "experimental" anymore)
