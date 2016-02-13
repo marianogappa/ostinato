@@ -1,27 +1,35 @@
-name := "ostinato"
+import sbt.Keys._
 
-version := "0.1-SNAPSHOT"
+enablePlugins(ScalaJSPlugin)
 
-organization := "org.gappa"
+scalaJSUseRhino in Global := false
 
-scalaVersion := "2.11.7"
+lazy val root = project.in(file(".")).
+  aggregate(js, jvm).
+  settings(
+    publish := {},
+    publishLocal := {}
+  )
 
-//enablePlugins(ScalaJSPlugin)
-//
-//val library = crossProject.settings(
-libraryDependencies ++= Seq(
-  "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
-  "org.mockito" % "mockito-core" % "1.9.5" % "test"
-)
-//).jsSettings(
-//  scalaVersion := "2.11.7"
-//   /*JS-specific settings here*/
-//).jvmSettings(
-//  scalaVersion := "2.11.7"
-//   /*JVM-specific settings here*/
-//)
-//
-//lazy val js = library.js
-//
-//lazy val jvm = library.jvm
-//
+lazy val ostinato = crossProject.in(file(".")).
+  settings (
+    name := "ostinato",
+
+    version := "0.1-SNAPSHOT",
+
+    organization := "org.gappa",
+
+    scalaVersion := "2.11.7",
+
+    libraryDependencies ++= Seq("org.scalatest" %%% "scalatest" % "3.0.0-M12")
+  ).
+  jvmSettings(
+    scalaVersion := "2.11.7"
+  ).
+  jsSettings (
+    scalaVersion := "2.11.7"
+  )
+
+lazy val js = ostinato.js
+
+lazy val jvm = ostinato.jvm
