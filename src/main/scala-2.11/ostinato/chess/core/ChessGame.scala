@@ -36,7 +36,7 @@ object ChessGame {
     }
   }
 
-  def fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
+  def   fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
     if (Fen.isValidFen(fenString)) {
       val s = fenString.split(" +")
 

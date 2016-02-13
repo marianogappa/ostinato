@@ -2,6 +2,8 @@ package ostinato.chess.core
 
 import org.scalatest.{ShouldMatchers, FunSpec}
 
+import scala.util.Failure
+
 class EnPassantTest extends FunSpec with ShouldMatchers{
   describe("En Passant") {
     it("should find only en passant capture action for black pawn") {
@@ -44,6 +46,17 @@ class EnPassantTest extends FunSpec with ShouldMatchers{
 
       val board = game.board
       game.blackPlayer.pieces(board).head.actions(board).size shouldBe 1
+    }
+    it("should not parse a game with 2 en passant pawns") {
+      val game = ChessGame.fromGridString(
+        """........
+          |........
+          |...↓....
+          |...♙....
+          |.....♟..
+          |.....↑..
+          |........
+          |........""".stripMargin) shouldBe Failure(MoreThanOneEnPassantPawnException)
     }
   }
 }

@@ -27,6 +27,14 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
           |........
           |""".stripMargin).get.board.toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
     }
+    it("should find invalid chess grid size") {
+      val fenGame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK b KQkq - 0 1"
+      ChessGame.fromFen(fenGame) shouldBe Failure(InvalidChessGridSizeException)
+    }
+    it("should not pass fen regex match") {
+      val fenGame = "rnbqk@@@r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      ChessGame.fromFen(fenGame) shouldBe Failure(FenStringRegexMismatchException)
+    }
   }
 
   describe("from short FEN Notation") {
@@ -47,6 +55,14 @@ class FenNotationParserTest extends FunSpec with ShouldMatchers {
     }
     it("should not decode an incomplete chessboard") {
       ChessGame.fromShortFen("7K/8/k1P5/7p/8") shouldBe Failure(InvalidChessGridSizeException)
+    }
+    it("should find invalid chess grid size") {
+      val fenGame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK"
+      ChessGame.fromShortFen(fenGame) shouldBe Failure(InvalidChessGridSizeException)
+    }
+    it("should not pass fen regex match") {
+      val fenGame = "rnbqk@@@r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+      ChessGame.fromShortFen(fenGame) shouldBe Failure(FenStringRegexMismatchException)
     }
   }
 

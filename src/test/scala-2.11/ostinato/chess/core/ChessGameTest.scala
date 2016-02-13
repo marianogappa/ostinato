@@ -3,6 +3,8 @@ package ostinato.chess.core
 import ostinato.chess.core._
 import org.scalatest.{FunSpec, ShouldMatchers}
 
+import scala.util.Failure
+
 class ChessGameTest extends FunSpec with ShouldMatchers {
   describe("ChessGame actions") {
     it("should print out a default starting game of Chess") {
@@ -15,6 +17,18 @@ class ChessGameTest extends FunSpec with ShouldMatchers {
           |........
           |♙♙♙♙♙♙♙♙
           |♖♘♗♕♔♗♘♖""".stripMargin
+    }
+
+    it("should not be able to parse an incomplete board") {
+      val game = ChessGame.fromGridString(
+        """♜♞♝♛♚♝♞♜
+          |♟♟♟♟♟♟♟♟
+          |........
+          |........
+          |........
+          |........
+          |♙♙♙♙♙♙♙♙
+          |♖♘♗♕♔""".stripMargin) shouldBe Failure(InvalidChessGridSizeException)
     }
 
     it("should find 14 possible actions for a Rook") {
