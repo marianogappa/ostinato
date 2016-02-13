@@ -4,4 +4,4 @@ scala:
 script:
   - sbt clean coverage test
 after_success:
-  - pip install --user codecov && codecov
+  - sbt coveralls
