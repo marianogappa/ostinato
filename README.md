@@ -253,7 +253,6 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
-- Proper ScalaJS crossProject build
 - Remove concept of whitePawnDirection; replace with orientation
 - Convert notation functionality with all notation variants available
 - Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
