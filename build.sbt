@@ -24,7 +24,12 @@ lazy val ostinato = crossProject.in(file(".")).
     libraryDependencies ++= Seq("org.scalatest" %%% "scalatest" % "3.0.0-M12")
   ).
   jvmSettings(
-    scalaVersion := "2.11.7"
+    scalaVersion := "2.11.7",
+
+    libraryDependencies ++= Seq(
+      "com.typesafe.akka" %% "akka-http-experimental" % "2.0.3",
+      "com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.0.3"
+    )
   ).
   jsSettings (
     scalaVersion := "2.11.7"
