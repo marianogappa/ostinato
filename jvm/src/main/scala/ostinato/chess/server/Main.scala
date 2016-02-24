@@ -1,7 +1,7 @@
 package ostinato.chess.server
 
 import akka.actor.ActorSystem
-import akka.event.{LoggingAdapter, Logging}
+import akka.event.{ LoggingAdapter, Logging }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
@@ -15,8 +15,7 @@ object Main extends App with OstinatoServerRoute {
   val config = ConfigFactory.load()
   val logger = Logging(system, getClass)
 
-
-  val bindingFuture = Http().bindAndHandle(route, "localhost", 51234)
+  val bindingFuture = Http().bindAndHandle(route, "127.0.0.1", 51234)
 }
 
 trait OstinatoServerRoute {

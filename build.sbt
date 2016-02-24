@@ -1,5 +1,9 @@
 import sbt.Keys._
 
+name := "ostinato"
+
+version := "0.1-SNAPSHOT"
+
 enablePlugins(ScalaJSPlugin)
 
 scalaJSUseRhino in Global := false
@@ -38,3 +42,6 @@ lazy val ostinato = crossProject.in(file(".")).
 lazy val js = ostinato.js
 
 lazy val jvm = ostinato.jvm
+
+// https://github.com/xerial/sbt-pack
+packAutoSettings
