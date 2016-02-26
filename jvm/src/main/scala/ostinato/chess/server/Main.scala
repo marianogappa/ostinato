@@ -15,7 +15,7 @@ object Main extends App with OstinatoServerRoute {
   val config = ConfigFactory.load()
   val logger = Logging(system, getClass)
 
-  val bindingFuture = Http().bindAndHandle(route, "127.0.0.1", 51234)
+  val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 51234)
 }
 
 trait OstinatoServerRoute {
