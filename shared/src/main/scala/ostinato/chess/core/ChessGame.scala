@@ -2,7 +2,7 @@ package ostinato.chess.core
 
 import ostinato.core._
 
-import scala.util.{Success, Failure, Try}
+import scala.util.{ Success, Failure, Try }
 import scala.util.control.NoStackTrace
 
 object ChessGame {
@@ -36,7 +36,7 @@ object ChessGame {
     }
   }
 
-  def   fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
+  def fromFen(fenString: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] =
     if (Fen.isValidFen(fenString)) {
       val s = fenString.split(" +")
 
@@ -47,18 +47,18 @@ object ChessGame {
       val grid = ChessGrid.fromGridString(gridS.map(Fen.shortFenTransformation(_)).mkString)
       val halfMoveCount = Fen.calculateNumber(halfMoveCountS)
       val fullMoveNumber = Fen.calculateNumber(fullMoveNumberS)
-      val enPassantPawn = turn flatMap (t => Fen.calculateEnPassantPawn(enPassantS, t))
+      val enPassantPawn = turn flatMap (t ⇒ Fen.calculateEnPassantPawn(enPassantS, t))
 
       (grid, turn, enPassantPawn, halfMoveCount, fullMoveNumber) match {
-        case (_, None, _, _, _) =>
+        case (_, None, _, _, _) ⇒
           Failure(InvalidTurnException)
-        case (_grid, _, _, _, _) if _grid.size != 64 =>
+        case (_grid, _, _, _, _) if _grid.size != 64 ⇒
           Failure(InvalidChessGridSizeException)
-        case (_, _, _, Failure(_), _) =>
+        case (_, _, _, Failure(_), _) ⇒
           Failure(InvalidHalfMoveCountException)
-        case (_, _, _, _, Failure(_)) =>
+        case (_, _, _, _, Failure(_)) ⇒
           Failure(InvalidFullMoveNumberException)
-        case (_grid, Some(_turn), _epp, Success(_halfMoveCount), Success(_fullMoveNumber)) =>
+        case (_grid, Some(_turn), _epp, Success(_halfMoveCount), Success(_fullMoveNumber)) ⇒
           Success(ChessGame(ChessBoard(_grid, _turn, _epp, castlingAvailable, _fullMoveNumber, _halfMoveCount), rules))
       }
     } else {
