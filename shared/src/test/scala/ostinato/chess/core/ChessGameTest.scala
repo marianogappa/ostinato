@@ -266,5 +266,19 @@ class ChessGameTest extends FunSpec with Matchers {
           |♟♟♟♟♟♟♟♟
           |♜♞♝♚♛♝♞♜""".stripMargin
     }
+
+    it("king should be able to take bishop") {
+      val game = ChessGame.fromGridString(
+        """........
+          |.....♔♝.
+          |.....♟..
+          |........
+          |........
+          |........
+          |........
+          |........""".stripMargin)
+//println(game.get.board.actions)
+      game.get.board.actions.exists { case a: CaptureAction ⇒ true; case _ ⇒ false } shouldBe true
+    }
   }
 }

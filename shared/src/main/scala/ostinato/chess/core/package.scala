@@ -265,7 +265,6 @@ package object core {
             return board.get(enemyPos).flatten
           case _ ⇒
         }
-        return board.get(pos + XY(-1, 1)).flatten
       } else if ((pos + XY(-1, 1)).exists && !isPiece(pos + XY(-1, 1))) {
         if (isEnemyQueenOrBishop(pos + XY(-2, 2))) {
           return board.get(pos + XY(-2, 2)).flatten
@@ -301,7 +300,6 @@ package object core {
             return board.get(enemyPos).flatten
           case _ ⇒
         }
-        return board.get(pos + XY(-1, -1)).flatten
       } else if ((pos + XY(-1, -1)).exists && !isPiece(pos + XY(-1, -1))) {
         if (isEnemyQueenOrBishop(pos + XY(-2, -2))) {
           return board.get(pos + XY(-2, -2)).flatten
@@ -337,7 +335,6 @@ package object core {
             return board.get(enemyPos).flatten
           case _ ⇒
         }
-        return board.get(pos + XY(1, -1)).flatten
       } else if ((pos + XY(1, -1)).exists && !isPiece(pos + XY(1, -1))) {
         if (isEnemyQueenOrBishop(pos + XY(2, -2))) {
           return board.get(pos + XY(2, -2)).flatten

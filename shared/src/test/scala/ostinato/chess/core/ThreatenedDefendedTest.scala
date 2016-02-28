@@ -99,7 +99,7 @@ class ThreatenedDefendedTest extends FunSpec with Matchers {
           |........
           |........""".stripMargin).get
 
-      game.board.knights.head.isThreatened(game.board) shouldBe true
+      game.board.knights.head.isThreatened(game.board) shouldBe false
     }
 
     it("should find that the King is threatened by Knight") {
