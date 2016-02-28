@@ -17,6 +17,7 @@ object NotationParser {
   case class ParsedMatch(steps: List[ParseStep], result: ParsingResult) {
     val isSuccess = result.isSuccess
     val validStepCount = steps count (_.maybeGameStep.nonEmpty)
+    val actionStrings = steps.map(_.stringToParse)
   }
 
   private val cache: collection.mutable.Map[ChessBoard, Set[ChessAction]] = collection.mutable.Map.empty[ChessBoard, Set[ChessAction]]
