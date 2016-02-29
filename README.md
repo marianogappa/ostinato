@@ -252,6 +252,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
 
 ## Short term TODO
 
+- Remove ScalaJs use from ostinato-examples, so it can be used by Js devs
 - Remove concept of whitePawnDirection; replace with orientation
 - Convert notation functionality with all notation variants available
 - Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
