@@ -1,7 +1,7 @@
 # ostinato
 A modular, fully tested, very comprehensive helper library for board games, with a focus on Chess, written in Scala.
 
-[![Build Status](https://travis-ci.org/MarianoGappa/ostinato.png)](https://travis-ci.org/MarianoGappa/ostinato)
+[![Build Status](https://img.shields.io/travis/MarianoGappa/ostinato.svg)](https://travis-ci.org/MarianoGappa/ostinato)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MarianoGappa/ostinato/master/LICENSE)
 
 [Chess Game Parser (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/parser)
