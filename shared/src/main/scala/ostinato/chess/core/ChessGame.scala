@@ -78,6 +78,17 @@ object ChessGame {
       Failure(FenStringRegexMismatchException)
     }
 
+  def fromOstinatoString(string: String)(implicit rules: ChessRules = ChessRules.default): Try[ChessGame] = {
+    OstinatoString.splitFenIccf(string) map {
+      case (fenString: String, iccfString: String) ⇒
+        fromFen(fenString) flatMap { game ⇒
+          OstinatoString.calculateHistory(iccfString) map { _history =>
+            game.copy(board = game.board.copy(history = _history))
+          }
+        }
+    } getOrElse Failure(OstinatoStringRegexMismatchException)
+  }
+
   val defaultGame: ChessGame = fromGridString(
     """♜♞♝♛♚♝♞♜
       |♟♟♟♟♟♟♟♟
@@ -102,6 +113,7 @@ case class ChessGame(override val board: ChessBoard, override val rules: ChessRu
 
   def toShortFen = board.toShortFen
   def toFen = board.toFen
+  def toOstinatoString = board.toOstinatoString
 
   def rotate: ChessGame = copy(board.rotate)
 }
@@ -112,3 +124,4 @@ case object InvalidFullMoveNumberException extends RuntimeException with NoStack
 case object InvalidHalfMoveCountException extends RuntimeException with NoStackTrace
 case object MoreThanOneEnPassantPawnException extends RuntimeException with NoStackTrace
 case object FenStringRegexMismatchException extends RuntimeException with NoStackTrace
+case object OstinatoStringRegexMismatchException extends RuntimeException with NoStackTrace

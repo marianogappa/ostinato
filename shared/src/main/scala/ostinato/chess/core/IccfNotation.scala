@@ -9,7 +9,7 @@ object IccfNotation extends Notation[IccfNotationRules] {
   def allPossibleRules: Set[IccfNotationRules] = Set(IccfNotationRules())
 }
 
-case class IccfNotationActionParser(r: IccfNotationRules) extends ActionParser {
+case class IccfNotationActionParser(r: IccfNotationRules = IccfNotationRules()) extends ActionParser {
   protected def move(a: MoveAction) = action(a)
   protected def enPassant(a: EnPassantAction) = action(a)
   protected def capture(a: CaptureAction) = action(a)

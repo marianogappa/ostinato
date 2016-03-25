@@ -1,6 +1,9 @@
 package ostinato.chess
 
-import ostinato.core.{ XY, BoardSize }
+import ostinato.core.{ BoardSize, XY }
+
+import scala.util.control.NoStackTrace
+import scala.util.{ Failure, Success, Try }
 
 package object core {
   implicit val chessBoardSize = BoardSize(8, 8)
@@ -23,9 +26,9 @@ package object core {
     castlingSide ← castlingSides
   } yield (chessPlayer, castlingSide) -> true).toMap
 
-  lazy val castlingFullyUnavailable = castlingFullyAvailable map (kv => (kv._1, false))
-  lazy val castlingOnlyBlackAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == BlackChessPlayer) }
-  lazy val castlingOnlyWhiteAvailable = castlingFullyAvailable map { case ((p, s), v) => ((p, s), p == WhiteChessPlayer) }
+  lazy val castlingFullyUnavailable = castlingFullyAvailable map (kv ⇒ (kv._1, false))
+  lazy val castlingOnlyBlackAvailable = castlingFullyAvailable map { case ((p, s), v) ⇒ ((p, s), p == BlackChessPlayer) }
+  lazy val castlingOnlyWhiteAvailable = castlingFullyAvailable map { case ((p, s), v) ⇒ ((p, s), p == WhiteChessPlayer) }
 
   def fenCastling(castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean]) =
     if (castlingAvailable == castlingFullyUnavailable)
@@ -41,7 +44,7 @@ package object core {
   object ChessXY {
     lazy val chars = "abcdefgh"
     def fromAn(string: String)(implicit rules: ChessRules = ChessRules.default) = {
-        val s = string.filter(_ > ' ').toLowerCase
+      val s = string.filter(_ > ' ').toLowerCase
       if (s.length == 2 && s.matches("""[a-h][1-8]"""))
         if (rules.whitePawnDirection == 1)
           Some(XY(chars.indexOf(s(0)), s(1).asDigit - 1))
@@ -92,8 +95,8 @@ package object core {
 
     def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = {
       (toAn, turn) match {
-        case (AnPos(x, y), WhiteChessPlayer) => dnConversions(x) map (DnPos(_, y))
-        case (AnPos(x, y), BlackChessPlayer) => dnConversions(x) map (DnPos(_, 9 - y))
+        case (AnPos(x, y), WhiteChessPlayer) ⇒ dnConversions(x) map (DnPos(_, y))
+        case (AnPos(x, y), BlackChessPlayer) ⇒ dnConversions(x) map (DnPos(_, 9 - y))
       }
     }
 
@@ -121,6 +124,34 @@ package object core {
     def kingSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0"
     def queenSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0-0"
     def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
+  }
+
+  object OstinatoString {
+    val pattern = """\s*([rnbqkpRNBQKP\/\d]+\s+[wb]\s+([KQkq]{1,4}|\-)\s*[\-abcdefgh12345678]{1,2}\s*[\d]{1,2}\s*[\d]{1,2})\s*([1-8 ]*)"""
+
+    def splitFenIccf(s: String): Option[(String, String)] = pattern.r.findFirstMatchIn(s).map { m ⇒
+      (m.group(1), m.group(3))
+    }
+
+    def calculateHistory(iccfString: String): Try[List[GameStep]] = {
+      val results = NotationParser.parseMatchString(
+        iccfString,
+        ChessGame.defaultGame.board,
+        List(IccfNotationActionParser())
+      )
+
+      if (results.succeeded) {
+        Success(
+          results.parsedMatches.head.map {
+            case parseStep ⇒
+              val step = parseStep.maybeGameStep.get
+              GameStep(Some(step.action), step.board)
+          }.reverse
+        )
+      } else {
+        Failure(InvalidIccfHistoryException)
+      }
+    }
   }
 
   case class GameStep(action: Option[ChessAction], board: ChessBoard)
@@ -406,3 +437,5 @@ package object core {
     }
   }
 }
+
+case object InvalidIccfHistoryException extends RuntimeException with NoStackTrace
