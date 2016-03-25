@@ -128,7 +128,7 @@ class DrawTest extends FunSpec with Matchers {
       val blackLeft = MoveAction(♚(XY(5, 5), BlackChessPlayer), XY(-1, 0))
       val blackRight = MoveAction(♚(XY(4, 5), BlackChessPlayer), XY(1, 0))
 
-      board.
+      val inClaimable3FR = board.
         doAction(whiteLeft).get.
         doAction(blackLeft).get.
         doAction(whiteRight).get.
@@ -136,8 +136,15 @@ class DrawTest extends FunSpec with Matchers {
         doAction(whiteLeft).get.
         doAction(blackLeft).get.
         doAction(whiteRight).get.
-        doAction(blackRight).get.
-        isInThreefoldRepetition shouldBe true
+        doAction(blackRight).get
+
+      inClaimable3FR.isInThreefoldRepetition shouldBe false
+      inClaimable3FR.canClaimThreefoldRepetition shouldBe true
+
+      val in3FR = inClaimable3FR.doAction(whiteLeft).get
+
+      in3FR.isInThreefoldRepetition shouldBe true
+      in3FR.canClaimThreefoldRepetition shouldBe true
     }
   }
   describe("Stalemate rule") {

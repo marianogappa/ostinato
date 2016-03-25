@@ -3,7 +3,6 @@ package ostinato.chess.core
 import scala.annotation.tailrec
 
 object NotationParser {
-  case class GameStep(action: ChessAction, board: ChessBoard)
   case class ParseStep(stringToParse: String, maybeGameStep: Option[GameStep])
   abstract class ParsingResult {
     val isSuccess: Boolean

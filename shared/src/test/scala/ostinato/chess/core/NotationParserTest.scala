@@ -1,7 +1,6 @@
 package ostinato.chess.core
 
 import org.scalatest._
-import ostinato.chess.core.NotationParser.GameStep
 
 class NotationParserTest extends FunSpec with Matchers {
   describe("Notation parsing") {

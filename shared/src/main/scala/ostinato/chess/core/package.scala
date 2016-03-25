@@ -123,19 +123,7 @@ package object core {
     def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
   }
 
-  case class PastBoards(boards: Map[String, Int] = Map()) {
-    def serialiseBoard(board: ChessBoard): String = "^([^ ]+ +[^ ]+ +[^ ]+ +[^ ]+).*$".r.replaceFirstIn(board.toShortFen, "$1")
-    lazy val isInThreefoldRepetition = boards.values.exists(_ >= 3)
-    val isEmpty = boards.isEmpty
-
-    def withBoard(board: ChessBoard) = {
-      val serialisedBoard = serialiseBoard(board)
-      if (boards.get(serialisedBoard).nonEmpty)
-        PastBoards(boards.updated(serialisedBoard, boards(serialisedBoard) + 1))
-      else
-        PastBoards(boards ++ Map(serialisedBoard -> 1))
-    }
-  }
+  case class GameStep(action: ChessAction, board: ChessBoard)
 
   // N.B. this optimisation can appear ugly, but it's the only reason this library is fast
   def posThreatenedBy(pos: XY, player: ChessPlayer, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] = {
