@@ -46,7 +46,9 @@ case class ChessBoard(
         halfMoveClock = calculateHalfMoveClock
       )
 
-      Some(newBoard.copy(history = GameStep(a, newBoard) :: history))
+      val previousHistory = if (history.isEmpty) List(GameStep(None, this)) else history
+
+      Some(newBoard.copy(history = GameStep(Some(a), newBoard) :: previousHistory))
     }
 
     lazy val applyFinalAction = Some(ChessBoard(grid, turn, None, castlingFullyUnavailable, fullMoveNumber, 0))

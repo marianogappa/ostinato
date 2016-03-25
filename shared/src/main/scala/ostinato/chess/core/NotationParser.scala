@@ -4,6 +4,8 @@ import scala.annotation.tailrec
 
 object NotationParser {
   case class ParseStep(stringToParse: String, maybeGameStep: Option[GameStep])
+  case class GameStep(action: ChessAction, board: ChessBoard)
+
   abstract class ParsingResult {
     val isSuccess: Boolean
   }

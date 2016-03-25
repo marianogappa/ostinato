@@ -123,7 +123,7 @@ package object core {
     def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
   }
 
-  case class GameStep(action: ChessAction, board: ChessBoard)
+  case class GameStep(action: Option[ChessAction], board: ChessBoard)
 
   // N.B. this optimisation can appear ugly, but it's the only reason this library is fast
   def posThreatenedBy(pos: XY, player: ChessPlayer, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] = {

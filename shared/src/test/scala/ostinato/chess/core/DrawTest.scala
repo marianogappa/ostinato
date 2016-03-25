@@ -135,13 +135,12 @@ class DrawTest extends FunSpec with Matchers {
         doAction(blackRight).get.
         doAction(whiteLeft).get.
         doAction(blackLeft).get.
-        doAction(whiteRight).get.
-        doAction(blackRight).get
+        doAction(whiteRight).get
 
       inClaimable3FR.isInThreefoldRepetition shouldBe false
       inClaimable3FR.canClaimThreefoldRepetition shouldBe true
 
-      val in3FR = inClaimable3FR.doAction(whiteLeft).get
+      val in3FR = inClaimable3FR.doAction(blackRight).get
 
       in3FR.isInThreefoldRepetition shouldBe true
       in3FR.canClaimThreefoldRepetition shouldBe true

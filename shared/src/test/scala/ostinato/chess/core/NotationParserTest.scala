@@ -3,6 +3,8 @@ package ostinato.chess.core
 import org.scalatest._
 
 class NotationParserTest extends FunSpec with Matchers {
+  import ostinato.chess.core.NotationParser.GameStep
+
   describe("Notation parsing") {
     it("should parse descriptive notation") {
       val descriptive =
