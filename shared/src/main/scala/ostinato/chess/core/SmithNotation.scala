@@ -19,7 +19,7 @@ case class SmithNotationActionParser(r: SmithNotationRules) extends ActionParser
   protected def enPassantCapture(a: EnPassantCaptureAction) =
     fromPos(a) * toPos(a) * a.toPawn.toDn.map(_.toLowerCase)
 
-  protected def castling(a: CastlingAction)(implicit rules: ChessRules = ChessRules.default) =
+  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default) =
     fromPos(a) * toPos(a) * (if (a.isKingside) "c" else "C")
 
   protected def promote(a: PromoteAction) = fromPos(a) * toPos(a) * a.toPiece.toAn

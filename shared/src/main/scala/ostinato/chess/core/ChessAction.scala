@@ -6,7 +6,7 @@ abstract class ChessAction(
     val fromPiece: ChessPiece,
     val delta: XY,
     val isCheck: Boolean = false,
-    val isCheckmate: Boolean = false) extends Action[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](fromPiece, delta) {
+    val isCheckmate: Boolean = false) extends Action[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations](fromPiece, delta) {
 
   val isFinal = false
   val turn = fromPiece.owner

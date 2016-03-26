@@ -9,9 +9,9 @@ case class ChessBoard(
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
     halfMoveClock: Int = 0,
-    history: List[GameStep] = List()) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](grid) {
+    history: List[GameStep] = List()) extends Board[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations](grid) {
 
-  def doAction(a: ChessAction)(implicit rules: ChessRules = ChessRules.default) = {
+  def doAction(a: ChessAction)(implicit rules: ChessOptimisations = ChessOptimisations.default) = {
     lazy val calculateEnPassants = a match {
       case EnPassantAction(pawn, delta, _, _) ⇒
         Some(EnPassantPawn(pawn.pos + XY(0, math.signum(delta.y)), pawn.movedTo(pawn.pos + XY(0, delta.y))))
@@ -70,7 +70,7 @@ case class ChessBoard(
     }
   }
 
-  def movementsOfDelta(from: XY, delta: XY)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+  def movementsOfDelta(from: XY, delta: XY)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = {
     val to = from + delta
     val fromPiece = get(from)
     val toPiece = get(to)
@@ -168,12 +168,12 @@ case class ChessBoard(
       concreteMovementsOfDelta
   }
 
-  def isDraw(implicit rules: ChessRules = ChessRules.default) = isDrawFor(turn)
-  def isDrawFor(player: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) =
+  def isDraw(implicit rules: ChessOptimisations = ChessOptimisations.default) = isDrawFor(turn)
+  def isDrawFor(player: ChessPlayer)(implicit rules: ChessOptimisations = ChessOptimisations.default) =
     player.nonFinalActions(this).isEmpty && !isLossFor(player)
 
-  def isLoss(implicit rules: ChessRules = ChessRules.default) = isLossFor(turn)
-  def isLossFor(player: ChessPlayer, basedOnCheckKnown: Boolean = false)(implicit rules: ChessRules = ChessRules.default): Boolean = {
+  def isLoss(implicit rules: ChessOptimisations = ChessOptimisations.default) = isLossFor(turn)
+  def isLossFor(player: ChessPlayer, basedOnCheckKnown: Boolean = false)(implicit rules: ChessOptimisations = ChessOptimisations.default): Boolean = {
     val noCheckForMates = rules.copy(checkForThreatens = false)
     lazy val allNewBoards = player.actions(this)(noCheckForMates) map doAction
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
@@ -231,16 +231,16 @@ case class ChessBoard(
       allNewBoards exists (nb => allSerialisedPastBoardsFor3FR.count(_ == nb) >= 2)
   }
 
-  def nonFinalActions(implicit rules: ChessRules = ChessRules.default) = turn.nonFinalActions(this)
-  def actions(implicit rules: ChessRules = ChessRules.default) = turn.actions(this)
-  def actionStream(implicit rules: ChessRules = ChessRules.default) = turn.actionStream(this)
+  def nonFinalActions(implicit rules: ChessOptimisations = ChessOptimisations.default) = turn.nonFinalActions(this)
+  def actions(implicit rules: ChessOptimisations = ChessOptimisations.default) = turn.actions(this)
+  def actionStream(implicit rules: ChessOptimisations = ChessOptimisations.default) = turn.actionStream(this)
   lazy val rooks: Vector[♜] = pieces flatMap { case p: ♜ ⇒ Vector(p); case _ ⇒ Vector() }
   lazy val knights: Vector[♞] = pieces flatMap { case p: ♞ ⇒ Vector(p); case _ ⇒ Vector() }
   lazy val bishops: Vector[♝] = pieces flatMap { case p: ♝ ⇒ Vector(p); case _ ⇒ Vector() }
   lazy val queens: Vector[♛] = pieces flatMap { case p: ♛ ⇒ Vector(p); case _ ⇒ Vector() }
   lazy val kings: Vector[♚] = pieces flatMap { case p: ♚ ⇒ Vector(p); case _ ⇒ Vector() }
   lazy val pawns: Vector[♟] = pieces flatMap { case p: ♟ ⇒ Vector(p); case _ ⇒ Vector() }
-  def game(implicit rules: ChessRules = ChessRules.default) = ChessGame(this, rules)
+  def game(implicit rules: ChessOptimisations = ChessOptimisations.default) = ChessGame(this, rules)
 
   override def equals(any: Any) = any match {
     case that: ChessBoard ⇒

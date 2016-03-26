@@ -4,9 +4,9 @@ import ostinato.chess.core._
 import ostinato.core.Ai
 
 case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = false)
-    extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules, ChessGame](player) {
+    extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations, ChessGame](player) {
 
-  override def nextAction(game: ChessGame)(implicit rules: ChessRules = ChessRules.default): Option[ChessAction] = {
+  override def nextAction(game: ChessGame)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] = {
     val noExtraValidation = rules.copy(extraValidationOnActionApply = false)
     val actions = game.board.actionStream.force.toSeq
     val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(noExtraValidation).get, action)(noExtraValidation)))
@@ -38,7 +38,7 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
     case _ => a._2 > b._2
   }
 
-  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = depth, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit rules: ChessRules = ChessRules.default): Long = {
+  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = depth, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit rules: ChessOptimisations = ChessOptimisations.default): Long = {
     var a = alpha
     var b = beta
 
@@ -82,7 +82,7 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
 
   private def int(b: Boolean) = if (b) 1 else 0
 
-  private def evaluate(board: ChessBoard, action: ChessAction)(implicit rules: ChessRules = ChessRules.default): Long = {
+  private def evaluate(board: ChessBoard, action: ChessAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Long = {
     action match {
 
       // PRIORITY #1: GAME END

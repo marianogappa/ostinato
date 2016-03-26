@@ -144,7 +144,7 @@ package object core {
   case class GameStep(action: Option[ChessAction], board: ChessBoard)
 
   // N.B. this optimisation can appear ugly, but it's the only reason this library is fast
-  def posThreatenedBy(pos: XY, player: ChessPlayer, board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Option[ChessPiece] = {
+  def posThreatenedBy(pos: XY, player: ChessPlayer, board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessPiece] = {
 
     def isEnemyKnight(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && p.isKnight ⇒ true; case _ ⇒ false }
     def isEnemyQueenOrKingOrRook(pos: XY) = board.get(pos) match { case Some(Some(p)) if p.owner == player.enemy && (p.isQueen || p.isKing || p.isRook) ⇒ true; case _ ⇒ false }

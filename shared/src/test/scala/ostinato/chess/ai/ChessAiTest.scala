@@ -9,7 +9,7 @@ class ChessAiTest extends FunSpec with Matchers {
       new Fixture {
         val action = LoseAction(WhiteChessPlayer)
 
-        override def _actions(implicit rules: ChessRules) = Set(action)
+        override def _actions(implicit rules: ChessOptimisations) = Set(action)
 
         ChessRandomAi(WhiteChessPlayer).nextAction(game) shouldBe Some(action)
       }
@@ -26,7 +26,7 @@ class ChessAiTest extends FunSpec with Matchers {
         val actions: Set[ChessAction] = Set(action1, action2, action3)
         val randomAction = random.shuffle(actions.toList).head
 
-        override def _actions(implicit rules: ChessRules) = actions
+        override def _actions(implicit rules: ChessOptimisations) = actions
 
         val ai = ChessRandomAi(WhiteChessPlayer, Some(seed))
         ai.nextAction(game) shouldBe Some(randomAction)
@@ -35,11 +35,11 @@ class ChessAiTest extends FunSpec with Matchers {
   }
 
   trait Fixture {
-    val _rules = ChessRules.default
-    def _actions(implicit rules: ChessRules): Set[ChessAction]
+    val _rules = ChessOptimisations.default
+    def _actions(implicit rules: ChessOptimisations): Set[ChessAction]
 
     lazy val board = new ChessBoard(grid = Vector()) {
-      override def actions(implicit rules: ChessRules) = _actions
+      override def actions(implicit rules: ChessOptimisations) = _actions
     }
 
     lazy val game = new ChessGame(board, _rules)

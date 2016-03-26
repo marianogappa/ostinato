@@ -13,7 +13,7 @@ trait ActionParser {
   def r: NotationRules
 
   def parseAction(a: ChessAction)(
-    implicit rules: ChessRules = ChessRules.default): Set[(String, (ChessAction, NotationRules))] = {
+    implicit rules: ChessOptimisations = ChessOptimisations.default): Set[(String, (ChessAction, NotationRules))] = {
     val s = a match {
       case a: MoveAction             ⇒ move(a)
       case a: EnPassantAction        ⇒ enPassant(a)
@@ -34,7 +34,7 @@ trait ActionParser {
   protected def capture(a: CaptureAction): Set[String]
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String]
   protected def capturePromote(a: CapturePromoteAction): Set[String]
-  protected def castling(a: CastlingAction)(implicit rules: ChessRules = ChessRules.default): Set[String]
+  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String]
   protected def lose(a: LoseAction): Set[String]
   protected def draw(a: DrawAction): Set[String]
 

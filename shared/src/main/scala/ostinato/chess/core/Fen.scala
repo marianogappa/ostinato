@@ -69,7 +69,7 @@ object Fen {
   )
 
   def calculateEnPassantPawn(s: String, turn: ChessPlayer)(
-    implicit rules: ChessRules = ChessRules.default): Option[EnPassantPawn] = {
+    implicit rules: ChessOptimisations = ChessOptimisations.default): Option[EnPassantPawn] = {
     val (upperRow, lowerRow) = (2, 5)
 
     (s.trim, ChessXY.fromAn(s)) match {

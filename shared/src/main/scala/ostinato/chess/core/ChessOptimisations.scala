@@ -2,8 +2,8 @@ package ostinato.chess.core
 
 import ostinato.core.Rules
 
-object ChessRules {
-  def default = ChessRules(
+object ChessOptimisations {
+  def default = ChessOptimisations(
     kingIsTakeable = false,
     checkForThreatens = true,
     validateDeltasOnActionCalculation = true,
@@ -11,7 +11,7 @@ object ChessRules {
   )
 }
 
-case class ChessRules(
+case class ChessOptimisations(
   kingIsTakeable: Boolean,
   checkForThreatens: Boolean,
   validateDeltasOnActionCalculation: Boolean,

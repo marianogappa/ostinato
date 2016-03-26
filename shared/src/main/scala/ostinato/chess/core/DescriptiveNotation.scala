@@ -42,7 +42,7 @@ case class DescriptiveNotationActionParser(r: DescriptiveNotationRules) extends 
   protected def capturePromote(a: CapturePromoteAction): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 
-  protected def castling(a: CastlingAction)(implicit rules: ChessRules = ChessRules.default): Set[String] =
+  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
     castlingSymbol(a) * checkAndCheckmate(a)
 
   protected def lose(a: LoseAction): Set[String] =
@@ -72,7 +72,7 @@ case class DescriptiveNotationActionParser(r: DescriptiveNotationRules) extends 
       Set("")
 
   private def castlingSymbol(a: CastlingAction)(
-    implicit rules: ChessRules = ChessRules.default): Set[String] =
+    implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
     if (r.castlingNotation == "word")
       Set("castles", "Castles")
     else if (a.isKingside) Set("O-O", "0-0") else Set("O-O-O", "0-0-0")

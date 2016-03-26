@@ -12,7 +12,7 @@ case object BlackChessPlayer extends ChessPlayer("Black") {
   def toFen = 'b'
 }
 
-abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessRules](name) {
+abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations](name) {
   def kingPiece(board: ChessBoard): Option[ChessPiece] = pieces(board).find(_.isKing)
   def enemy: ChessPlayer
   def toFen: Char
@@ -22,7 +22,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     case BlackChessPlayer => 0
   }
 
-  override def actions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Set[ChessAction] = {
+  override def actions(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = {
     val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
     (board.hasInsufficientMaterial, super.actions(board)(noDeltaValidation), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
@@ -32,7 +32,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   }
 
   // TODO actionStream doesn't have: ++ Set(LoseAction(this), DrawAction(this))
-  override def actionStream(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default): Stream[ChessAction] = {
+  override def actionStream(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Stream[ChessAction] = {
     val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
     (board.hasInsufficientMaterial, super.actionStream(board)(noDeltaValidation), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Stream(DrawAction(this))
@@ -41,7 +41,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     }
   }
 
-  def nonFinalActions(board: ChessBoard)(implicit rules: ChessRules = ChessRules.default) =
+  def nonFinalActions(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default) =
     actions(board).filter {
       case a: FinalAction ⇒ false
       case _              ⇒ true
