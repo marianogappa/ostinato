@@ -178,9 +178,9 @@ case class ChessBoard(
     lazy val allNewBoards = player.actions(this)(noCheckForMates) map doAction
     def isKingThreatened(b: ChessBoard): Boolean = player.kingPiece(b).exists(_.isThreatened(b)(noCheckForMates))
 
-    player.kingPiece(this).map { king ⇒
+    player.kingPiece(this).exists { king ⇒
       (basedOnCheckKnown || king.isThreatened(this)(noCheckForMates)) && (allNewBoards.flatten forall isKingThreatened)
-    } getOrElse rules.noKingMeansLoss
+    }
   }
 
   override lazy val toString: String = {
