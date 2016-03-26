@@ -138,38 +138,28 @@ case class PromoteAction(
 }
 
 object CastlingAction {
-  private def rookX(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
-    ♚.rookX(side, rules.whitePawnDirection)
+  private def rookX(side: CastlingSide.Value) = ♚.rookX(side)
+  private def kingDelta(side: CastlingSide.Value) = ♚.kingDelta(side)
+  private def rookDelta(side: CastlingSide.Value) = ♚.rookDelta(side)
 
-  private def kingDelta(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
-    ♚.kingDelta(side, rules.whitePawnDirection)
-
-  private def rookDelta(side: CastlingSide.Value)(implicit rules: ChessRules = ChessRules.default) =
-    ♚.rookDelta(side, rules.whitePawnDirection)
-
-  private def constructWith(player: ChessPlayer, side: CastlingSide.Value, isCheck: Boolean, isCheckmate: Boolean)(
-    implicit rules: ChessRules = ChessRules.default) =
+  private def constructWith(player: ChessPlayer, side: CastlingSide.Value, isCheck: Boolean, isCheckmate: Boolean) =
     CastlingAction(
-      ♚(XY(♚.initialX(rules.whitePawnDirection), ♚.initialY(player, rules.whitePawnDirection)), player),
+      ♚(XY(♚.initialX, ♚.initialY(player)), player),
       kingDelta(side),
-      ♜(XY(rookX(side), ♚.initialY(player, rules.whitePawnDirection)), player),
+      ♜(XY(rookX(side), ♚.initialY(player)), player),
       rookDelta(side), isCheck, isCheckmate
     )
 
-  def whiteKingside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-    implicit rules: ChessRules = ChessRules.default) =
+  def whiteKingside(isCheck: Boolean = false, isCheckmate: Boolean = false) =
     constructWith(WhiteChessPlayer, CastlingSide.Kingside, isCheck, isCheckmate)
 
-  def whiteQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-    implicit rules: ChessRules = ChessRules.default) =
+  def whiteQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false) =
     constructWith(WhiteChessPlayer, CastlingSide.Queenside, isCheck, isCheckmate)
 
-  def blackKingside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-    implicit rules: ChessRules = ChessRules.default) =
+  def blackKingside(isCheck: Boolean = false, isCheckmate: Boolean = false) =
     constructWith(BlackChessPlayer, CastlingSide.Kingside, isCheck, isCheckmate)
 
-  def blackQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false)(
-    implicit rules: ChessRules = ChessRules.default) =
+  def blackQueenside(isCheck: Boolean = false, isCheckmate: Boolean = false) =
     constructWith(BlackChessPlayer, CastlingSide.Queenside, isCheck, isCheckmate)
 }
 

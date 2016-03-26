@@ -46,9 +46,6 @@ package object core {
     def fromAn(string: String)(implicit rules: ChessRules = ChessRules.default) = {
       val s = string.filter(_ > ' ').toLowerCase
       if (s.length == 2 && s.matches("""[a-h][1-8]"""))
-        if (rules.whitePawnDirection == 1)
-          Some(XY(chars.indexOf(s(0)), s(1).asDigit - 1))
-        else
           Some(XY(chars.indexOf(s(0)), 7 - (s(1).asDigit - 1)))
       else
         None

@@ -13,10 +13,9 @@ object ChessRules {
 }
 
 case class ChessRules(
-                       whitePawnDirection: Int,
-                       kingIsTakeable: Boolean,
-                       checkForThreatens: Boolean,
-                       validateDeltasOnActionCalculation: Boolean,
-                       extraValidationOnActionApply: Boolean
-                     ) extends Rules
+  whitePawnDirection: Int,
+  kingIsTakeable: Boolean,
+  checkForThreatens: Boolean,
+  validateDeltasOnActionCalculation: Boolean,
+  extraValidationOnActionApply: Boolean) extends Rules
 
