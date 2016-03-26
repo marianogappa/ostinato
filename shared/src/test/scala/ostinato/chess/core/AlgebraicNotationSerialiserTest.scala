@@ -3,7 +3,7 @@ package ostinato.chess.core
 import ostinato.core.XY
 import org.scalatest._
 
-class AlgebraicNotationParserTest extends FunSpec with Matchers {
+class AlgebraicNotationSerialiserTest extends FunSpec with Matchers {
   describe("Algebraic notation for pieces") {
     it("should find black rook at h8") {
       val game = ChessGame.fromGridString(

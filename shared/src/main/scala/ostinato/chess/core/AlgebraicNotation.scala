@@ -28,7 +28,7 @@ object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
   } yield AlgebraicNotationRules(lowerCaseLetters, figurine, distinguishCaptures, colonForCaptures, castlingNotation)
 }
 
-case class AlgebraicNotationActionParser(r: AlgebraicNotationRules) extends ActionParser {
+case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules) extends ActionSerialiser {
 
   protected def lose(a: LoseAction): Set[String] = if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2", "½–½", "draws")

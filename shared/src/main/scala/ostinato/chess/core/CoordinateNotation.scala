@@ -24,7 +24,7 @@ object CoordinateNotation extends Notation[CoordinateNotationRules] {
   } yield CoordinateNotationRules(lowerCaseLetters, useDashDelimiter, distinguishCaptures, castlingNotation)
 }
 
-case class CoordinateNotationActionParser(r: CoordinateNotationRules) extends ActionParser {
+case class CoordinateNotationActionSerialiser(r: CoordinateNotationRules) extends ActionSerialiser {
 
   protected def lose(a: LoseAction): Set[String] = if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2", "½–½", "draws")

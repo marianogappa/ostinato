@@ -9,7 +9,7 @@ object SmithNotation extends Notation[SmithNotationRules] {
   def allPossibleRules: Set[SmithNotationRules] = Set(SmithNotationRules())
 }
 
-case class SmithNotationActionParser(r: SmithNotationRules) extends ActionParser {
+case class SmithNotationActionSerialiser(r: SmithNotationRules) extends ActionSerialiser {
   protected def move(a: MoveAction) = fromPos(a) * toPos(a)
   protected def enPassant(a: EnPassantAction) = fromPos(a) * toPos(a)
   protected def capture(a: CaptureAction) = fromPos(a) * toPos(a) * a.toPiece.toDn.map(_.toLowerCase)

@@ -9,10 +9,10 @@ abstract class Notation[NR <: NotationRules] {
   def allPossibleRules: Set[NR]
 }
 
-trait ActionParser {
+trait ActionSerialiser {
   def r: NotationRules
 
-  def parseAction(a: ChessAction): Set[(String, (ChessAction, NotationRules))] = {
+  def serialiseAction(a: ChessAction): Set[(String, (ChessAction, NotationRules))] = {
     val s = a match {
       case a: MoveAction             ⇒ move(a)
       case a: EnPassantAction        ⇒ enPassant(a)

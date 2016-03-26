@@ -205,7 +205,7 @@ case class ChessBoard(
 
   //TODO didn't add rules because I'm hoping to take it away very soon
   lazy val toOstinatoString: String = (toFen + " " +
-    history.reverse.flatMap(_.action).map(IccfNotationActionParser().parseAction(_).head._1).mkString(" ")).trim
+    history.reverse.flatMap(_.action).map(IccfNotationActionSerialiser().serialiseAction(_).head._1).mkString(" ")).trim
 
   lazy val serialisedFor3FR =
     toShortFen + " " +

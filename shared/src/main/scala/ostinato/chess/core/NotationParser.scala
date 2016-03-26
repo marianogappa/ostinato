@@ -31,24 +31,23 @@ object NotationParser {
   private def prepareMatchString(s: String) =
     s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ").replaceAll(" +", " ").replaceAll("""[\?!]*""", "").trim.split(' ')
 
-  private def doParseMatch(actions: List[String], currentBoard: ChessBoard, steps: List[ParseStep], actionParser: ActionParser)(
+  private def doParseMatch(actions: List[String], currentBoard: ChessBoard, steps: List[ParseStep], actionSerialiser: ActionSerialiser)(
     implicit opts: ChessOptimisations = ChessOptimisations.default): Set[ParsedMatch] =
     actions match {
       case Nil ⇒
-        Set(ParsedMatch(steps, SuccessfulParse(actionParser.r)))
+        Set(ParsedMatch(steps, SuccessfulParse(actionSerialiser.r)))
       case a :: as ⇒
-        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionParser.parseAction filter (_._1 == a)
+        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionSerialiser.serialiseAction filter (_._1 == a)
 
         if (nodes.isEmpty) {
-          Set(ParsedMatch(steps ++ (a :: as).map(ParseStep(_, None)), FailedParse(Some(actionParser.r))))
+          Set(ParsedMatch(steps ++ (a :: as).map(ParseStep(_, None)), FailedParse(Some(actionSerialiser.r))))
         } else {
           reduce {
             nodes.flatMap {
               case (_: String, (chessAction: ChessAction, notationRules: NotationRules)) ⇒
                 currentBoard.doAction(chessAction) match {
                   case Some(newBoard: ChessBoard) ⇒
-                    //                                    println(s"Successfully processed $a with $chessAction", newBoard)
-                    doParseMatch(as, newBoard, steps :+ ParseStep(a, Some(GameStep(chessAction, newBoard))), actionParser)
+                    doParseMatch(as, newBoard, steps :+ ParseStep(a, Some(GameStep(chessAction, newBoard))), actionSerialiser)
                   case None ⇒
                     val allSteps: List[ParseStep] = steps ++ (a :: as).map(ParseStep(_, None))
                     Set(ParsedMatch(allSteps, FailedParse(Some(notationRules))))
@@ -76,28 +75,28 @@ object NotationParser {
       leaveBestAttempts
   }
 
-  private def allActionParsers: List[ActionParser] = {
-    (AlgebraicNotation.allPossibleRules map AlgebraicNotationActionParser).toList ++
-      (SmithNotation.allPossibleRules map SmithNotationActionParser).toList ++
-      (IccfNotation.allPossibleRules map IccfNotationActionParser).toList ++
-      (DescriptiveNotation.allPossibleRules map DescriptiveNotationActionParser).toList ++
-      (CoordinateNotation.allPossibleRules map CoordinateNotationActionParser).toList
+  private def allActionSerialisers: List[ActionSerialiser] = {
+    (AlgebraicNotation.allPossibleRules map AlgebraicNotationActionSerialiser).toList ++
+      (SmithNotation.allPossibleRules map SmithNotationActionSerialiser).toList ++
+      (IccfNotation.allPossibleRules map IccfNotationActionSerialiser).toList ++
+      (DescriptiveNotation.allPossibleRules map DescriptiveNotationActionSerialiser).toList ++
+      (CoordinateNotation.allPossibleRules map CoordinateNotationActionSerialiser).toList
   }
 
   @tailrec
   def parseMatchString(
     s: String,
     board: ChessBoard = ChessGame.defaultGame.board,
-    actionParsers: List[ActionParser] = allActionParsers,
+    actionSerialisers: List[ActionSerialiser] = allActionSerialisers,
     partialResults: Set[ParsedMatch] = Set()): ParseResultsProxy =
-    actionParsers match {
+    actionSerialisers match {
       case Nil ⇒
         ParseResultsProxy(reduce(partialResults))
       case _ if partialResults exists (_.isSuccess) ⇒
         ParseResultsProxy(reduce(partialResults))
-      case actionParser :: as ⇒
+      case actionSerialiser :: as ⇒
         parseMatchString(s, board, as,
-          partialResults ++ doParseMatch(prepareMatchString(s).toList, board, List.empty[ParseStep], actionParser))
+          partialResults ++ doParseMatch(prepareMatchString(s).toList, board, List.empty[ParseStep], actionSerialiser))
     }
 
   case class ParseResultsProxy(results: Set[ParsedMatch]) {

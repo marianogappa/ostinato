@@ -26,7 +26,7 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
   }
 }
 
-case class DescriptiveNotationActionParser(r: DescriptiveNotationRules) extends ActionParser {
+case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules) extends ActionSerialiser {
   protected def move(a: MoveAction): Set[String] = fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
   protected def enPassant(a: EnPassantAction): Set[String] = fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
   protected def capture(a: CaptureAction): Set[String] = fromPiece(a) * "x" * a.toPiece.toDn * checkAndCheckmate(a)

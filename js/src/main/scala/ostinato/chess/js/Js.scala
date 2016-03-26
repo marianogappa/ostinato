@@ -79,7 +79,7 @@ object Js {
       "actions" ->
         results.parsedMatches.head.flatMap(
           _.maybeGameStep.map(
-            gameStep => getActionParser(notation).parseAction(gameStep.action).head._1
+            gameStep => getActionParser(notation).serialiseAction(gameStep.action).head._1
           )
         ).toJSArray,
       "validActionCount" -> results.results.head.validStepCount
@@ -88,7 +88,7 @@ object Js {
 
   private def getActionParser(notation: String) = notation match {
     case "Algebraic Notation" ⇒
-      AlgebraicNotationActionParser(
+      AlgebraicNotationActionSerialiser(
         AlgebraicNotationRules(
           lowerCaseLetters = true,
           figurine = false,
@@ -98,16 +98,16 @@ object Js {
         )
       )
     case "Figurine Algebraic Notation" ⇒
-      AlgebraicNotationActionParser(AlgebraicNotation.allPossibleRules.head.copy(figurine = true))
+      AlgebraicNotationActionSerialiser(AlgebraicNotation.allPossibleRules.head.copy(figurine = true))
     case "Descriptive Notation" ⇒
-      DescriptiveNotationActionParser(DescriptiveNotation.allPossibleRules.head)
+      DescriptiveNotationActionSerialiser(DescriptiveNotation.allPossibleRules.head)
     case "Coordinate Notation" ⇒
-      CoordinateNotationActionParser(CoordinateNotation.allPossibleRules.head)
+      CoordinateNotationActionSerialiser(CoordinateNotation.allPossibleRules.head)
     case "ICCF Notation" ⇒
-      IccfNotationActionParser(IccfNotation.allPossibleRules.head)
+      IccfNotationActionSerialiser(IccfNotation.allPossibleRules.head)
     case "Smith Notation" ⇒
-      SmithNotationActionParser(SmithNotation.allPossibleRules.head)
-    case _ ⇒ AlgebraicNotationActionParser(
+      SmithNotationActionSerialiser(SmithNotation.allPossibleRules.head)
+    case _ ⇒ AlgebraicNotationActionSerialiser(
       AlgebraicNotationRules(
         lowerCaseLetters = true,
         figurine = false,

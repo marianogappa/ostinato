@@ -124,7 +124,7 @@ package object core {
       val results = NotationParser.parseMatchString(
         iccfString,
         ChessGame.defaultGame.board,
-        List(IccfNotationActionParser())
+        List(IccfNotationActionSerialiser())
       )
 
       if (results.succeeded) {
