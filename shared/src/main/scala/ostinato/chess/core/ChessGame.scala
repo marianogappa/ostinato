@@ -11,8 +11,7 @@ object ChessGame {
     turn: ChessPlayer = WhiteChessPlayer,
     castlingAvailable: Map[(ChessPlayer, CastlingSide.Value), Boolean] = castlingFullyAvailable,
     fullMoveNumber: Int = 1,
-    halfMoveClock: Int = 0)(
-                      implicit opts: ChessOptimisations = ChessOptimisations.default): Try[ChessGame] = {
+    halfMoveClock: Int = 0): Try[ChessGame] = {
 
     val grid = ChessGrid.fromGridString(string)
 
@@ -30,13 +29,13 @@ object ChessGame {
       Success(
         ChessGame(
           ChessBoard(grid, turn, enPassantPawns.headOption, castlingAvailable, fullMoveNumber, halfMoveClock),
-          opts
+          ChessOptimisations.default
         )
       )
     }
   }
 
-  def fromFen(fenString: String)(implicit opts: ChessOptimisations = ChessOptimisations.default): Try[ChessGame] =
+  def fromFen(fenString: String): Try[ChessGame] =
     if (Fen.isValidFen(fenString)) {
       val s = fenString.split(" +")
 
@@ -59,26 +58,29 @@ object ChessGame {
         case (_, _, _, _, Failure(_)) ⇒
           Failure(InvalidFullMoveNumberException)
         case (_grid, Some(_turn), _epp, Success(_halfMoveCount), Success(_fullMoveNumber)) ⇒
-          Success(ChessGame(ChessBoard(_grid, _turn, _epp, castlingAvailable, _fullMoveNumber, _halfMoveCount), opts))
+          Success(ChessGame(
+            ChessBoard(_grid, _turn, _epp, castlingAvailable, _fullMoveNumber, _halfMoveCount),
+            ChessOptimisations.default
+          ))
       }
     } else {
       Failure(FenStringRegexMismatchException)
     }
 
-  def fromShortFen(shortFenString: String)(implicit opts: ChessOptimisations = ChessOptimisations.default): Try[ChessGame] =
+  def fromShortFen(shortFenString: String): Try[ChessGame] =
     if (Fen.isValidShortFen(shortFenString)) {
       val grid = ChessGrid.fromGridString(shortFenString.map(Fen.shortFenTransformation(_)).mkString)
 
       if (grid.size != 64)
         Failure(InvalidChessGridSizeException)
       else
-        Success(ChessGame(ChessBoard(grid), opts))
+        Success(ChessGame(ChessBoard(grid), ChessOptimisations.default))
 
     } else {
       Failure(FenStringRegexMismatchException)
     }
 
-  def fromOstinatoString(string: String)(implicit opts: ChessOptimisations = ChessOptimisations.default): Try[ChessGame] = {
+  def fromOstinatoString(string: String): Try[ChessGame] = {
     OstinatoString.splitFenIccf(string) map {
       case (fenString: String, iccfString: String) ⇒
         fromFen(fenString) flatMap { game ⇒
