@@ -207,7 +207,6 @@ class CastlingTest extends FunSpec with Matchers {
       } shouldBe false
     }
     it("should properly update the grid after a black long castle") {
-      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromGridString(
         """♜...♚...
           |........

@@ -5,22 +5,21 @@ import org.scalatest._
 
 class AlgebraicNotationParserTest extends FunSpec with Matchers {
   describe("Algebraic notation for pieces") {
-    it("should find black rook at h8 if white moves downwards") {
-      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
+    it("should find black rook at h8") {
       val game = ChessGame.fromGridString(
-        """........
+        """.......♜
           |........
           |........
           |........
           |........
           |........
           |........
-          |♜.......""".stripMargin).get
+          |........""".stripMargin).get
 
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('h', 8)
     }
 
-    it("should find black rook at a1 if white pawn moves upwards") {
+    it("should find black rook at a1") {
       val game = ChessGame.fromGridString(
         """........
           |........
@@ -33,8 +32,7 @@ class AlgebraicNotationParserTest extends FunSpec with Matchers {
 
       game.blackPlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('a', 1)
     }
-    it("should find white rook at e4 if white pawn moves downwards") {
-      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
+    it("should find white rook at d5") {
       val game = ChessGame.fromGridString(
         """........
           |........
@@ -45,7 +43,7 @@ class AlgebraicNotationParserTest extends FunSpec with Matchers {
           |........
           |........""".stripMargin).get
 
-      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('e', 4)
+      game.whitePlayer.pieces(game.board).head.pos.toAn shouldBe AnPos('d', 5)
     }
   }
 

@@ -43,7 +43,7 @@ package object core {
 
   object ChessXY {
     lazy val chars = "abcdefgh"
-    def fromAn(string: String)(implicit rules: ChessRules = ChessRules.default) = {
+    def fromAn(string: String) = {
       val s = string.filter(_ > ' ').toLowerCase
       if (s.length == 2 && s.matches("""[a-h][1-8]"""))
           Some(XY(chars.indexOf(s(0)), 7 - (s(1).asDigit - 1)))
@@ -53,20 +53,20 @@ package object core {
   }
 
   object ChessGrid {
-    def fromGridString(s: String)(implicit rules: ChessRules = ChessRules.default): Vector[Option[ChessPiece]] = {
+    def fromGridString(s: String): Vector[Option[ChessPiece]] = {
       charVector(s) map {
         case ('♜', i) ⇒ Some(♜(XY.fromI(i), BlackChessPlayer))
         case ('♞', i) ⇒ Some(♞(XY.fromI(i), BlackChessPlayer))
         case ('♝', i) ⇒ Some(♝(XY.fromI(i), BlackChessPlayer))
         case ('♛', i) ⇒ Some(♛(XY.fromI(i), BlackChessPlayer))
         case ('♚', i) ⇒ Some(♚(XY.fromI(i), BlackChessPlayer))
-        case ('♟', i) ⇒ Some(♟(XY.fromI(i), BlackChessPlayer, rules.whitePawnDirection * -1))
+        case ('♟', i) ⇒ Some(♟(XY.fromI(i), BlackChessPlayer, 1))
         case ('♖', i) ⇒ Some(♜(XY.fromI(i), WhiteChessPlayer))
         case ('♘', i) ⇒ Some(♞(XY.fromI(i), WhiteChessPlayer))
         case ('♗', i) ⇒ Some(♝(XY.fromI(i), WhiteChessPlayer))
         case ('♕', i) ⇒ Some(♛(XY.fromI(i), WhiteChessPlayer))
         case ('♔', i) ⇒ Some(♚(XY.fromI(i), WhiteChessPlayer))
-        case ('♙', i) ⇒ Some(♟(XY.fromI(i), WhiteChessPlayer, rules.whitePawnDirection))
+        case ('♙', i) ⇒ Some(♟(XY.fromI(i), WhiteChessPlayer, -1))
         case _        ⇒ None
       }
     }
@@ -75,32 +75,22 @@ package object core {
 
   implicit class ChessXY(pos: XY) {
     def squareColor = if ((pos.x + pos.y) % 2 == 0) SquareColor.Light else SquareColor.Dark
-
-    def toAn(implicit rules: ChessRules = ChessRules.default) = {
-      if (rules.whitePawnDirection == 1)
-        AnPos(ChessXY.chars(7 - pos.x), pos.y + 1)
-      else
-        AnPos(ChessXY.chars(pos.x), 8 - pos.y)
-    }
+    val toAn = AnPos(ChessXY.chars(pos.x), 8 - pos.y)
+    val toIccf = IccfPos(iccfConversions(toAn.x), toAn.y)
 
     lazy val dnConversions =
       Map('a' -> Set("QR", "R"), 'b' -> Set("QN", "N"), 'c' -> Set("QB", "B"), 'd' -> Set("Q"), 'e' -> Set("K"),
         'f' -> Set("KB", "B"), 'g' -> Set("KN", "N"), 'h' -> Set("KR", "R"))
 
-    lazy val iccfConversions =
-      Map('a' -> 1, 'b' -> 2, 'c' -> 3, 'd' -> 4, 'e' -> 5, 'f' -> 6, 'g' -> 7, 'h' -> 8)
+    lazy val iccfConversions = Map('a' -> 1, 'b' -> 2, 'c' -> 3, 'd' -> 4, 'e' -> 5, 'f' -> 6, 'g' -> 7, 'h' -> 8)
 
-    def toDn(turn: ChessPlayer)(implicit rules: ChessRules = ChessRules.default) = {
+    def toDn(turn: ChessPlayer) = {
       (toAn, turn) match {
         case (AnPos(x, y), WhiteChessPlayer) ⇒ dnConversions(x) map (DnPos(_, y))
         case (AnPos(x, y), BlackChessPlayer) ⇒ dnConversions(x) map (DnPos(_, 9 - y))
       }
     }
 
-    def toIccf(implicit rules: ChessRules = ChessRules.default) = {
-      val an = toAn
-      IccfPos(iccfConversions(an.x), an.y)
-    }
   }
 
   case class AnPos(x: Char, y: Int) {
