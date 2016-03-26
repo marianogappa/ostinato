@@ -4,7 +4,6 @@ import ostinato.core.Rules
 
 object ChessRules {
   def default = ChessRules(
-    whitePawnDirection = -1,
     kingIsTakeable = false,
     checkForThreatens = true,
     validateDeltasOnActionCalculation = true,
@@ -13,7 +12,6 @@ object ChessRules {
 }
 
 case class ChessRules(
-  whitePawnDirection: Int,
   kingIsTakeable: Boolean,
   checkForThreatens: Boolean,
   validateDeltasOnActionCalculation: Boolean,
