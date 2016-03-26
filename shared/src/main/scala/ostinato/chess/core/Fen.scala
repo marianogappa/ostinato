@@ -68,8 +68,7 @@ object Fen {
     (BlackChessPlayer, CastlingSide.Queenside) -> s.contains('q')
   )
 
-  def calculateEnPassantPawn(s: String, turn: ChessPlayer)(
-    implicit rules: ChessOptimisations = ChessOptimisations.default): Option[EnPassantPawn] = {
+  def calculateEnPassantPawn(s: String, turn: ChessPlayer): Option[EnPassantPawn] = {
     val (upperRow, lowerRow) = (2, 5)
 
     (s.trim, ChessXY.fromAn(s)) match {

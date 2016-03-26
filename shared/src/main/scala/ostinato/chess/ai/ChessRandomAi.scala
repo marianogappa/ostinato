@@ -7,9 +7,9 @@ case class ChessRandomAi(player: ChessPlayer, seed: Option[Long] = None)
   extends RandomAi[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations, ChessGame](player, seed) {
 
   // N.B. the only reason this is here is to have a default implicit value for rules
-  override def nextAction(game: ChessGame)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
+  override def nextAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
     super.nextAction(game)
 
-  def nextNonFinalAction(game: ChessGame)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
+  def nextNonFinalAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
     shuffleHead(game.board.nonFinalActions.toList)
 }

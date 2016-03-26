@@ -22,7 +22,7 @@ object NotationParser {
   }
 
   private val cache: collection.mutable.Map[ChessBoard, Set[ChessAction]] = collection.mutable.Map.empty[ChessBoard, Set[ChessAction]]
-  private def store(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default) = {
+  private def store(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default) = {
     val actions = board.actions
     cache(board) = actions
     actions
@@ -32,7 +32,7 @@ object NotationParser {
     s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ").replaceAll(" +", " ").replaceAll("""[\?!]*""", "").trim.split(' ')
 
   private def doParseMatch(actions: List[String], currentBoard: ChessBoard, steps: List[ParseStep], actionParser: ActionParser)(
-    implicit rules: ChessOptimisations = ChessOptimisations.default): Set[ParsedMatch] =
+    implicit opts: ChessOptimisations = ChessOptimisations.default): Set[ParsedMatch] =
     actions match {
       case Nil ⇒
         Set(ParsedMatch(steps, SuccessfulParse(actionParser.r)))
@@ -89,8 +89,7 @@ object NotationParser {
     s: String,
     board: ChessBoard = ChessGame.defaultGame.board,
     actionParsers: List[ActionParser] = allActionParsers,
-    partialResults: Set[ParsedMatch] = Set())(
-      implicit rules: ChessOptimisations = ChessOptimisations.default): ParseResultsProxy =
+    partialResults: Set[ParsedMatch] = Set()): ParseResultsProxy =
     actionParsers match {
       case Nil ⇒
         ParseResultsProxy(reduce(partialResults))

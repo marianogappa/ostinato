@@ -27,35 +27,20 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
 }
 
 case class DescriptiveNotationActionParser(r: DescriptiveNotationRules) extends ActionParser {
-  protected def move(a: MoveAction): Set[String] =
-    fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
-
-  protected def enPassant(a: EnPassantAction): Set[String] =
-    fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
-
-  protected def capture(a: CaptureAction): Set[String] =
-    fromPiece(a) * "x" * a.toPiece.toDn * checkAndCheckmate(a)
+  protected def move(a: MoveAction): Set[String] = fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
+  protected def enPassant(a: EnPassantAction): Set[String] = fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
+  protected def capture(a: CaptureAction): Set[String] = fromPiece(a) * "x" * a.toPiece.toDn * checkAndCheckmate(a)
+  protected def castling(a: CastlingAction): Set[String] = castlingSymbol(a) * checkAndCheckmate(a)
+  protected def lose(a: LoseAction): Set[String] = if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
+  protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2")
+  private def fromPiece(a: ChessAction): Set[String] = a.fromPiece.toDn
+  private def dash(a: ChessAction): Set[String] = if (r.omitDash) Set() else Set("-")
 
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
 
   protected def capturePromote(a: CapturePromoteAction): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
-
-  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
-    castlingSymbol(a) * checkAndCheckmate(a)
-
-  protected def lose(a: LoseAction): Set[String] =
-    if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
-
-  protected def draw(a: DrawAction): Set[String] =
-    Set("1/2-1/2")
-
-  private def fromPiece(a: ChessAction): Set[String] =
-    a.fromPiece.toDn
-
-  private def dash(a: ChessAction): Set[String] =
-    if (r.omitDash) Set() else Set("-")
 
   private def toPos(a: ChessAction): Set[String] =
     (a.fromPiece.pos + a.delta).toDn(a.turn).map {
@@ -71,8 +56,7 @@ case class DescriptiveNotationActionParser(r: DescriptiveNotationRules) extends 
     else
       Set("")
 
-  private def castlingSymbol(a: CastlingAction)(
-    implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
+  private def castlingSymbol(a: CastlingAction): Set[String] =
     if (r.castlingNotation == "word")
       Set("castles", "Castles")
     else if (a.isKingside) Set("O-O", "0-0") else Set("O-O-O", "0-0-0")

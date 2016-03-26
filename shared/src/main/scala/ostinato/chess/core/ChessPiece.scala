@@ -18,21 +18,21 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
   protected val deltaPatterns: Set[XY]
   protected val hasRecursiveDeltas: Boolean
 
-  def isThreatened(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Boolean = threatenedBy(board).nonEmpty
-  def isDefended(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Boolean = defendedBy(board).nonEmpty
+  def isThreatened(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Boolean = threatenedBy(board).nonEmpty
+  def isDefended(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Boolean = defendedBy(board).nonEmpty
   val enemy: ChessPlayer = this.owner.enemy
   def equals(that: ChessPiece) = pos == that.pos && owner == that.owner
   override def toString = s"${owner.name}'s $pieceName on (${pos.x}, ${pos.y})"
   def deltas(board: ChessBoard) = concreteDeltas(board, deltaPatterns, Set())
 
-  def threatenedBy(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessPiece] = {
+  def threatenedBy(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessPiece] = {
     posThreatenedBy(pos, owner, board)
   }
 
-  def defendedBy(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Option[ChessPiece] =
+  def defendedBy(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessPiece] =
     withOwner(enemy).threatenedBy(board)
 
-  def canMoveTo(to: XY, board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default) = {
+  def canMoveTo(to: XY, board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default) = {
     !cantMove(to, board) && actions(board).exists {
       m ⇒ (pos + m.delta) == to
     }
@@ -48,7 +48,7 @@ abstract class ChessPiece(pos: XY, owner: ChessPlayer) extends Piece[ChessBoard,
     }
   }
 
-  def actions(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = deltas(board).flatMap {
+  def actions(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = deltas(board).flatMap {
      case delta ⇒ movementsOfDelta(pos, delta, board)
   }
 }
@@ -172,6 +172,7 @@ case class ♚(override val pos: XY, override val owner: ChessPlayer) extends Ch
     case WhiteChessPlayer ⇒ '♔'
   }
 }
+
 case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) extends ChessPiece(pos, owner) {
   val isInInitialPosition = dy == 1 && pos.y == 1 || dy == -1 && pos.y == 6
   protected val hasRecursiveDeltas = false

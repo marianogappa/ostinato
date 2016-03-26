@@ -37,7 +37,7 @@ case class CoordinateNotationActionParser(r: CoordinateNotationRules) extends Ac
   protected def capturePromote(a: CapturePromoteAction) =
     fromPos(a) * captureDash * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 
-  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
+  protected def castling(a: CastlingAction): Set[String] =
     r.castlingNotation match {
       case "zeroes" if a.isKingside  ⇒ Set("0-0")
       case "zeroes" if a.isQueenside ⇒ Set("0-0-0")

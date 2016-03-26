@@ -46,7 +46,7 @@ case class AlgebraicNotationActionParser(r: AlgebraicNotationRules) extends Acti
   protected def enPassantCapture(a: EnPassantCaptureAction) =
     a.fromPawn.pos.toAn.x.toString * (a.fromPawn.pos + a.delta).toAn.toString * Set("e.p.", "") * checkAndCheckmate(a)
 
-  protected def castling(a: CastlingAction)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[String] =
+  protected def castling(a: CastlingAction): Set[String] =
     r.castlingNotation match {
       case "zeroes" if a.isKingside  ⇒ Set("0-0")
       case "zeroes" if a.isQueenside ⇒ Set("0-0-0")

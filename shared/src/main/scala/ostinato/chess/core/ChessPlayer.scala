@@ -22,8 +22,8 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     case BlackChessPlayer => 0
   }
 
-  override def actions(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = {
-    val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
+  override def actions(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = {
+    val noDeltaValidation = opts.copy(validateDeltasOnActionCalculation = false)
     (board.hasInsufficientMaterial, super.actions(board)(noDeltaValidation), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
@@ -32,8 +32,8 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   }
 
   // TODO actionStream doesn't have: ++ Set(LoseAction(this), DrawAction(this))
-  override def actionStream(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default): Stream[ChessAction] = {
-    val noDeltaValidation = rules.copy(validateDeltasOnActionCalculation = false)
+  override def actionStream(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Stream[ChessAction] = {
+    val noDeltaValidation = opts.copy(validateDeltasOnActionCalculation = false)
     (board.hasInsufficientMaterial, super.actionStream(board)(noDeltaValidation), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Stream(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Stream(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
@@ -41,7 +41,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     }
   }
 
-  def nonFinalActions(board: ChessBoard)(implicit rules: ChessOptimisations = ChessOptimisations.default) =
+  def nonFinalActions(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default) =
     actions(board).filter {
       case a: FinalAction ⇒ false
       case _              ⇒ true
