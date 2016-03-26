@@ -12,32 +12,32 @@ import js.JSConverters._
 object Js {
   val defaultGame: String = ChessGame.defaultGame.toFen
 
-  def isFinalBoard(fen: String): Boolean = ChessGame.fromFen(fen).get.isGameOver
+  def isFinalBoard(fen: String): Boolean = ChessGame.fromOstinatoString(fen).get.isGameOver
 
   def move(fen: String, from: String, to: String): String = {
     val fromPos = ChessXY.fromAn(from).get
     val toPos = ChessXY.fromAn(to).get
-    val board = ChessGame.fromFen(fen).get.board
+    val board = ChessGame.fromOstinatoString(fen).get.board
     val action = board.movementsOfDelta(fromPos, toPos - fromPos).headOption
 
     if (action.isEmpty)
       ""
     else
-      board.doAction(action.get).get.toFen
+      board.doAction(action.get).get.toOstinatoString
   }
 
   def basicAiMove(fen: String, _player: String, _depth: Int, _debug: Boolean): String = {
     val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer
-    val game = ChessGame.fromFen(fen).get
+    val game = ChessGame.fromOstinatoString(fen).get
     val action = ChessBasicAi(player, debug = _debug, depth = _depth).nextAction(game).get
-    game.board.doAction(action).get.toFen
+    game.board.doAction(action).get.toOstinatoString
   }
 
   def randomAiMove(fen: String, _player: String): String = {
     val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer
-    val game = ChessGame.fromFen(fen).get
+    val game = ChessGame.fromOstinatoString(fen).get
     val action = ChessRandomAi(player).nextAction(game).get
-    game.board.doAction(action).get.toFen
+    game.board.doAction(action).get.toOstinatoString
   }
 
   def parseNotation(input: String): js.Dictionary[Any] = {
@@ -70,5 +70,51 @@ object Js {
           "notationName" -> notationName
         ).toJSDictionary
     }
+  }
+
+  def convertNotation(input: String, notation: String): js.Dictionary[Any] = {
+    val results = NotationParser.parseMatchString(input)
+
+    Map(
+      "actions" ->
+        results.parsedMatches.head.flatMap(
+          _.maybeGameStep.map(
+            gameStep => getActionParser(notation).parseAction(gameStep.action).head._1
+          )
+        ).toJSArray,
+      "validActionCount" -> results.results.head.validStepCount
+    ).toJSDictionary
+  }
+
+  private def getActionParser(notation: String) = notation match {
+    case "Algebraic Notation" ⇒
+      AlgebraicNotationActionParser(
+        AlgebraicNotationRules(
+          lowerCaseLetters = true,
+          figurine = false,
+          distinguishCaptures = true,
+          colonForCaptures = false,
+          castlingNotation = "zeroes"
+        )
+      )
+    case "Figurine Algebraic Notation" ⇒
+      AlgebraicNotationActionParser(AlgebraicNotation.allPossibleRules.head.copy(figurine = true))
+    case "Descriptive Notation" ⇒
+      DescriptiveNotationActionParser(DescriptiveNotation.allPossibleRules.head)
+    case "Coordinate Notation" ⇒
+      CoordinateNotationActionParser(CoordinateNotation.allPossibleRules.head)
+    case "ICCF Notation" ⇒
+      IccfNotationActionParser(IccfNotation.allPossibleRules.head)
+    case "Smith Notation" ⇒
+      SmithNotationActionParser(SmithNotation.allPossibleRules.head)
+    case _ ⇒ AlgebraicNotationActionParser(
+      AlgebraicNotationRules(
+        lowerCaseLetters = true,
+        figurine = false,
+        distinguishCaptures = true,
+        colonForCaptures = false,
+        castlingNotation = "zeroes"
+      )
+    )
   }
 }
