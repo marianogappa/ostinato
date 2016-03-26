@@ -117,10 +117,10 @@ package object core {
 
   object Fan {
     def checkmate(winner: ChessPlayer) = if (winner == WhiteChessPlayer) "1-0" else "0-1"
-    def check(implicit rules: ChessRules = ChessRules.default) = "+"
-    def kingSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0"
-    def queenSideCastle(implicit rules: ChessRules = ChessRules.default) = "0-0-0"
-    def draw(implicit rules: ChessRules = ChessRules.default) = "½–½"
+    def check = "+"
+    def kingSideCastle = "0-0"
+    def queenSideCastle = "0-0-0"
+    def draw = "½–½"
   }
 
   object OstinatoString {

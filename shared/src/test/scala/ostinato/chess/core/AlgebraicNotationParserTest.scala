@@ -67,14 +67,6 @@ class AlgebraicNotationParserTest extends FunSpec with Matchers {
       CastlingAction(♚(XY(4, 0), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 0), BlackChessPlayer), XY(3, 0)).toAn shouldBe "0-0-0"
     }
 
-    it("should encode castling to algebraic notation when white is on top") {
-      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
-      CastlingAction(♚(XY(3, 0), WhiteChessPlayer), XY(2, 0), ♜(XY(7, 0), WhiteChessPlayer), XY(-3, 0)).toAn shouldBe "0-0-0"
-      CastlingAction(♚(XY(3, 0), WhiteChessPlayer), XY(-2, 0), ♜(XY(0, 0), WhiteChessPlayer), XY(2, 0)).toAn shouldBe "0-0"
-      CastlingAction(♚(XY(3, 7), BlackChessPlayer), XY(2, 0), ♜(XY(7, 7), BlackChessPlayer), XY(-3, 0)).toAn shouldBe "0-0-0"
-      CastlingAction(♚(XY(3, 7), BlackChessPlayer), XY(-2, 0), ♜(XY(0, 7), BlackChessPlayer), XY(2, 0)).toAn shouldBe "0-0"
-    }
-
     it("should encode castling properly when using sugar methods to create the actions") {
       CastlingAction.blackKingside().toAn shouldBe "0-0"
       CastlingAction.whiteKingside().toAn shouldBe "0-0"

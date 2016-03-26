@@ -11,7 +11,8 @@ abstract class ChessAction(
   val isFinal = false
   val turn = fromPiece.owner
   val enemy = turn.enemy
-  def toAn(implicit rules: ChessRules = ChessRules.default): String
+  val toAn: String
+
   def gridUpdates = {
     List(
       fromPiece.pos.toI -> None,
@@ -39,8 +40,7 @@ case class CaptureAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${toPiece.owner.name}'s ${toPiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) =
-    fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  val toAn = fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class CapturePromoteActionFactory(fromPiece: ChessPiece, delta: XY, capturedPiece: ChessPiece, promotePiece: ChessPiece) extends ChessActionFactory {
@@ -59,8 +59,7 @@ case class CapturePromoteAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${capturedPiece.owner.name}'s ${capturedPiece.pieceName} and promotes to ${promotePiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) =
-    fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  val toAn = fromPiece.toAn + 'x' + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
   override def gridUpdates = super.gridUpdates ++ List(promotePiece.pos.toI -> Some(promotePiece))
 }
 
@@ -78,7 +77,7 @@ case class MoveAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  val toAn= fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class EnPassantTakeActionFactory(fromPawn: ♟, delta: XY, toPawn: ♟) extends ChessActionFactory {
@@ -95,8 +94,7 @@ case class EnPassantCaptureAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} captures ${toPawn.owner.name}'s en passant"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) =
-    fromPiece.pos.toAn.x.toString + 'x' + (fromPiece.pos + delta).toAn + "e.p." + (if (isCheck) Fan.check else "")
+  val toAn = fromPiece.pos.toAn.x.toString + 'x' + (fromPiece.pos + delta).toAn + "e.p." + (if (isCheck) Fan.check else "")
   override def gridUpdates = super.gridUpdates ++ List(toPawn.pos.toI -> None)
 }
 
@@ -114,7 +112,7 @@ case class EnPassantAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves forward twice (en passant)"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  val toAn = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class PromoteActionFactory(fromPiece: ♟, delta: XY, toPiece: ChessPiece) extends ChessActionFactory {
@@ -132,7 +130,7 @@ case class PromoteAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes to ${toPiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) =
+  val toAn =
     (fromPiece.pos + delta).toAn + toPiece.toAn + (if (isCheck) Fan.check else "")
   override def gridUpdates = super.gridUpdates ++ List(toPiece.pos.toI -> Some(toPiece))
 }
@@ -176,13 +174,10 @@ case class CastlingAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} castles"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) =
-    if (isKingside) Fan.kingSideCastle else Fan.queenSideCastle
+  val toAn = if (isKingside) Fan.kingSideCastle else Fan.queenSideCastle
+  def isKingside = kingDelta.x == 2
+  def isQueenside = !isKingside
 
-  def isKingside(implicit rules: ChessRules = ChessRules.default) =
-    kingDelta.x == 2 && rules.whitePawnDirection == -1 || kingDelta.x == -2 && rules.whitePawnDirection == 1
-
-  def isQueenside(implicit rules: ChessRules = ChessRules.default) = !isKingside
   override def gridUpdates =
     super.gridUpdates ++
       List(
@@ -206,17 +201,18 @@ case class DrawAction(
     player: ChessPlayer,
     override val isCheck: Boolean = false,
     override val isCheckmate: Boolean = false) extends FinalAction(player) {
+
   override val isDraw = true
   override def toString = s"${player.name} claims draw"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.draw
+  val toAn = Fan.draw
   override def gridUpdates = List()
 }
 
 case class LoseAction(player: ChessPlayer) extends FinalAction(player) {
   override val isLoss = true
   override def toString = s"${player.enemy.name} wins"
-  def toAn(implicit rules: ChessRules = ChessRules.default) = Fan.checkmate(player.enemy)
+  val toAn = Fan.checkmate(player.enemy)
   override def gridUpdates = List()
 }
