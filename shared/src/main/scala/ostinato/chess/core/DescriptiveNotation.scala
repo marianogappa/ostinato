@@ -39,6 +39,10 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules) exte
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
 
+  //TODO review this!
+  protected def promote(a: PromoteAction): Set[String] =
+    fromPiece(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
+
   protected def capturePromote(a: CapturePromoteAction): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 

@@ -18,6 +18,7 @@ trait ActionSerialiser {
       case a: EnPassantAction        ⇒ enPassant(a)
       case a: CaptureAction          ⇒ capture(a)
       case a: EnPassantCaptureAction ⇒ enPassantCapture(a)
+      case a: PromoteAction          ⇒ promote(a)
       case a: CapturePromoteAction   ⇒ capturePromote(a)
       case a: CastlingAction         ⇒ castling(a)
       case a: LoseAction             ⇒ lose(a)
@@ -32,6 +33,7 @@ trait ActionSerialiser {
   protected def enPassant(a: EnPassantAction): Set[String]
   protected def capture(a: CaptureAction): Set[String]
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String]
+  protected def promote(a: PromoteAction): Set[String]
   protected def capturePromote(a: CapturePromoteAction): Set[String]
   protected def castling(a: CastlingAction): Set[String]
   protected def lose(a: LoseAction): Set[String]
