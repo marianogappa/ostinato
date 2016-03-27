@@ -8,7 +8,7 @@ A modular, fully tested, very comprehensive helper library for board games, with
 
 Tool to paste any chess match in any known notation and browse through the moves via Chessboard. Also play from any board state against the AI, or convert to any other notation.
 
-[Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play) ** NOTE: I broke promoting temporarily **
+[Chess Game (using ChessBoardJS)](http://marianogappa.github.io/ostinato-examples/play)
 
 Play a Chess Match against the AI. A hacker will be able to play from whatever board starting position, as white or black, configuring AI's strength and enabling debug mode.
 
