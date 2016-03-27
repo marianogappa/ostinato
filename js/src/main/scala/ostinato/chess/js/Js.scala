@@ -62,7 +62,7 @@ object Js {
 
     results.head match {
       case parsedMatch @ ParsedMatch(steps, notationRules) ⇒
-        val fenBoards = steps.filter(_.maybeGameStep.nonEmpty).map(_.maybeGameStep.get.board.toFen).toArray
+        val boards = steps.filter(_.maybeGameStep.nonEmpty).map(_.maybeGameStep.get.board.toOstinatoString).toArray
 
         val actions = parsedMatch.actionStrings
 
@@ -80,7 +80,7 @@ object Js {
         }
 
         Map(
-          "fenBoards" -> fenBoards.toJSArray,
+          "boards" -> boards.toJSArray,
           "actions" -> actions.toJSArray,
           "validActionCount" -> validActionCount,
           "parseWasSuccessful" -> parseWasSuccessful,
