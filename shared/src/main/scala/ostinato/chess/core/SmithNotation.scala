@@ -15,7 +15,7 @@ case class SmithNotationActionSerialiser(r: SmithNotationRules) extends ActionSe
   protected def capture(a: CaptureAction) = fromPos(a) * toPos(a) * a.toPiece.toDn.map(_.toLowerCase)
   protected def enPassantCapture(a: EnPassantCaptureAction) = fromPos(a) * toPos(a) * a.toPawn.toDn.map(_.toLowerCase)
   protected def castling(a: CastlingAction) = fromPos(a) * toPos(a) * (if (a.isKingside) "c" else "C")
-  protected def promote(a: PromoteAction) = fromPos(a) * toPos(a) * a.toPiece.toAn
+  protected def promote(a: PromoteAction) = fromPos(a) * toPos(a) * a.promotePiece.toAn
   protected def lose(a: LoseAction) = Set("")
   protected def draw(a: DrawAction) = Set("")
   private def fromPos(a: ChessAction) = a.fromPiece.pos.toAn.toString

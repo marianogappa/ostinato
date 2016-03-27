@@ -10,6 +10,10 @@ case class ChessRandomAi(player: ChessPlayer, seed: Option[Long] = None)
   override def nextAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
     super.nextAction(game)
 
-  def nextNonFinalAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] =
-    shuffleHead(game.board.nonFinalActions.toList)
+  def nextNonFinalAction(game: ChessGame): Option[ChessAction] = {
+    val optsForAi = ChessOptimisations.default.copy(
+      extraValidationOnActionApply = false, dontCalculateHistory = true)
+
+    shuffleHead(game.board.actionStream(optsForAi).toList)
+  }
 }

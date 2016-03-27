@@ -46,7 +46,7 @@ package object core {
     def fromAn(string: String) = {
       val s = string.filter(_ > ' ').toLowerCase
       if (s.length == 2 && s.matches("""[a-h][1-8]"""))
-          Some(XY(chars.indexOf(s(0)), 7 - (s(1).asDigit - 1)))
+        Some(XY(chars.indexOf(s(0)), 7 - (s(1).asDigit - 1)))
       else
         None
     }
@@ -101,8 +101,26 @@ package object core {
     override def toString = s"$x$y"
   }
 
+  object IccfPos {
+    def fromString(s: String): Try[IccfPos] = {
+      Try {
+        (s(0).toString.toInt, s(1).toString.toInt)
+      } flatMap {
+        case (x, y) ⇒
+          if (x >= 1 && x <= 8 && y >= 1 && y <= 8)
+            Success(IccfPos(x, y))
+          else
+            Failure(InvalidIccfPos(s))
+      } recoverWith {
+        case _ ⇒
+          Failure(InvalidIccfPos(s))
+      }
+    }
+  }
+
   case class IccfPos(x: Int, y: Int) {
     override def toString = s"$x$y"
+    lazy val toXY = XY(x - 1, 8 - y)
   }
 
   object Fan {
@@ -121,23 +139,18 @@ package object core {
     }
 
     def calculateHistory(iccfString: String): Try[List[GameStep]] = {
-      val results = NotationParser.parseMatchString(
-        iccfString,
-        ChessGame.defaultGame.board,
-        List(IccfNotationActionSerialiser())
-      )
+      val startBoard = ChessGame.defaultGame.board
+      val zero: (Try[List[GameStep]], ChessBoard) = (Success(List(GameStep(None, startBoard))), startBoard)
+      val actionStrings = iccfString.split(" +").toList.filterNot(_.isEmpty)
 
-      if (results.succeeded) {
-        Success(
-          results.parsedMatches.head.map {
-            case parseStep ⇒
-              val step = parseStep.maybeGameStep.get
-              GameStep(Some(step.action), step.board)
-          }.reverse
-        )
-      } else {
-        Failure(InvalidIccfHistoryException)
-      }
+      actionStrings.foldLeft(zero) {
+        case ((Success(gameSteps), currentBoard), s) ⇒
+          IccfNotation.parseActionString(s, currentBoard) match {
+            case Success(gs @ GameStep(_, b)) ⇒ (Success(gs :: gameSteps), b)
+            case Failure(e)                   ⇒ (Failure(InvalidIccfHistoryException(e)), startBoard)
+          }
+        case ((Failure(e), _), _) ⇒ (Failure(InvalidIccfHistoryException(e)), startBoard)
+      }._1
     }
   }
 
@@ -425,4 +438,5 @@ package object core {
   }
 }
 
-case object InvalidIccfHistoryException extends RuntimeException with NoStackTrace
+case class InvalidIccfPos(s: String) extends RuntimeException(s"Invalid Iccf coordinates: [$s]") with NoStackTrace
+case class InvalidIccfHistoryException(e: Throwable) extends RuntimeException(s"Invalid ICCF History given:", e) with NoStackTrace

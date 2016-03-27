@@ -34,7 +34,11 @@ class OstinatoStringTest extends FunSpec with Matchers {
 
       val expectedAction = EnPassantAction(♟(XY(4, 6), WhiteChessPlayer, -1), XY(0, -2))
 
-      parsedGame.get.board.history shouldBe List(GameStep(Some(expectedAction), baseExpectedGame.board))
+      parsedGame.get.board.history shouldBe
+        List(
+          GameStep(Some(expectedAction), baseExpectedGame.board),
+          GameStep(None, ChessGame.defaultGame.board)
+        )
     }
 
     it("should be able to convert a game to an ostinato string, when it contains one history element") {
@@ -74,7 +78,8 @@ class OstinatoStringTest extends FunSpec with Matchers {
 
       parsedGame.get.board.history shouldBe List(
         GameStep(Some(expectedAction2), baseExpectedGame2.board),
-        GameStep(Some(expectedAction1), baseExpectedGame1.board)
+        GameStep(Some(expectedAction1), baseExpectedGame1.board),
+        GameStep(None, ChessGame.defaultGame.board)
       )
     }
 
@@ -86,8 +91,10 @@ class OstinatoStringTest extends FunSpec with Matchers {
     }
 
     it("should not be able to parse invalid ostinato strings") {
-      ChessGame.fromOstinatoString("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 525blah!") shouldBe
-        Failure(InvalidIccfHistoryException)
+      ChessGame.fromOstinatoString("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 525blah!") match {
+        case Failure(InvalidIccfHistoryException(_)) =>
+        case _ => fail // N.B. "shouldBe 'failure" doesn't work on ScalaJS
+      }
 
       ChessGame.fromOstinatoString("rnbqkbnr/pppppp$$pp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 5254") shouldBe
         Failure(InvalidChessGridSizeException)

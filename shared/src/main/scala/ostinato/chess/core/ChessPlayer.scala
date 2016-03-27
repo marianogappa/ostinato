@@ -23,8 +23,13 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
   }
 
   override def actions(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Set[ChessAction] = {
-    val noDeltaValidation = opts.copy(validateDeltasOnActionCalculation = false)
-    (board.hasInsufficientMaterial, super.actions(board)(noDeltaValidation), kingPiece(board)) match {
+    val o = opts.copy(
+      validateDeltasOnActionCalculation = false,
+      dontCalculateHistory = true,
+      checkForThreatens = true,
+      extraValidationOnActionApply = false
+    )
+    (board.hasInsufficientMaterial, super.actions(board)(o), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
       case (_, a, _)                    ⇒ a ++ Set(LoseAction(this), DrawAction(this))
@@ -33,8 +38,13 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
 
   // TODO actionStream doesn't have: ++ Set(LoseAction(this), DrawAction(this))
   override def actionStream(board: ChessBoard)(implicit opts: ChessOptimisations = ChessOptimisations.default): Stream[ChessAction] = {
-    val noDeltaValidation = opts.copy(validateDeltasOnActionCalculation = false)
-    (board.hasInsufficientMaterial, super.actionStream(board)(noDeltaValidation), kingPiece(board)) match {
+    val o = opts.copy(
+      validateDeltasOnActionCalculation = false,
+      dontCalculateHistory = true,
+      checkForThreatens = true,
+      extraValidationOnActionApply = false
+    )
+    (board.hasInsufficientMaterial, super.actionStream(board)(o), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Stream(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Stream(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
       case (_, a, _)                    ⇒ a

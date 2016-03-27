@@ -33,7 +33,7 @@ case class CoordinateNotationActionSerialiser(r: CoordinateNotationRules) extend
   protected def move(a: MoveAction) = action(a)
   protected def enPassant(a: EnPassantAction) = action(a)
   protected def action(a: ChessAction) = fromPos(a) * dash * toPos(a) * checkAndCheckmate(a)
-  protected def promote(a: PromoteAction) = fromPos(a) * dash * toPos(a) * genericPromotion(a.toPiece) * checkAndCheckmate(a)
+  protected def promote(a: PromoteAction) = fromPos(a) * dash * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
   protected def capturePromote(a: CapturePromoteAction) =
     fromPos(a) * captureDash * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 

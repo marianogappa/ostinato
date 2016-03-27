@@ -77,7 +77,7 @@ case class MoveAction(
   override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
-  val toAn= fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
+  val toAn = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
 }
 
 case class EnPassantTakeActionFactory(fromPawn: ♟, delta: XY, toPawn: ♟) extends ChessActionFactory {
@@ -123,16 +123,16 @@ case class PromoteActionFactory(fromPiece: ♟, delta: XY, toPiece: ChessPiece) 
 case class PromoteAction(
     override val fromPiece: ♟,
     override val delta: XY,
-    toPiece: ChessPiece,
+    promotePiece: ChessPiece,
     override val isCheck: Boolean = false,
-    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
+    override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) with ActionWithPromotion {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes to ${toPiece.pieceName}"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} promotes to ${promotePiece.pieceName}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   val toAn =
-    (fromPiece.pos + delta).toAn + toPiece.toAn + (if (isCheck) Fan.check else "")
-  override def gridUpdates = super.gridUpdates ++ List(toPiece.pos.toI -> Some(toPiece))
+    (fromPiece.pos + delta).toAn + promotePiece.toAn + (if (isCheck) Fan.check else "")
+  override def gridUpdates = super.gridUpdates ++ List(promotePiece.pos.toI -> Some(promotePiece))
 }
 
 object CastlingAction {
@@ -215,4 +215,15 @@ case class LoseAction(player: ChessPlayer) extends FinalAction(player) {
   override def toString = s"${player.enemy.name} wins"
   val toAn = Fan.checkmate(player.enemy)
   override def gridUpdates = List()
+}
+
+trait ActionWithPromotion {
+  val promotePiece: ChessPiece
+
+  def promotedPieceIccfCode = promotePiece match {
+    case p: ♛ ⇒ "1"
+    case p: ♜ ⇒ "2"
+    case p: ♝ ⇒ "3"
+    case p: ♞ ⇒ "4"
+  }
 }

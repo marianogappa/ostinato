@@ -34,7 +34,7 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules) extends 
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2", "½–½", "draws")
   protected def move(a: MoveAction) = fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
   protected def enPassant(a: EnPassantAction) = fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
-  protected def promote(a: PromoteAction) = fromPos(a) * toPos(a) * genericPromotion(a.toPiece) * checkAndCheckmate(a)
+  protected def promote(a: PromoteAction) = fromPos(a) * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 
   protected def capture(a: CaptureAction) =
     fromPiece(a) * fromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(a)

@@ -7,9 +7,9 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
     extends Ai[ChessBoard, ChessAction, ChessPiece, ChessPlayer, ChessOptimisations, ChessGame](player) {
 
   override def nextAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] = {
-    val noExtraValidation = opts.copy(extraValidationOnActionApply = false)
-    val actions = game.board.actionStream.force.toSeq
-    val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(noExtraValidation).get, action)(noExtraValidation)))
+    val optsForAi = opts.copy(extraValidationOnActionApply = false, dontCalculateHistory = true)
+    val actions = game.board.actionStream.force
+    val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(optsForAi).get, action)(optsForAi)))
 
     if (debug) { options foreach println }
 
@@ -38,7 +38,7 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
     case _ => a._2 > b._2
   }
 
-  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = depth, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit opts: ChessOptimisations = ChessOptimisations.default): Long = {
+  def alphabeta(board: ChessBoard, action: ChessAction, depth: Int = depth, alpha: Long = -Long.MaxValue, beta: Long = Long.MaxValue)(implicit opts: ChessOptimisations): Long = {
     var a = alpha
     var b = beta
 
