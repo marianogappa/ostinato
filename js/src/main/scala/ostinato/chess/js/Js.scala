@@ -1,13 +1,11 @@
 package ostinato.chess.js
 
-import ostinato.chess.ai.{ ChessBasicAi, ChessRandomAi }
 import ostinato.chess.api.Api
-import ostinato.chess.core.NotationParser.{ FailedParse, ParsedMatch, SuccessfulParse }
 import ostinato.chess.core._
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
-import js.JSConverters._
+import scala.scalajs.js.JSConverters._
+import scala.scalajs.js.annotation.{JSExport, JSExportAll}
 
 @JSExport @JSExportAll
 object Js {

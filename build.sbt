@@ -8,6 +8,9 @@ enablePlugins(ScalaJSPlugin)
 
 scalaJSUseRhino in Global := false
 
+val akkaVersion = "2.4.2"
+
+
 lazy val root = project.in(file(".")).
   aggregate(js, jvm).
   settings(
@@ -31,8 +34,10 @@ lazy val ostinato = crossProject.in(file(".")).
     scalaVersion := "2.11.7",
 
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http-experimental" % "2.0.3",
-      "com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.0.3"
+      "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
+      "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion % "test",
+      "com.typesafe.akka" % "akka-http-jackson-experimental_2.11" % akkaVersion,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.7.2"
     )
   ).
   jsSettings (
