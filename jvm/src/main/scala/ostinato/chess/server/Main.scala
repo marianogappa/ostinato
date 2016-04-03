@@ -27,7 +27,7 @@ object Main extends App with OstinatoServerRoute {
 trait OstinatoServerRoute {
   val logger: LoggingAdapter
 
-  val headers = List(RawHeader("Access-Control-Allow-Origin", "*"),
+  val optionsHeaders = List(RawHeader("Access-Control-Allow-Origin", "*"),
     RawHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE"),
     RawHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"))
 
@@ -57,7 +57,7 @@ trait OstinatoServerRoute {
               entity(as[String])(api[Map[String, (String, String)]](_, { case m => (Api.convertNotation _).tupled(m("data"))}))
             }
         } ~ options {
-      complete { HttpResponse().withHeaders(headers) }
+      complete { HttpResponse().withHeaders(optionsHeaders) }
     }
 
   private def api[T: Manifest](request: String, f: T => Map[String, Any]): StandardRoute = {
