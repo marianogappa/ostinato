@@ -9,16 +9,19 @@ case class ChessBasicAi(player: ChessPlayer, depth: Int = 1, debug: Boolean = fa
   override def nextAction(game: ChessGame)(implicit opts: ChessOptimisations = ChessOptimisations.default): Option[ChessAction] = {
     val optsForAi = opts.copy(extraValidationOnActionApply = false, dontCalculateHistory = true)
     val actions = game.board.actionStream.force
-    val options = actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(optsForAi).get, action)(optsForAi)))
+    val options = evaluateAllActions(actions, game, optsForAi)
 
     if (debug) { options foreach println }
 
-    val chosenAction = options.sortWith(sort).head._1
+    val chosenAction = options.toList.sortWith(sort).head._1
 
     if (debug) { println(s"Chosen action: $chosenAction") }
 
     Some(chosenAction)
   }
+
+  def evaluateAllActions(actions: Stream[ChessAction], game: ChessGame, optsForAi: ChessOptimisations): Seq[(ChessAction, Long)] =
+    actions map (action ⇒ (action, alphabeta(game.board.doAction(action)(optsForAi).get, action)(optsForAi)))
 
   def sort(a: (ChessAction, Long), b: (ChessAction, Long)) = (a, b) match {
     case _ if a._1.isCheckmate => true

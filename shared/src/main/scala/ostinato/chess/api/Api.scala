@@ -1,10 +1,10 @@
 package ostinato.chess.api
 
-import ostinato.chess.ai.{ ChessBasicAi, ChessRandomAi }
-import ostinato.chess.core.NotationParser.{ FailedParse, ParsedMatch, SuccessfulParse }
-import ostinato.chess.core.{ AlgebraicNotation, AlgebraicNotationActionSerialiser, AlgebraicNotationRules, BlackChessPlayer, ChessAction, ChessGame, ChessXY, CoordinateNotation, CoordinateNotationActionSerialiser, DescriptiveNotation, DescriptiveNotationActionSerialiser, IccfNotation, IccfNotationActionSerialiser, NotationParser, NotationRules, SmithNotation, SmithNotationActionSerialiser, WhiteChessPlayer }
+import ostinato.chess.ai.{ChessBasicAi, ChessRandomAi}
+import ostinato.chess.core.NotationParser.{FailedParse, ParsedMatch, SuccessfulParse}
+import ostinato.chess.core.{AlgebraicNotation, AlgebraicNotationActionSerialiser, AlgebraicNotationRules, BlackChessPlayer, ChessAction, ChessGame, ChessPlayer, ChessXY, CoordinateNotation, CoordinateNotationActionSerialiser, DescriptiveNotation, DescriptiveNotationActionSerialiser, IccfNotation, IccfNotationActionSerialiser, NotationParser, NotationRules, SmithNotation, SmithNotationActionSerialiser, WhiteChessPlayer}
 
-object Api {
+class Api {
   val defaultGame: String = ChessGame.defaultGame.toFen
 
   def move(ostinatoString: String, from: String, to: String): Map[String, Any] = {
@@ -19,10 +19,13 @@ object Api {
   def basicAiMove(fen: String, _player: String, _depth: Int, _debug: Boolean): Map[String, Any] = {
     val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer
     val game = ChessGame.fromOstinatoString(fen).toOption
-    val action = game flatMap (ChessBasicAi(player, debug = _debug, depth = _depth).nextAction(_))
+    val action = game flatMap (instantiateChessBasicAi(player, _depth, _debug).nextAction(_))
 
     moveResult(action, game)
   }
+
+  protected def instantiateChessBasicAi(_player: ChessPlayer, _depth: Int, _debug: Boolean) =
+    ChessBasicAi(player = _player, debug = _debug, depth = _depth)
 
   def randomAiMove(fen: String, _player: String): Map[String, Any] = {
     val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer

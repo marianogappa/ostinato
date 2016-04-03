@@ -11,7 +11,8 @@ import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 import ostinato.chess.api.Api
 import java.net.URLDecoder
-import scala.reflect.ClassTag
+
+import ostinato.chess.core.ChessPlayer
 
 object Main extends App with OstinatoServerRoute {
   implicit val system = ActorSystem("ostinato")
@@ -31,6 +32,8 @@ trait OstinatoServerRoute {
     RawHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE"),
     RawHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"))
 
+  val api = ServerApi()
+
   val route =
     path("healthcheck") {
       get {
@@ -42,34 +45,44 @@ trait OstinatoServerRoute {
     } ~
         post {
           path("move") {
-            entity(as[String])(api[Map[String, (String, String, String)]](_, { case m => (Api.move _).tupled(m("data")) }))
+            entity(as[String])(serve[Map[String, (String, String, String)]](_, {
+              case m => (api.move _).tupled(m("data")) }))
           } ~
             path("basicAiMove") {
-              entity(as[String])(api[Map[String, (String, String, Int, Boolean)]](_, { case m => (Api.basicAiMove _).tupled(m("data"))}))
+              entity(as[String])(serve[Map[String, (String, String, Int, Boolean)]](_, {
+                case m => (api.basicAiMove _).tupled(m("data"))}))
             } ~
             path("randomAiMove") {
-              entity(as[String])(api[Map[String, (String, String)]](_, { case m => (Api.randomAiMove _).tupled(m("data"))}))
+              entity(as[String])(serve[Map[String, (String, String)]](_, {
+                case m => (api.randomAiMove _).tupled(m("data"))}))
             } ~
             path("parseNotation") {
-              entity(as[String])(api[Map[String, (String, Boolean)]](_, { case m => (Api.parseNotation _).tupled(m("data"))}))
+              entity(as[String])(serve[Map[String, (String, Boolean)]](_, {
+                case m => (api.parseNotation _).tupled(m("data"))}))
             } ~
             path("convertNotation") {
-              entity(as[String])(api[Map[String, (String, String)]](_, { case m => (Api.convertNotation _).tupled(m("data"))}))
+              entity(as[String])(serve[Map[String, (String, String)]](_, {
+                case m => (api.convertNotation _).tupled(m("data"))}))
             }
         } ~ options {
       complete { HttpResponse().withHeaders(optionsHeaders) }
     }
 
-  private def api[T: Manifest](request: String, f: T => Map[String, Any]): StandardRoute = {
+  private def serve[T: Manifest](request: String, f: T => Map[String, Any]): StandardRoute = {
     complete (
       HttpResponse(
         entity =
         JsonUtil.toJson (
           f (
-            JsonUtil.fromJson[T](URLDecoder.decode(request))
+            JsonUtil.fromJson[T](URLDecoder.decode(request, "UTF-8"))
           )
         )
       ).withHeaders(`Access-Control-Allow-Origin`.`*`)
     )
   }
+}
+
+case class ServerApi() extends Api {
+  override protected def instantiateChessBasicAi(_player: ChessPlayer, _depth: Int, _debug: Boolean) =
+    new ParallelisedChessBasicAi(_player, _depth, _debug)
 }
