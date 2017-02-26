@@ -7,6 +7,40 @@ class NotationParserTest extends FunSpec with Matchers {
 
   describe("Notation parsing") {
     it("should parse descriptive notation") {
+      // https://github.com/marianogappa/ostinato/issues/1
+      val descriptive =
+        NotationParser.parseMatchString("""
+                                            |1. P-K4 P-K4
+                                            |2. N-KB3 N-QB3
+                                            |3. B-B4 B-B4
+                                            |4. P-QN4 BxNP
+                                            |5. P-B3 B-R4
+                                            |6. P-Q4 PxP
+                                            |7. O-O P-Q6
+                                            |8. Q-N3 Q-B3
+                                            |9. P-K5 Q-N3
+                                            |10. R-K1 KN-K2
+                                            |11. B-R3 P-N4
+                                            |12. QxP R-QN1
+                                            |13. Q-R4 B-N3
+                                            |14. QN-Q2 B-N2?
+                                            |15. N-K4 Q-B4?
+                                            |16. BxQP Q-R4
+                                            |17. N-B6ch! PxN
+                                            |18. PxP R-N1
+                                            |19. QR-Q1! QxN
+                                            |20. RxNch NxR
+                                            |21. QxPch! KxQ
+                                            |22. B-B5dblch K-K1
+                                            |23. B-Q7ch K-B1
+                                            |24. BxNmate
+                                            |""".stripMargin)
+
+      descriptive.succeeded shouldBe true
+      descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
+      descriptive.parsedMatches.head.size shouldBe 47
+    }
+    it("should parse descriptive notation 2") {
       val descriptive =
         NotationParser.parseMatchString("""
                                             |1. P-K4 P-K3

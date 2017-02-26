@@ -184,7 +184,7 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int) e
   val isPromoting = pos.y == promotingPosition(dy)
   val pieceName = "Pawn"
   val toAn = ""
-  val toDn = Set("P")
+  val toDn = Set("P", Map(0 -> "RP", 1 -> "NP", 2 -> "BP", 3 -> "QP", 4 -> "KP", 5 -> "BP", 6 -> "NP", 7 -> "RP")(pos.x))
   lazy val toIccf = throw new RuntimeException("Pawn does not have an Iccf code") with NoStackTrace
   val toFen = if (owner == WhiteChessPlayer) 'P' else 'p'
   override val isPawn = true

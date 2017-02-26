@@ -56,7 +56,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules) exte
     if (a.isCheckmate)
       Set("++", "mate")
     else if (a.isCheck)
-      Set("+", "ch")
+      Set("+", "ch", "dblch")
     else
       Set("")
 
