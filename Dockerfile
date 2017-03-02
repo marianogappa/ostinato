@@ -1,4 +1,4 @@
-FROM jeanblanchard/java:8
+FROM anapsix/alpine-java:8
 
 RUN mkdir -p /lib
 
