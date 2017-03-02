@@ -243,33 +243,7 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
     }    
 ```
 
-## Use cases
+## Known issues
 
-- Making board game AIs
-- UI API for board games (e.g. asking it "check mate?", or "which cells can I move to?" to highlight them)
-- Solving/researching board games
-- Inventing board games
-
-## Short term TODO
-
-- Bugfix: ChessAction doesn't inform checkMate properly even if action is "1-0"!
-- Convert notation functionality with all notation variants available
-- Round of AI refinement iterations up to the point that a 2 ply AI can beat me (~1100 ELO)
-- UI/UX review with a UI/UX senior
-- Research Hands on ScalaJS
-- Research repositories
-- Extensive Scaladoc documentation effort (do after code is not "experimental" anymore)
-- Tutorials (do after code is not "experimental" anymore)
-- Blog post
-
-## Long term TODO
-
-- Implement PegSolitaireGame as proof of concept
-- Solve PegSolitaireGame as proof of concept
-- Invent awesome game using this library
-
-## Anyway; why "ostinato"?
-
-The author is a musician of sorts and deeply loves music.
-
-"Ostinato" stands for something like: "a short melody or rhythm that is repeated by the same voice or instrument during a musical composition"; although it comes from "stubborn" (italian). The author is a very stubborn (がんこ) man of italian descent who came up with this idea of making a board game based on a chess board and chess pieces but with different rules, as a team project for his company's FedEx day. He persisted on his unpopular idea and kept repeating how great it was even though no one agreed. So.
+- ChessAction doesn't inform checkMate properly even if action is "1-0"!
+- No documentation/tutorials
