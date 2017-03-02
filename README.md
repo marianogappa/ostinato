@@ -186,14 +186,14 @@ actions map board.doAction.get foreach (b => println(b + "\n"))
 - check & checkmate detection with proper testing
 - detection of draw due to insufficient material
 - detection of draw due to stalemate
-- basic AI available
+- basic and random AI available
+- basic AI based on minimax with alpha beta pruning
 
 ### Some illustrative tests
 
 - En Passant
 ```
     it("should not find en passant take move for black pawn, since king would be threatened") {
-      implicit val rules = ChessRules.default.copy(whitePawnDirection = 1)
       val game = ChessGame.fromString(
         """....♖...
           |........
