@@ -8,10 +8,12 @@ object ChessOptimisations {
     checkForThreatens = true,
     validateDeltasOnActionCalculation = true,
     extraValidationOnActionApply = false,
-    dontCalculateHistory = false
+    dontCalculateHistory = false,
+    optimistic = false
   )
 
   def noCheckForThreatens = default.copy(checkForThreatens = false)
+  def beOptimistic = default.copy(optimistic = true)
 }
 
 case class ChessOptimisations(
@@ -19,5 +21,6 @@ case class ChessOptimisations(
   checkForThreatens: Boolean,
   validateDeltasOnActionCalculation: Boolean,
   extraValidationOnActionApply: Boolean,
-  dontCalculateHistory: Boolean) extends Rules
+  dontCalculateHistory: Boolean,
+  optimistic: Boolean) extends Rules
 

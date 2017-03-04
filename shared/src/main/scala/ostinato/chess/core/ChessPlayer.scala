@@ -32,6 +32,7 @@ abstract class ChessPlayer(name: String) extends Player[ChessBoard, ChessAction,
     (board.hasInsufficientMaterial, super.actions(board)(o), kingPiece(board)) match {
       case (true, _, _)                 ⇒ Set(DrawAction(this))
       case (_, a, Some(k)) if a.isEmpty ⇒ Set(if (k.isThreatened(board)) LoseAction(this) else DrawAction(this))
+      case (_, a, _) if o.optimistic    ⇒ a
       case (_, a, _)                    ⇒ a ++ Set(LoseAction(this), DrawAction(this))
     }
   }
