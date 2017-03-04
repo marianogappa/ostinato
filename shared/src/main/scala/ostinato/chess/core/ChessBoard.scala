@@ -237,6 +237,8 @@ case class ChessBoard(
       allNewBoards exists (nb => allSerialisedPastBoardsFor3FR.count(_ == nb) >= 2)
   }
 
+  def doAllActions(implicit opts: ChessOptimisations = ChessOptimisations.default) = actions flatMap this.doAction
+  def doAllNonFinalActions(implicit opts: ChessOptimisations = ChessOptimisations.default) = nonFinalActions flatMap this.doAction
   def nonFinalActions(implicit opts: ChessOptimisations = ChessOptimisations.default) = turn.nonFinalActions(this)
   def actions(implicit opts: ChessOptimisations = ChessOptimisations.default) = turn.actions(this)
   def actionStream(implicit opts: ChessOptimisations = ChessOptimisations.default) = turn.actionStream(this)
