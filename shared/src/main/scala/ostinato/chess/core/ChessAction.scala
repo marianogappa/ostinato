@@ -74,7 +74,7 @@ case class MoveAction(
     override val isCheck: Boolean = false,
     override val isCheckmate: Boolean = false) extends ChessAction(fromPiece, delta) {
 
-  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${fromPiece.pos + delta}"
+  override def toString = s"${fromPiece.owner.name}'s ${fromPiece.pieceName} moves to ${(fromPiece.pos + delta).toAn}"
   def withCheck = this.copy(isCheck = true)
   def withCheckmate = this.copy(isCheckmate = true)
   val toAn = fromPiece.toAn + (fromPiece.pos + delta).toAn + (if (isCheck) Fan.check else "")
