@@ -36,8 +36,7 @@ lazy val ostinato = crossProject.in(file(".")).
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-http" % akkaVersion,
       "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion % "test",
-      "com.typesafe.akka" % "akka-http-jackson_2.12" % akkaVersion,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.8.7"
+      "com.typesafe.akka" %% "akka-http-spray-json" % akkaVersion
     )
   ).
   jsSettings (

@@ -53,7 +53,7 @@ class Api {
     }) getOrElse Map("success" -> (false: Any))
   }
 
-  def parseNotation(input: String, useless: Boolean = false): Map[String, Any] = {
+  def parseNotation(input: String): Map[String, Any] = {
     val results = NotationParser.parseMatchString(input).results
 
     results.head match {

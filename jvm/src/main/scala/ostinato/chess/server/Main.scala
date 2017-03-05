@@ -7,10 +7,14 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.headers._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.StandardRoute
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 import ostinato.chess.api.Api
 import java.net.URLDecoder
+import spray.json.DefaultJsonProtocol
+import spray.json._
 
 import ostinato.chess.core.ChessPlayer
 
@@ -25,7 +29,37 @@ object Main extends App with OstinatoServerRoute {
   val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 51234)
 }
 
-trait OstinatoServerRoute {
+case class RequestMove(board: String, from: String, to: String)
+case class RequestBasicAI(board: String, player: String, depth: Int)
+case class RequestRandomAI(board: String, player: String)
+case class RequestParseNotation(input: String)
+case class RequestConvertNotation(input: String, notation: String)
+
+trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+  implicit val f1 = jsonFormat3(RequestMove.apply)
+  implicit val f2 = jsonFormat3(RequestBasicAI.apply)
+  implicit val f3 = jsonFormat2(RequestRandomAI.apply)
+  implicit val f4 = jsonFormat1(RequestParseNotation.apply)
+  implicit val f5 = jsonFormat2(RequestConvertNotation.apply)
+}
+
+trait OstinatoServerRoute extends JsonSupport {
+  implicit object AnyJsonFormat extends JsonFormat[Any] {
+    def write(x: Any) = x match {
+      case n: Int => JsNumber(n)
+      case s: String => JsString(s)
+      case b: Boolean if b == true => JsTrue
+      case b: Boolean if b == false => JsFalse
+    }
+    def read(value: JsValue) = value match {
+      case JsNumber(n) => n.intValue()
+      case JsString(s) => s
+      case JsTrue => true
+      case JsFalse => false
+      case _ => "unimplemented"
+    }
+  }
+
   val logger: LoggingAdapter
 
   val optionsHeaders = List(RawHeader("Access-Control-Allow-Origin", "*"),
@@ -45,41 +79,33 @@ trait OstinatoServerRoute {
     } ~
         post {
           path("move") {
-            entity(as[String])(serve[Map[String, (String, String, String)]](_, {
-              case m => (api.move _).tupled(m("data")) }))
-          } ~
-            path("basicAiMove") {
-              entity(as[String])(serve[Map[String, (String, String, Int, Boolean)]](_, {
-                case m => (api.basicAiMove _).tupled(m("data"))}))
-            } ~
-            path("randomAiMove") {
-              entity(as[String])(serve[Map[String, (String, String)]](_, {
-                case m => (api.randomAiMove _).tupled(m("data"))}))
-            } ~
-            path("parseNotation") {
-              entity(as[String])(serve[Map[String, (String, Boolean)]](_, {
-                case m => (api.parseNotation _).tupled(m("data"))}))
-            } ~
-            path("convertNotation") {
-              entity(as[String])(serve[Map[String, (String, String)]](_, {
-                case m => (api.convertNotation _).tupled(m("data"))}))
+            entity(as[RequestMove]) { r =>
+              complete { api.move(r.board, r.from, r.to) }
             }
+          } ~
+          path("basicAiMove") {
+           entity(as[RequestBasicAI]) { r =>
+              complete { api.basicAiMove(r.board, r.player, r.depth, false) }
+            }
+          } ~
+          path("randomAiMove") {
+           entity(as[RequestRandomAI]) { r =>
+              complete { api.randomAiMove(r.board, r.player) }
+            }
+          } ~
+          path("parseNotation") {
+           entity(as[RequestParseNotation]) { r =>
+              complete { api.parseNotation(r.input) }
+            }
+          } ~
+          path("convertNotation") {
+           entity(as[RequestConvertNotation]) { r =>
+              complete { api.convertNotation(r.input, r.notation) }
+            }
+          }
         } ~ options {
       complete { HttpResponse().withHeaders(optionsHeaders) }
     }
-
-  private def serve[T: Manifest](request: String, f: T => Map[String, Any]): StandardRoute = {
-    complete (
-      HttpResponse(
-        entity =
-        JsonUtil.toJson (
-          f (
-            JsonUtil.fromJson[T](URLDecoder.decode(request, "UTF-8"))
-          )
-        )
-      ).withHeaders(`Access-Control-Allow-Origin`.`*`)
-    )
-  }
 }
 
 case class ServerApi() extends Api {
