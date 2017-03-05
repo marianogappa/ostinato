@@ -30,14 +30,14 @@ object Main extends App with OstinatoServerRoute {
 }
 
 case class RequestMove(board: String, from: String, to: String)
-case class RequestBasicAI(board: String, player: String, depth: Int)
+case class RequestBasicAI(board: String, player: String, depth: Int, debug: Boolean)
 case class RequestRandomAI(board: String, player: String)
 case class RequestParseNotation(input: String)
 case class RequestConvertNotation(input: String, notation: String)
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val f1 = jsonFormat3(RequestMove.apply)
-  implicit val f2 = jsonFormat3(RequestBasicAI.apply)
+  implicit val f2 = jsonFormat4(RequestBasicAI.apply)
   implicit val f3 = jsonFormat2(RequestRandomAI.apply)
   implicit val f4 = jsonFormat1(RequestParseNotation.apply)
   implicit val f5 = jsonFormat2(RequestConvertNotation.apply)
@@ -78,34 +78,50 @@ trait OstinatoServerRoute extends JsonSupport {
       }
     } ~
         post {
-          path("move") {
-            entity(as[RequestMove]) { r =>
-              complete { api.move(r.board, r.from, r.to) }
-            }
-          } ~
-          path("basicAiMove") {
-           entity(as[RequestBasicAI]) { r =>
-              complete { api.basicAiMove(r.board, r.player, r.depth, false) }
-            }
-          } ~
-          path("randomAiMove") {
-           entity(as[RequestRandomAI]) { r =>
-              complete { api.randomAiMove(r.board, r.player) }
-            }
-          } ~
-          path("parseNotation") {
-           entity(as[RequestParseNotation]) { r =>
-              complete { api.parseNotation(r.input) }
-            }
-          } ~
-          path("convertNotation") {
-           entity(as[RequestConvertNotation]) { r =>
-              complete { api.convertNotation(r.input, r.notation) }
-            }
+          respondWithAllowOrigin {
+            path("move") {
+              entity(as[RequestMove]) { r =>
+                complete {
+                  api.move(r.board, r.from, r.to)
+                }
+              }
+            } ~
+              path("basicAiMove") {
+                entity(as[RequestBasicAI]) { r =>
+                  complete {
+                    api.basicAiMove(r.board, r.player, r.depth, r.debug)
+                  }
+                }
+              } ~
+              path("randomAiMove") {
+                entity(as[RequestRandomAI]) { r =>
+                  complete {
+                    api.randomAiMove(r.board, r.player)
+                  }
+                }
+              } ~
+              path("parseNotation") {
+                entity(as[RequestParseNotation]) { r =>
+                  complete {
+                    api.parseNotation(r.input)
+                  }
+                }
+              } ~
+              path("convertNotation") {
+                entity(as[RequestConvertNotation]) { r =>
+                  complete {
+                    api.convertNotation(r.input, r.notation)
+                  }
+                }
+              }
           }
         } ~ options {
       complete { HttpResponse().withHeaders(optionsHeaders) }
     }
+
+  def respondWithAllowOrigin =
+    respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
+
 }
 
 case class ServerApi() extends Api {
