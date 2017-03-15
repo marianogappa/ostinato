@@ -89,14 +89,14 @@ trait OstinatoServerRoute extends JsonSupport {
               path("basicAiMove") {
                 entity(as[RequestBasicAI]) { r =>
                   complete {
-                    api.basicAiMove(r.board, r.player, r.depth, r.debug)
+                    api.basicAiMove(r.board, r.depth, r.debug)
                   }
                 }
               } ~
               path("randomAiMove") {
                 entity(as[RequestRandomAI]) { r =>
                   complete {
-                    api.randomAiMove(r.board, r.player)
+                    api.randomAiMove(r.board)
                   }
                 }
               } ~

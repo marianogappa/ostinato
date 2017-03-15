@@ -16,10 +16,9 @@ class Api {
     moveResult(action, game)
   }
 
-  def basicAiMove(fen: String, _player: String, _depth: Int, _debug: Boolean): Map[String, Any] = {
-    val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer
+  def basicAiMove(fen: String, _depth: Int, _debug: Boolean): Map[String, Any] = {
     val game = ChessGame.fromOstinatoString(fen).toOption
-    val action = game flatMap (instantiateChessBasicAi(player, _depth, _debug).nextAction(_))
+    val action = game flatMap (instantiateChessBasicAi(game.get.board.turn, _depth, _debug).nextAction(_))
 
     moveResult(action, game)
   }
@@ -27,10 +26,9 @@ class Api {
   protected def instantiateChessBasicAi(_player: ChessPlayer, _depth: Int, _debug: Boolean) =
     ChessBasicAi(player = _player, debug = _debug, depth = _depth)
 
-  def randomAiMove(fen: String, _player: String): Map[String, Any] = {
-    val player = if (Set("white", "w") contains _player.toLowerCase) WhiteChessPlayer else BlackChessPlayer
+  def randomAiMove(fen: String): Map[String, Any] = {
     val game = ChessGame.fromOstinatoString(fen).toOption
-    val action = game flatMap (ChessRandomAi(player).nextNonFinalAction(_))
+    val action = game flatMap (ChessRandomAi(game.get.board.turn).nextNonFinalAction(_))
 
     moveResult(action, game)
   }
