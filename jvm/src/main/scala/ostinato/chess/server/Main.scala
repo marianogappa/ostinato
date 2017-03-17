@@ -27,6 +27,7 @@ object Main extends App with OstinatoServerRoute {
   val logger = Logging(system, getClass)
 
   val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 51234)
+  bindingFuture foreach (_ => println("Ostinato server is listening on port 51234. Try `curl localhost:51234/healthcheck`."))
 }
 
 case class RequestMove(board: String, from: String, to: String)
