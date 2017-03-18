@@ -34,12 +34,9 @@ object Main extends App with OstinatoServerRoute {
 
 case class RequestMove(board: String, from: String, to: String)
 
-case class RequestBasicAI(board: String,
-                          player: String,
-                          depth: Int,
-                          debug: Boolean)
+case class RequestBasicAI(board: String, depth: Int, debug: Boolean)
 
-case class RequestRandomAI(board: String, player: String)
+case class RequestRandomAI(board: String)
 
 case class RequestParseNotation(input: String)
 
@@ -47,8 +44,8 @@ case class RequestConvertNotation(input: String, notation: String)
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val f1 = jsonFormat3(RequestMove.apply)
-  implicit val f2 = jsonFormat4(RequestBasicAI.apply)
-  implicit val f3 = jsonFormat2(RequestRandomAI.apply)
+  implicit val f2 = jsonFormat3(RequestBasicAI.apply)
+  implicit val f3 = jsonFormat1(RequestRandomAI.apply)
   implicit val f4 = jsonFormat1(RequestParseNotation.apply)
   implicit val f5 = jsonFormat2(RequestConvertNotation.apply)
 }
