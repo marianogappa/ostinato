@@ -127,9 +127,9 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="ostinato.chess">chess</a></dd></dl></div>
     </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="object" href="JsonUtil$.html" title=""></a>
-                        <a href="JsonUtil$.html" title="">
-                          JsonUtil
+                        <a class="trait" href="JsonSupport.html" title=""></a>
+                        <a href="JsonSupport.html" title="">
+                          JsonSupport
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -148,6 +148,36 @@
                         <a class="class" href="ParallelisedChessBasicAi.html" title=""></a>
                         <a href="ParallelisedChessBasicAi.html" title="">
                           ParallelisedChessBasicAi
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestBasicAI.html" title=""></a>
+                        <a href="RequestBasicAI.html" title="">
+                          RequestBasicAI
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestConvertNotation.html" title=""></a>
+                        <a href="RequestConvertNotation.html" title="">
+                          RequestConvertNotation
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestMove.html" title=""></a>
+                        <a href="RequestMove.html" title="">
+                          RequestMove
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestParseNotation.html" title=""></a>
+                        <a href="RequestParseNotation.html" title="">
+                          RequestParseNotation
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestRandomAI.html" title=""></a>
+                        <a href="RequestRandomAI.html" title="">
+                          RequestRandomAI
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -324,9 +354,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="ostinato.chess.api.Api#basicAiMove" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="basicAiMove(fen:String,_player:String,_depth:Int,_debug:Boolean):Map[String,Any]"></a><a id="basicAiMove(String,String,Int,Boolean):Map[String,Any]"></a>
+      <a id="basicAiMove(fen:String,_depth:Int,_debug:Boolean):Map[String,Any]"></a><a id="basicAiMove(String,Int,Boolean):Map[String,Any]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/ServerApi.html#basicAiMove(fen:String,_player:String,_depth:Int,_debug:Boolean):Map[String,Any]" title="Permalink">
+      <a href="../../../ostinato/chess/server/ServerApi.html#basicAiMove(fen:String,_depth:Int,_debug:Boolean):Map[String,Any]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -335,7 +365,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">basicAiMove</span><span class="params">(<span name="fen">fen: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_player">_player: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_depth">_depth: <span class="extype" name="scala.Int">Int</span></span>, <span name="_debug">_debug: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="name">basicAiMove</span><span class="params">(<span name="fen">fen: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_depth">_depth: <span class="extype" name="scala.Int">Int</span></span>, <span name="_debug">_debug: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/Api.html" class="extype" name="ostinato.chess.api.Api">Api</a></dd></dl></div>
@@ -544,9 +574,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.chess.api.Api#parseNotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseNotation(input:String,useless:Boolean):Map[String,Any]"></a><a id="parseNotation(String,Boolean):Map[String,Any]"></a>
+      <a id="parseNotation(input:String):Map[String,Any]"></a><a id="parseNotation(String):Map[String,Any]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/ServerApi.html#parseNotation(input:String,useless:Boolean):Map[String,Any]" title="Permalink">
+      <a href="../../../ostinato/chess/server/ServerApi.html#parseNotation(input:String):Map[String,Any]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -555,14 +585,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="useless">useless: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="name">parseNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/Api.html" class="extype" name="ostinato.chess.api.Api">Api</a></dd></dl></div>
     </li><li name="ostinato.chess.api.Api#randomAiMove" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="randomAiMove(fen:String,_player:String):Map[String,Any]"></a><a id="randomAiMove(String,String):Map[String,Any]"></a>
+      <a id="randomAiMove(fen:String):Map[String,Any]"></a><a id="randomAiMove(String):Map[String,Any]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/ServerApi.html#randomAiMove(fen:String,_player:String):Map[String,Any]" title="Permalink">
+      <a href="../../../ostinato/chess/server/ServerApi.html#randomAiMove(fen:String):Map[String,Any]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -571,7 +601,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">randomAiMove</span><span class="params">(<span name="fen">fen: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_player">_player: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="name">randomAiMove</span><span class="params">(<span name="fen">fen: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/Api.html" class="extype" name="ostinato.chess.api.Api">Api</a></dd></dl></div>

@@ -600,7 +600,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessOptimisations</span><span class="params">(<span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="dontCalculateHistory">dontCalculateHistory: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../core/Rules.html" class="extype" name="ostinato.core.Rules">Rules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ChessOptimisations</span><span class="params">(<span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="dontCalculateHistory">dontCalculateHistory: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="optimistic">optimistic: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../core/Rules.html" class="extype" name="ostinato.core.Rules">Rules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
@@ -656,9 +656,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.chess.core.ChessOptimisations#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(kingIsTakeable:Boolean,checkForThreatens:Boolean,validateDeltasOnActionCalculation:Boolean,extraValidationOnActionApply:Boolean,dontCalculateHistory:Boolean):ostinato.chess.core.ChessOptimisations"></a><a id="&lt;init&gt;:ChessOptimisations"></a>
+      <a id="&lt;init&gt;(kingIsTakeable:Boolean,checkForThreatens:Boolean,validateDeltasOnActionCalculation:Boolean,extraValidationOnActionApply:Boolean,dontCalculateHistory:Boolean,optimistic:Boolean):ostinato.chess.core.ChessOptimisations"></a><a id="&lt;init&gt;:ChessOptimisations"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/core/ChessOptimisations.html#&lt;init&gt;(kingIsTakeable:Boolean,checkForThreatens:Boolean,validateDeltasOnActionCalculation:Boolean,extraValidationOnActionApply:Boolean,dontCalculateHistory:Boolean):ostinato.chess.core.ChessOptimisations" title="Permalink">
+      <a href="../../../ostinato/chess/core/ChessOptimisations.html#&lt;init&gt;(kingIsTakeable:Boolean,checkForThreatens:Boolean,validateDeltasOnActionCalculation:Boolean,extraValidationOnActionApply:Boolean,dontCalculateHistory:Boolean,optimistic:Boolean):ostinato.chess.core.ChessOptimisations" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -667,7 +667,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ChessOptimisations</span><span class="params">(<span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="dontCalculateHistory">dontCalculateHistory: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">ChessOptimisations</span><span class="params">(<span name="kingIsTakeable">kingIsTakeable: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkForThreatens">checkForThreatens: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="validateDeltasOnActionCalculation">validateDeltasOnActionCalculation: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="extraValidationOnActionApply">extraValidationOnActionApply: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="dontCalculateHistory">dontCalculateHistory: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="optimistic">optimistic: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
       </span>
       
       
@@ -949,6 +949,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.ChessOptimisations#optimistic" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="optimistic:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/core/ChessOptimisations.html#optimistic:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">optimistic</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

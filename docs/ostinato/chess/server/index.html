@@ -179,9 +179,9 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="ostinato.chess">chess</a></dd></dl></div>
     </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="object" href="JsonUtil$.html" title=""></a>
-                        <a href="JsonUtil$.html" title="">
-                          JsonUtil
+                        <a class="trait" href="JsonSupport.html" title=""></a>
+                        <a href="JsonSupport.html" title="">
+                          JsonSupport
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -200,6 +200,36 @@
                         <a class="class" href="ParallelisedChessBasicAi.html" title=""></a>
                         <a href="ParallelisedChessBasicAi.html" title="">
                           ParallelisedChessBasicAi
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestBasicAI.html" title=""></a>
+                        <a href="RequestBasicAI.html" title="">
+                          RequestBasicAI
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestConvertNotation.html" title=""></a>
+                        <a href="RequestConvertNotation.html" title="">
+                          RequestConvertNotation
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestMove.html" title=""></a>
+                        <a href="RequestMove.html" title="">
+                          RequestMove
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestParseNotation.html" title=""></a>
+                        <a href="RequestParseNotation.html" title="">
+                          RequestParseNotation
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="RequestRandomAI.html" title=""></a>
+                        <a href="RequestRandomAI.html" title="">
+                          RequestRandomAI
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -270,10 +300,28 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="ostinato.chess.server.OstinatoServerRoute" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OstinatoServerRouteextendsAnyRef"></a><a id="OstinatoServerRoute:OstinatoServerRoute"></a>
+              <ol><li name="ostinato.chess.server.JsonSupport" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JsonSupportextendsSprayJsonSupportwithDefaultJsonProtocol"></a><a id="JsonSupport:JsonSupport"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/index.html#OstinatoServerRouteextendsAnyRef" title="Permalink">
+      <a href="../../../ostinato/chess/server/index.html#JsonSupportextendsSprayJsonSupportwithDefaultJsonProtocol" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="JsonSupport.html">
+              <span class="name">JsonSupport</span>
+            </a><span class="result"> extends <span class="extype" name="akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport">SprayJsonSupport</span> with <span class="extype" name="spray.json.DefaultJsonProtocol">DefaultJsonProtocol</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.OstinatoServerRoute" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OstinatoServerRouteextendsJsonSupport"></a><a id="OstinatoServerRoute:OstinatoServerRoute"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#OstinatoServerRouteextendsJsonSupport" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -284,7 +332,7 @@
       <span class="symbol">
         <a title="" href="OstinatoServerRoute.html">
               <span class="name">OstinatoServerRoute</span>
-            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+            </a><span class="result"> extends <a href="JsonSupport.html" class="extype" name="ostinato.chess.server.JsonSupport">JsonSupport</a></span>
       </span>
       
       
@@ -303,6 +351,96 @@
         <a title="" href="ParallelisedChessBasicAi.html">
               <span class="name">ParallelisedChessBasicAi</span>
             </a><span class="result"> extends <a href="../ai/ChessBasicAi.html" class="extype" name="ostinato.chess.ai.ChessBasicAi">ChessBasicAi</a></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.RequestBasicAI" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestBasicAIextendsProductwithSerializable"></a><a id="RequestBasicAI:RequestBasicAI"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#RequestBasicAIextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RequestBasicAI.html">
+              <span class="name">RequestBasicAI</span>
+            </a><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="depth">depth: <span class="extype" name="scala.Int">Int</span></span>, <span name="debug">debug: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.RequestConvertNotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestConvertNotationextendsProductwithSerializable"></a><a id="RequestConvertNotation:RequestConvertNotation"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#RequestConvertNotationextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RequestConvertNotation.html">
+              <span class="name">RequestConvertNotation</span>
+            </a><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="notation">notation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.RequestMove" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestMoveextendsProductwithSerializable"></a><a id="RequestMove:RequestMove"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#RequestMoveextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RequestMove.html">
+              <span class="name">RequestMove</span>
+            </a><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="from">from: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="to">to: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.RequestParseNotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestParseNotationextendsProductwithSerializable"></a><a id="RequestParseNotation:RequestParseNotation"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#RequestParseNotationextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RequestParseNotation.html">
+              <span class="name">RequestParseNotation</span>
+            </a><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.server.RequestRandomAI" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestRandomAIextendsProductwithSerializable"></a><a id="RequestRandomAI:RequestRandomAI"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/server/index.html#RequestRandomAIextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RequestRandomAI.html">
+              <span class="name">RequestRandomAI</span>
+            </a><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       
@@ -332,25 +470,7 @@
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="ostinato.chess.server.JsonUtil" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="JsonUtil"></a><a id="JsonUtil:JsonUtil"></a>
-      <span class="permalink">
-      <a href="../../../ostinato/chess/server/index.html#JsonUtil" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="JsonUtil$.html">
-              <span class="name">JsonUtil</span>
-            </a>
-      </span>
-      
-      
-    </li><li name="ostinato.chess.server.Main" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="ostinato.chess.server.Main" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Main"></a><a id="Main:Main"></a>
       <span class="permalink">
       <a href="../../../ostinato/chess/server/index.html#Main" title="Permalink">
