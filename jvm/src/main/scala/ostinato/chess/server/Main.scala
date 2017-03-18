@@ -128,6 +128,11 @@ trait OstinatoServerRoute extends JsonSupport {
               }
             }
         }
+      } ~
+      path("initialBoard") {
+        complete {
+          Map("board" -> api.defaultGame)
+        }
       } ~ options {
       complete {
         HttpResponse().withHeaders(optionsHeaders)
