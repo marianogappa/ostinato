@@ -34,7 +34,7 @@ object Main extends App with OstinatoServerRoute {
 
 case class RequestMove(board: String, from: String, to: String)
 
-case class RequestBasicAI(board: String, depth: Int, debug: Boolean)
+case class RequestBasicAI(board: String, depth: Option[Int], debug: Option[Boolean])
 
 case class RequestRandomAI(board: String)
 
@@ -102,7 +102,7 @@ trait OstinatoServerRoute extends JsonSupport {
             path("basicAiMove") {
               entity(as[RequestBasicAI]) { r =>
                 complete {
-                  api.basicAiMove(r.board, r.depth, r.debug)
+                  api.basicAiMove(r.board, r.depth.getOrElse(2), r.debug.getOrElse(false))
                 }
               }
             } ~
