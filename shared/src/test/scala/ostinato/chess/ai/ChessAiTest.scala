@@ -36,6 +36,7 @@ class ChessAiTest extends FunSpec with Matchers {
 
   trait Fixture {
     val opts = ChessOptimisations.default
+
     def _actions(implicit opts: ChessOptimisations): Set[ChessAction]
 
     lazy val board = new ChessBoard(grid = Vector()) {
@@ -44,4 +45,5 @@ class ChessAiTest extends FunSpec with Matchers {
 
     lazy val game = new ChessGame(board, opts)
   }
+
 }

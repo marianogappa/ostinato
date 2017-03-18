@@ -16,103 +16,147 @@ class FenNotationParserTest extends FunSpec with Matchers {
       ChessGame.defaultGame.board.toShortFen shouldBe "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     }
     it("should encode this board") {
-      ChessGame.fromGridString(
-        """.......♔
-          |........
-          |♚.♙.....
-          |.......♟
-          |........
-          |........
-          |........
-          |........
-          |""".stripMargin).get.board.toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
+      ChessGame
+        .fromGridString(""".......♔
+            |........
+            |♚.♙.....
+            |.......♟
+            |........
+            |........
+            |........
+            |........
+            |""".stripMargin)
+        .get
+        .board
+        .toShortFen shouldBe "7K/8/k1P5/7p/8/8/8/8"
     }
     it("should find invalid chess grid size") {
       val fenGame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK b KQkq - 0 1"
-      ChessGame.fromFen(fenGame) shouldBe Failure(InvalidChessGridSizeException)
+      ChessGame.fromFen(fenGame) shouldBe Failure(
+        InvalidChessGridSizeException)
     }
     it("should not pass fen regex match") {
       val fenGame = "rnbqk@@@r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-      ChessGame.fromFen(fenGame) shouldBe Failure(FenStringRegexMismatchException)
+      ChessGame.fromFen(fenGame) shouldBe Failure(
+        FenStringRegexMismatchException)
     }
   }
 
   describe("from short FEN Notation") {
     it("should decode a default chess setup in short FEN Notation") {
-      ChessGame.fromShortFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") shouldBe Success(ChessGame.defaultGame)
+      ChessGame.fromShortFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") shouldBe Success(
+        ChessGame.defaultGame)
     }
     it("should decode this chessboard in short FEN Notation") {
-      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Success(ChessGame.fromGridString(
-        """.......♔
-          |........
-          |♚.♙.....
-          |.......♟
-          |........
-          |........
-          |........
-          |........
-          |""".stripMargin).get)
+      ChessGame.fromShortFen("7K/8/k1P5/7p/8/8/8/8") shouldBe Success(
+        ChessGame.fromGridString(""".......♔
+            |........
+            |♚.♙.....
+            |.......♟
+            |........
+            |........
+            |........
+            |........
+            |""".stripMargin).get)
     }
     it("should not decode an incomplete chessboard") {
-      ChessGame.fromShortFen("7K/8/k1P5/7p/8") shouldBe Failure(InvalidChessGridSizeException)
+      ChessGame.fromShortFen("7K/8/k1P5/7p/8") shouldBe Failure(
+        InvalidChessGridSizeException)
     }
     it("should find invalid chess grid size") {
       val fenGame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK"
-      ChessGame.fromShortFen(fenGame) shouldBe Failure(InvalidChessGridSizeException)
+      ChessGame.fromShortFen(fenGame) shouldBe Failure(
+        InvalidChessGridSizeException)
     }
     it("should not pass fen regex match") {
       val fenGame = "rnbqk@@@r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-      ChessGame.fromShortFen(fenGame) shouldBe Failure(FenStringRegexMismatchException)
+      ChessGame.fromShortFen(fenGame) shouldBe Failure(
+        FenStringRegexMismatchException)
     }
   }
 
   describe("from FEN Notation") {
     it("should decode a default chess setup in FEN Notation") {
-      ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") shouldBe Success(ChessGame.defaultGame)
+      ChessGame.fromFen(
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") shouldBe Success(
+        ChessGame.defaultGame)
     }
     it("should decode the default chess setup plus an e4 in FEN Notation") {
-      ChessGame.fromFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1") shouldBe
-      Success(ChessGame.fromGridString(
-      """♜♞♝♛♚♝♞♜
-        |♟♟♟♟♟♟♟♟
-        |........
-        |........
-        |....♙...
-        |....↑...
-        |♙♙♙♙.♙♙♙
-        |♖♘♗♕♔♗♘♖
-        |""".stripMargin, turn = BlackChessPlayer, castlingFullyAvailable, 1, 0).get)
+      ChessGame.fromFen(
+        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1") shouldBe
+        Success(
+          ChessGame
+            .fromGridString(
+              """♜♞♝♛♚♝♞♜
+                |♟♟♟♟♟♟♟♟
+                |........
+                |........
+                |....♙...
+                |....↑...
+                |♙♙♙♙.♙♙♙
+                |♖♘♗♕♔♗♘♖
+                |""".stripMargin,
+              turn = BlackChessPlayer,
+              castlingFullyAvailable,
+              1,
+              0
+            )
+            .get)
     }
     it("should decode a chess setup with black en passant in FEN Notation") {
-      ChessGame.fromFen("rnbqkbnr/p1pppppp/8/1p6/8/8/PPPPPPPP/RNBQKBNR w KQkq b6 4 5") shouldBe
-      Success(ChessGame.fromGridString(
-      """♜♞♝♛♚♝♞♜
-        |♟.♟♟♟♟♟♟
-        |.↓......
-        |.♟......
-        |........
-        |........
-        |♙♙♙♙♙♙♙♙
-        |♖♘♗♕♔♗♘♖
-        |""".stripMargin, turn = WhiteChessPlayer, castlingFullyAvailable, 5, 4).get)
+      ChessGame.fromFen(
+        "rnbqkbnr/p1pppppp/8/1p6/8/8/PPPPPPPP/RNBQKBNR w KQkq b6 4 5") shouldBe
+        Success(
+          ChessGame
+            .fromGridString(
+              """♜♞♝♛♚♝♞♜
+                |♟.♟♟♟♟♟♟
+                |.↓......
+                |.♟......
+                |........
+                |........
+                |♙♙♙♙♙♙♙♙
+                |♖♘♗♕♔♗♘♖
+                |""".stripMargin,
+              turn = WhiteChessPlayer,
+              castlingFullyAvailable,
+              5,
+              4
+            )
+            .get)
     }
 
     val Q: Map[(ChessPlayer, CastlingSide.Value), Boolean] =
-      castlingFullyUnavailable ++ Map((WhiteChessPlayer, CastlingSide.Queenside) -> true)
+      castlingFullyUnavailable ++ Map(
+        (WhiteChessPlayer, CastlingSide.Queenside) -> true)
     val K: Map[(ChessPlayer, CastlingSide.Value), Boolean] =
-      castlingFullyUnavailable ++ Map((WhiteChessPlayer, CastlingSide.Kingside) -> true)
+      castlingFullyUnavailable ++ Map(
+        (WhiteChessPlayer, CastlingSide.Kingside) -> true)
     val q: Map[(ChessPlayer, CastlingSide.Value), Boolean] =
-      castlingFullyUnavailable ++ Map((BlackChessPlayer, CastlingSide.Queenside) -> true)
+      castlingFullyUnavailable ++ Map(
+        (BlackChessPlayer, CastlingSide.Queenside) -> true)
     val k: Map[(ChessPlayer, CastlingSide.Value), Boolean] =
-      castlingFullyUnavailable ++ Map((BlackChessPlayer, CastlingSide.Kingside) -> true)
+      castlingFullyUnavailable ++ Map(
+        (BlackChessPlayer, CastlingSide.Kingside) -> true)
 
-    val castlingMap: List[(String, Map[(ChessPlayer, CastlingSide.Value), Boolean])] = List(
-      ("Q", Q), ("K", K), ("q", q), ("k", k), ("KQkq", castlingFullyAvailable), ("-", castlingFullyUnavailable)
+    val castlingMap
+      : List[(String, Map[(ChessPlayer, CastlingSide.Value), Boolean])] = List(
+      ("Q", Q),
+      ("K", K),
+      ("q", q),
+      ("k", k),
+      ("KQkq", castlingFullyAvailable),
+      ("-", castlingFullyUnavailable)
     )
 
-    castlingMap foreach { case (k, v) => it(s"should decode a chess setup with castling '$k'") {
-      ChessGame.fromFen(s"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w $k - 0 1") shouldBe
-        Success(ChessGame.defaultGame.copy(board = ChessGame.defaultGame.board.copy(castlingAvailable = v)))
-    }}
+    castlingMap foreach {
+      case (k, v) =>
+        it(s"should decode a chess setup with castling '$k'") {
+          ChessGame.fromFen(
+            s"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w $k - 0 1") shouldBe
+            Success(ChessGame.defaultGame.copy(
+              board = ChessGame.defaultGame.board.copy(castlingAvailable = v)))
+        }
+    }
   }
 }

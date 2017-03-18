@@ -7,8 +7,7 @@ import ostinato.core.XY
 class ChessBasicAiTest extends FunSpec with Matchers {
   describe("Basic AI") {
     it("should choose check mate if available") {
-      val game = ChessGame.fromGridString(
-        """........
+      val game = ChessGame.fromGridString("""........
           |..♔.....
           |........
           |........
@@ -18,11 +17,14 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |.....♚..""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
-        Some(MoveAction(♜(XY(0, 5), WhiteChessPlayer), XY(0, 2), isCheck = true, isCheckmate = true))
+        Some(
+          MoveAction(♜(XY(0, 5), WhiteChessPlayer),
+                     XY(0, 2),
+                     isCheck = true,
+                     isCheckmate = true))
     }
     it("should choose capturing if available, given no check mate available") {
-      val game = ChessGame.fromGridString(
-        """........
+      val game = ChessGame.fromGridString("""........
           |..♔.....
           |........
           |........
@@ -32,11 +34,14 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |.....♚..""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
-        Some(CaptureAction(♜(XY(0, 5), WhiteChessPlayer), XY(4, 0), ♞(XY(4, 5), BlackChessPlayer)))
+        Some(
+          CaptureAction(♜(XY(0, 5), WhiteChessPlayer),
+                        XY(4, 0),
+                        ♞(XY(4, 5), BlackChessPlayer)))
     }
-    it("should not choose capturing if it will leave a threatened undefended piece of greater value") {
-      val game = ChessGame.fromGridString(
-        """........
+    it(
+      "should not choose capturing if it will leave a threatened undefended piece of greater value") {
+      val game = ChessGame.fromGridString("""........
           |..♔.....
           |♙.......
           |........
@@ -45,11 +50,11 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |.....♚..
           |........""".stripMargin).get
 
-      ChessBasicAi(WhiteChessPlayer).nextAction(game) should not be a [CaptureAction]
+      ChessBasicAi(WhiteChessPlayer).nextAction(game) should not be a[
+        CaptureAction]
     }
     it("should choose to promote to Queen") {
-      val game = ChessGame.fromGridString(
-        """........
+      val game = ChessGame.fromGridString("""........
           |.♔..♙...
           |....♚...
           |........
@@ -59,11 +64,15 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |........""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
-        Some(PromoteAction(♟(XY(4, 1), WhiteChessPlayer, -1), XY(0, -1), ♛(XY(4, 0), WhiteChessPlayer), isCheck = true, isCheckmate = false))
+        Some(
+          PromoteAction(♟(XY(4, 1), WhiteChessPlayer, -1),
+                        XY(0, -1),
+                        ♛(XY(4, 0), WhiteChessPlayer),
+                        isCheck = true,
+                        isCheckmate = false))
     }
     it("should choose to promote to Knight") {
-      val game = ChessGame.fromGridString(
-        """........
+      val game = ChessGame.fromGridString("""........
           |♚.♙.....
           |.......♖
           |...♗....
@@ -73,11 +82,16 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |♘♖.....♔""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
-        Some(PromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1), XY(0, -1), ♞(XY(2, 0), WhiteChessPlayer), isCheck = true, isCheckmate = true))
+        Some(
+          PromoteAction(♟(XY(2, 1), WhiteChessPlayer, -1),
+                        XY(0, -1),
+                        ♞(XY(2, 0), WhiteChessPlayer),
+                        isCheck = true,
+                        isCheckmate = true))
     }
-    it("should choose to capture when the enemy piece has more value, even if it is defended") {
-      val game = ChessGame.fromGridString(
-        """........
+    it(
+      "should choose to capture when the enemy piece has more value, even if it is defended") {
+      val game = ChessGame.fromGridString("""........
           |♚.......
           |..♗.....
           |........
@@ -87,20 +101,30 @@ class ChessBasicAiTest extends FunSpec with Matchers {
           |.......♔""".stripMargin).get
 
       ChessBasicAi(WhiteChessPlayer).nextAction(game) shouldBe
-        Some(CaptureAction(♝(XY(2, 2), WhiteChessPlayer), XY(2, 2), ♜(XY(4, 4), BlackChessPlayer)))
+        Some(
+          CaptureAction(♝(XY(2, 2), WhiteChessPlayer),
+                        XY(2, 2),
+                        ♜(XY(4, 4), BlackChessPlayer)))
     }
-    it("should prefer not to exchange rooks given it has material value disadvantage") {
-      val game = ChessGame.fromGridString(
-        """♜.......
+    it(
+      "should prefer not to exchange rooks given it has material value disadvantage") {
+      val game = ChessGame
+        .fromGridString(
+          """♜.......
           |........
           |..♟.....
           |........
           |.....♙..
           |♖.......
           |.♙......
-          |........""".stripMargin, turn = BlackChessPlayer).get
+          |........""".stripMargin,
+          turn = BlackChessPlayer
+        )
+        .get
 
-      ChessBasicAi(BlackChessPlayer, depth = 0).nextAction(game).get shouldBe a[MoveAction]
+      ChessBasicAi(BlackChessPlayer, depth = 0)
+        .nextAction(game)
+        .get shouldBe a[MoveAction]
     }
   }
 }

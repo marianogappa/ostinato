@@ -27,13 +27,22 @@ object Main extends App with OstinatoServerRoute {
   val logger = Logging(system, getClass)
 
   val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 51234)
-  bindingFuture foreach (_ => println("Ostinato server is listening on port 51234. Try `curl localhost:51234/healthcheck`."))
+  bindingFuture foreach (_ =>
+    println(
+      "Ostinato server is listening on port 51234. Try `curl localhost:51234/healthcheck`."))
 }
 
 case class RequestMove(board: String, from: String, to: String)
-case class RequestBasicAI(board: String, player: String, depth: Int, debug: Boolean)
+
+case class RequestBasicAI(board: String,
+                          player: String,
+                          depth: Int,
+                          debug: Boolean)
+
 case class RequestRandomAI(board: String, player: String)
+
 case class RequestParseNotation(input: String)
+
 case class RequestConvertNotation(input: String, notation: String)
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
@@ -45,6 +54,7 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 }
 
 trait OstinatoServerRoute extends JsonSupport {
+
   implicit object AnyJsonFormat extends JsonFormat[Any] {
     def write(x: Any) = x match {
       case n: Int => JsNumber(n)
@@ -52,6 +62,7 @@ trait OstinatoServerRoute extends JsonSupport {
       case b: Boolean if b == true => JsTrue
       case b: Boolean if b == false => JsFalse
     }
+
     def read(value: JsValue) = value match {
       case JsNumber(n) => n.intValue()
       case JsString(s) => s
@@ -63,9 +74,13 @@ trait OstinatoServerRoute extends JsonSupport {
 
   val logger: LoggingAdapter
 
-  val optionsHeaders = List(RawHeader("Access-Control-Allow-Origin", "*"),
-    RawHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE"),
-    RawHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"))
+  val optionsHeaders = List(
+    RawHeader("Access-Control-Allow-Origin", "*"),
+    RawHeader("Access-Control-Allow-Methods",
+              "GET, POST, PUT, OPTIONS, DELETE"),
+    RawHeader("Access-Control-Allow-Headers",
+              "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+  )
 
   val api = ServerApi()
 
@@ -78,46 +93,48 @@ trait OstinatoServerRoute extends JsonSupport {
         }
       }
     } ~
-        post {
-          respondWithAllowOrigin {
-            path("move") {
-              entity(as[RequestMove]) { r =>
+      post {
+        respondWithAllowOrigin {
+          path("move") {
+            entity(as[RequestMove]) { r =>
+              complete {
+                api.move(r.board, r.from, r.to)
+              }
+            }
+          } ~
+            path("basicAiMove") {
+              entity(as[RequestBasicAI]) { r =>
                 complete {
-                  api.move(r.board, r.from, r.to)
+                  api.basicAiMove(r.board, r.depth, r.debug)
                 }
               }
             } ~
-              path("basicAiMove") {
-                entity(as[RequestBasicAI]) { r =>
-                  complete {
-                    api.basicAiMove(r.board, r.depth, r.debug)
-                  }
-                }
-              } ~
-              path("randomAiMove") {
-                entity(as[RequestRandomAI]) { r =>
-                  complete {
-                    api.randomAiMove(r.board)
-                  }
-                }
-              } ~
-              path("parseNotation") {
-                entity(as[RequestParseNotation]) { r =>
-                  complete {
-                    api.parseNotation(r.input)
-                  }
-                }
-              } ~
-              path("convertNotation") {
-                entity(as[RequestConvertNotation]) { r =>
-                  complete {
-                    api.convertNotation(r.input, r.notation)
-                  }
+            path("randomAiMove") {
+              entity(as[RequestRandomAI]) { r =>
+                complete {
+                  api.randomAiMove(r.board)
                 }
               }
-          }
-        } ~ options {
-      complete { HttpResponse().withHeaders(optionsHeaders) }
+            } ~
+            path("parseNotation") {
+              entity(as[RequestParseNotation]) { r =>
+                complete {
+                  api.parseNotation(r.input)
+                }
+              }
+            } ~
+            path("convertNotation") {
+              entity(as[RequestConvertNotation]) { r =>
+                complete {
+                  api.convertNotation(r.input, r.notation)
+                }
+              }
+            }
+        }
+      } ~ options {
+      complete {
+        HttpResponse().withHeaders(optionsHeaders)
+      }
     }
 
   def respondWithAllowOrigin =
@@ -126,6 +143,8 @@ trait OstinatoServerRoute extends JsonSupport {
 }
 
 case class ServerApi() extends Api {
-  override protected def instantiateChessBasicAi(_player: ChessPlayer, _depth: Int, _debug: Boolean) =
+  override protected def instantiateChessBasicAi(_player: ChessPlayer,
+                                                 _depth: Int,
+                                                 _debug: Boolean) =
     new ParallelisedChessBasicAi(_player, _depth, _debug)
 }

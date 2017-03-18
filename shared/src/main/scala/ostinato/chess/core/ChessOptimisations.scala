@@ -13,14 +13,14 @@ object ChessOptimisations {
   )
 
   def noCheckForThreatens = default.copy(checkForThreatens = false)
+
   def beOptimistic = default.copy(optimistic = true)
 }
 
-case class ChessOptimisations(
-  kingIsTakeable: Boolean,
-  checkForThreatens: Boolean,
-  validateDeltasOnActionCalculation: Boolean,
-  extraValidationOnActionApply: Boolean,
-  dontCalculateHistory: Boolean,
-  optimistic: Boolean) extends Rules
-
+case class ChessOptimisations(kingIsTakeable: Boolean,
+                              checkForThreatens: Boolean,
+                              validateDeltasOnActionCalculation: Boolean,
+                              extraValidationOnActionApply: Boolean,
+                              dontCalculateHistory: Boolean,
+                              optimistic: Boolean)
+    extends Rules
