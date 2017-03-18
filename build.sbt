@@ -2,7 +2,7 @@ import sbt.Keys._
 
 name := "ostinato"
 
-version := "1.0.1"
+version := "1.0.2"
 
 enablePlugins(ScalaJSPlugin)
 
@@ -22,7 +22,7 @@ lazy val ostinato = crossProject.in(file(".")).
   settings (
     name := "ostinato",
 
-    version := "1.0.1",
+    version := "1.0.2",
 
     organization := "org.gappa",
 
