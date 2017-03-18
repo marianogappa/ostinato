@@ -26,6 +26,8 @@ object Js {
   def basicAiMove(fen: String, _depth: Int, _debug: Boolean) =
     sjs(api.basicAiMove(fen, _depth, _debug))
 
+  def initialBoard() = sjs(Map("board" -> defaultGame))
+
   private def sjs(m: Map[String, Any]) =
     m.mapValues {
       case a: Array[_] ⇒ a.toJSArray
