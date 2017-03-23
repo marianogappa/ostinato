@@ -28,17 +28,15 @@ Two AI's playing each other (making random moves).
 
 ## Features
 
-- Feature parity with the more mature [chess.js](https://github.com/jhlywa/chess.js) minus PGN headers and undo, and plus a lot of useful stuff!
 - Supporting the following Chess notations (with variants): PGN, Algebraic, Figurine, Coordinate, Descriptive, ICCF, Smith and FEN
-- Support for importing/exporting a game state encoded in FEN notation
 - Random and Basic AI available based on minimax with alpha-beta pruning
-
-## Technical features
 - Compiled for JVM and JS => can serve as backend or in the frontend
 - Fully stateless design => thread-safe & scalable; no shared mutable state & no side-effects
 - `Functional design; no nulls or exception handling` x `Object Oriented design with inheritance but no downcasting`
+- ostinato.js on the front-end, Akka HTTP Server on the back-end
+- [Docker Hub image](https://hub.docker.com/r/marianogappa/ostinato/) available; Kubernetes deployment, service and auto-scaling examples on the [blogpost](http://marianogappa.github.io/software/2017/03/23/ostinato-a-chess-engine-written-in-scala-that-runs-on-the-browser-docker-and-the-repl/)
 
-### Import a ChessBoard
+### Importing a ChessBoard
 ```
 $ sbt pack && scala -cp target/pack/lib/ostinato_2.12-1.0.2.jar
 
@@ -84,7 +82,7 @@ scala> actions map game.board.doAction foreach (b => println(b.get + "\n"))
 ...♜....    ........    ........    ........    ........    ........    ........
 ```
 
-### Import game from any known notation, without specifying which one
+### Importing a game from any known notation, without specifying which one
 ```
 it("should parse the same game in different notations") {
       val pgn =
