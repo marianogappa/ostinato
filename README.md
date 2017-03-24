@@ -4,7 +4,7 @@ A chess library that runs on the server (Scala), on the browser (ScalaJS) and on
 [![Build Status](https://img.shields.io/travis/marianogappa/ostinato.svg)](https://travis-ci.org/marianogappa/ostinato)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MarianoGappa/ostinato/master/LICENSE)
 
-[Blogpost](http://marianogappa.github.io/software/2017/03/23/ostinato-a-chess-engine-written-in-scala-that-runs-on-the-browser-docker-and-the-repl/)
+[Blogpost](https://marianogappa.github.io/software/2017/03/24/ostinato-a-chess-engine-written-in-scala-that-runs-on-the-browser-docker-and-the-repl/)
 
 Best introduction to the library with code examples in JavaScript, Scala and in the REPL.
 
