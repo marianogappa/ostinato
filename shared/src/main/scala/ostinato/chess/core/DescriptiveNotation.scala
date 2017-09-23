@@ -40,7 +40,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
 
   protected def capture(a: CaptureAction): Set[String] =
-    fromPiece(a) * "x" * a.toPiece.toDn * checkAndCheckmate(a)
+    fromPiece(a) * "x" * (a.toPiece.toDn * Set("", toPieceDn(a.toPiece)) * Set("", toPieceYPos(a.toPiece)) ++ Set(toPieceDnPos(a.toPiece))) * checkAndCheckmate(a)
 
   protected def castling(a: CastlingAction): Set[String] =
     castlingSymbol(a) * checkAndCheckmate(a)
@@ -50,10 +50,11 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
 
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2")
 
-  private def fromPiece(a: ChessAction): Set[String] = a.fromPiece.toDn
+  private def fromPiece(a: ChessAction): Set[String] =
+    a.fromPiece.toDn * Set("", "-" + (if (a.fromPiece.pos.x <= 3) "Q" else "K") + fromPieceYPos(a.fromPiece))
 
   private def dash(a: ChessAction): Set[String] =
-    if (r.omitDash) Set() else Set("-")
+    if (r.omitDash) Set("") else Set("-")
 
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
@@ -72,6 +73,32 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
       case p @ DnPos(file, rank) ⇒
         if (r.numericalRankBeforeFile) rank.toString + file else p.toString
     }
+
+  private def toPieceDn(p: ChessPiece): String =
+    Map(0 -> "QR",
+        1 -> "QN",
+        2 -> "QB",
+        3 -> "Q",
+        4 -> "K",
+        5 -> "KB",
+        6 -> "KN",
+        7 -> "KR")(p.pos.x)
+
+  private def toPieceDnPos(p: ChessPiece): String =
+    Map(0 -> "QR",
+        1 -> "QN",
+        2 -> "QB",
+        3 -> "Q",
+        4 -> "K",
+        5 -> "KB",
+        6 -> "KN",
+        7 -> "KR")(p.pos.x) + toPieceYPos(p)
+
+  private def toPieceYPos(p: ChessPiece): String =
+    (if (p.owner == WhiteChessPlayer) p.pos.y+1 else 8-p.pos.y).toString
+
+  private def fromPieceYPos(p: ChessPiece): String =
+    (if (p.owner == BlackChessPlayer) p.pos.y+1 else 8-p.pos.y).toString
 
   private def checkAndCheckmate(a: ChessAction): Set[String] =
     if (a.isCheckmate)

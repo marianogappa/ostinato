@@ -285,7 +285,32 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int)
                      4 -> "KP",
                      5 -> "BP",
                      6 -> "NP",
-                     7 -> "RP")(pos.x))
+                     7 -> "RP")(pos.x),
+                 Map(0 -> "PR",
+                     1 -> "PN",
+                     2 -> "PB",
+                     3 -> "PQ",
+                     4 -> "PK",
+                     5 -> "PB",
+                     6 -> "PN",
+                     7 -> "PR")(pos.x),
+                 Map(0 -> "QRP",
+                     1 -> "QNP",
+                     2 -> "QBP",
+                     3 -> "QP",
+                     4 -> "KP",
+                     5 -> "KBP",
+                     6 -> "KNP",
+                     7 -> "KRP")(pos.x),
+                 Map(0 -> "PQR",
+                     1 -> "PQN",
+                     2 -> "PQB",
+                     3 -> "PQ",
+                     4 -> "PK",
+                     5 -> "PKB",
+                     6 -> "PKN",
+                     7 -> "PKR")(pos.x)
+                 )
   lazy val toIccf = throw new RuntimeException(
     "Pawn does not have an Iccf code") with NoStackTrace
   val toFen = if (owner == WhiteChessPlayer) 'P' else 'p'

@@ -37,7 +37,10 @@ object NotationParser {
   }
 
   private def prepareMatchString(s: String) =
-    s.replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
+    s.toUpperCase.replaceAll(""" ch""", "ch")
+      .replaceAll(""" dblch""", "dblch")
+      .replaceAll(""" mate""", "mate")
+      .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
       .replaceAll(" +", " ")
       .replaceAll("""[\?!]*""", "")
       .trim
