@@ -34,7 +34,7 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
 case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     extends ActionSerialiser {
   protected def move(a: MoveAction): Set[String] =
-    fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
+    fromPiece(a) * dash(a) * (toPos(a) ++ (a.fromPiece.pos + a.delta).toDn(a.fromPiece.owner).map(_.toString)) * checkAndCheckmate(a)
 
   protected def enPassant(a: EnPassantAction): Set[String] =
     fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
@@ -54,7 +54,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     a.fromPiece.toDn * Set("", "-" + (if (a.fromPiece.pos.x <= 3) "Q" else "K") + fromPieceYPos(a.fromPiece))
 
   private def dash(a: ChessAction): Set[String] =
-    if (r.omitDash) Set("") else Set("-")
+    Set("", "-")
 
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
