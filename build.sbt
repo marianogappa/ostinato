@@ -5,8 +5,7 @@ name := "ostinato"
 version := "1.0.2"
 
 enablePlugins(ScalaJSPlugin)
-
-scalaJSUseRhino in Global := false
+enablePlugins(PackPlugin)
 
 val akkaVersion = "10.0.4"
 
@@ -48,4 +47,5 @@ lazy val js = ostinato.js
 lazy val jvm = ostinato.jvm
 
 // https://github.com/xerial/sbt-pack
-packAutoSettings
+// TODO re-enable this
+//packAutoSettings

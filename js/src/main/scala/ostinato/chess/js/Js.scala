@@ -2,13 +2,10 @@ package ostinato.chess.js
 
 import ostinato.chess.api.Api
 import ostinato.chess.core._
-
-import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
-import scala.scalajs.js.annotation.{JSExport, JSExportAll}
+import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExport
-@JSExportAll
+@JSExportTopLevel(name="Js")
 object Js {
   val defaultGame: String = ChessGame.defaultGame.toFen
   val api = new Api
