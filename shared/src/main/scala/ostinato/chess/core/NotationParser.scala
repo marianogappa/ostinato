@@ -56,7 +56,7 @@ object NotationParser {
       case Nil ⇒
         Set(ParsedMatch(steps, SuccessfulParse(actionSerialiser.r)))
       case a :: as ⇒
-        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionSerialiser.serialiseAction filter (_._1 == a)
+        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionSerialiser.serialiseAction filter (_._1.toUpperCase == a)
 
         if (nodes.isEmpty) {
           Set(
