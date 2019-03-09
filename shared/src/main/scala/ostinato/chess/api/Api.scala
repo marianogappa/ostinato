@@ -1,32 +1,8 @@
 package ostinato.chess.api
 
 import ostinato.chess.ai.{ChessBasicAi, ChessRandomAi}
-import ostinato.chess.core.NotationParser.{
-  FailedParse,
-  ParsedMatch,
-  SuccessfulParse
-}
-import ostinato.chess.core.{
-  AlgebraicNotation,
-  AlgebraicNotationActionSerialiser,
-  AlgebraicNotationRules,
-  BlackChessPlayer,
-  ChessAction,
-  ChessGame,
-  ChessPlayer,
-  ChessXY,
-  CoordinateNotation,
-  CoordinateNotationActionSerialiser,
-  DescriptiveNotation,
-  DescriptiveNotationActionSerialiser,
-  IccfNotation,
-  IccfNotationActionSerialiser,
-  NotationParser,
-  NotationRules,
-  SmithNotation,
-  SmithNotationActionSerialiser,
-  WhiteChessPlayer
-}
+import ostinato.chess.core.NotationParser.{FailedParse, ParsedMatch, SuccessfulParse}
+import ostinato.chess.core.{AlgebraicNotation, AlgebraicNotationActionSerialiser, AlgebraicNotationRules, BlackChessPlayer, ChessAction, ChessBoard, ChessGame, ChessPlayer, ChessXY, CoordinateNotation, CoordinateNotationActionSerialiser, DescriptiveNotation, DescriptiveNotationActionSerialiser, IccfNotation, IccfNotationActionSerialiser, NotationParser, NotationRules, SmithNotation, SmithNotationActionSerialiser, WhiteChessPlayer}
 
 class Api {
   val defaultGame: String = ChessGame.defaultGame.toFen
@@ -87,8 +63,10 @@ class Api {
     }) getOrElse Map("success" -> (false: Any))
   }
 
-  def parseNotation(input: String): Map[String, Any] = {
-    val results = NotationParser.parseMatchString(input).results
+  def parseNotation(input: String, initialBoardString: String = ChessGame.defaultGame.toFen): Map[String, Any] = {
+    val maybeInitialBoard = ChessGame.fromFen(initialBoardString).map(_.board)
+    val initialBoard = if (maybeInitialBoard.isSuccess) maybeInitialBoard.get else ChessGame.defaultGame.board
+    val results = NotationParser.parseMatchString(input, initialBoard).results
 
     results.head match {
       case parsedMatch @ ParsedMatch(steps, notationRules) ⇒
@@ -121,8 +99,12 @@ class Api {
     }
   }
 
-  def convertNotation(input: String, notation: String): Map[String, Any] = {
-    val results = NotationParser.parseMatchString(input)
+  def convertNotation(input: String, notation: String, initialBoardString: String = ChessGame.defaultGame.toFen): Map[String, Any] = {
+    val maybeInitialBoard = ChessGame.fromFen(initialBoardString).map(_.board)
+    val initialBoard = if (maybeInitialBoard.isSuccess) maybeInitialBoard.get else {
+      ChessGame.defaultGame.board
+    }
+    val results = NotationParser.parseMatchString(input, initialBoard)
 
     Map(
       "actions" ->
