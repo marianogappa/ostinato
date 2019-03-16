@@ -91,7 +91,7 @@ case class ♜(override val pos: XY, override val owner: ChessPlayer)
     Piece.toXYs(Set((-1, 0), (1, 0), (0, -1), (0, 1)))
   val pieceName = "Rook"
   val toAn = "R"
-  val toDn = Set("R", "KR", "QR")
+  val toDn = Set("R", "KR", "QR") // Aim to support any scenario. Kings rook might move to QR position.
   lazy val toIccf = 2
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isRook = true
@@ -156,7 +156,7 @@ case class ♞(override val pos: XY, override val owner: ChessPlayer)
         (2, 1)))
   val pieceName = "Knight"
   val toAn = "N"
-  val toDn = Set("N", "KN", "QN")
+  val toDn = Set("N", "KN", "QN", "Kt", "KKt", "QKt")
   lazy val toIccf = 4
   val toFen = if (owner == WhiteChessPlayer) toAn.head else toAn.head.toLower
   override val isKnight = true
@@ -277,40 +277,16 @@ case class ♟(override val pos: XY, override val owner: ChessPlayer, dy: Int)
   val isPromoting = pos.y == promotingPosition(dy)
   val pieceName = "Pawn"
   val toAn = ""
-  val toDn = Set("P",
-                 Map(0 -> "RP",
-                     1 -> "NP",
-                     2 -> "BP",
-                     3 -> "QP",
-                     4 -> "KP",
-                     5 -> "BP",
-                     6 -> "NP",
-                     7 -> "RP")(pos.x),
-                 Map(0 -> "PR",
-                     1 -> "PN",
-                     2 -> "PB",
-                     3 -> "PQ",
-                     4 -> "PK",
-                     5 -> "PB",
-                     6 -> "PN",
-                     7 -> "PR")(pos.x),
-                 Map(0 -> "QRP",
-                     1 -> "QNP",
-                     2 -> "QBP",
-                     3 -> "QP",
-                     4 -> "KP",
-                     5 -> "KBP",
-                     6 -> "KNP",
-                     7 -> "KRP")(pos.x),
-                 Map(0 -> "PQR",
-                     1 -> "PQN",
-                     2 -> "PQB",
-                     3 -> "PQ",
-                     4 -> "PK",
-                     5 -> "PKB",
-                     6 -> "PKN",
-                     7 -> "PKR")(pos.x)
-                 )
+  val toDn = Set("P") ++
+                 Map(0 -> Set("RP", "PR", "QRP", "PQR"),
+                     1 -> Set("NP", "PN", "QNP", "PQN", "KtP", "PKt", "QKtP", "PQKt"),
+                     2 -> Set("BP", "PB", "QBP", "PQB"),
+                     3 -> Set("QP", "PQ"),
+                     4 -> Set("KP", "PK"),
+                     5 -> Set("BP", "PB", "KBP", "PKB"),
+                     6 -> Set("NP", "PN", "KNP", "PKN", "KtP", "PKt", "KKtP", "PKKt"),
+                     7 -> Set("RP", "PR", "KRP", "PKR"))(pos.x)
+
   lazy val toIccf = throw new RuntimeException(
     "Pawn does not have an Iccf code") with NoStackTrace
   val toFen = if (owner == WhiteChessPlayer) 'P' else 'p'

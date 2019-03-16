@@ -34,13 +34,16 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
 case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     extends ActionSerialiser {
   protected def move(a: MoveAction): Set[String] =
-    fromPiece(a) * dash(a) * (toPos(a) ++ (a.fromPiece.pos + a.delta).toDn(a.fromPiece.owner).map(_.toString)) * checkAndCheckmate(a)
+    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
 
-  protected def enPassant(a: EnPassantAction): Set[String] =
-    fromPiece(a) * dash(a) * toPos(a) * checkAndCheckmate(a)
+  protected def enPassant(a: EnPassantAction): Set[String] = // same as move
+    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
 
   protected def capture(a: CaptureAction): Set[String] =
-    fromPiece(a) * "x" * (a.toPiece.toDn * Set("", toPieceDn(a.toPiece)) * Set("", toPieceYPos(a.toPiece)) ++ Set(toPieceDnPos(a.toPiece))) * checkAndCheckmate(a)
+    (fromPiece(a) * "x" * toCapturedPiece(a) * checkAndCheckmate(a)) ++
+      (fromPiece(a) * "x" * toCapturedPiece(a) * "/" * parensPos(a.toPiece.pos, a.turn) * checkAndCheckmate(a)) // This line is edge case: BxN/QB6
 
   protected def castling(a: CastlingAction): Set[String] =
     castlingSymbol(a) * checkAndCheckmate(a)
@@ -51,10 +54,10 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2")
 
   private def fromPiece(a: ChessAction): Set[String] =
-    a.fromPiece.toDn * Set("", "-" + (if (a.fromPiece.pos.x <= 3) "Q" else "K") + fromPieceYPos(a.fromPiece))
+    a.fromPiece.toDn * Set("", fromPieceRank(a.fromPiece))
 
-  private def dash(a: ChessAction): Set[String] =
-    Set("", "-")
+  private def toCapturedPiece(a: CaptureAction): Set[String] =
+    a.toPiece.toDn * Set("", fromPieceRank(a.fromPiece))
 
   protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
@@ -69,35 +72,32 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
 
   private def toPos(a: ChessAction): Set[String] =
     (a.fromPiece.pos + a.delta).toDn(a.turn).map {
-      case DnPos(file, 1) if r.omitFirstRank ⇒ file
+      case DnPos(file, 1) if r.omitFirstRank ⇒ file // https://en.wikipedia.org/wiki/Descriptive_notation#Notation_for_moves
       case p @ DnPos(file, rank) ⇒
         if (r.numericalRankBeforeFile) rank.toString + file else p.toString
     }
 
-  private def toPieceDn(p: ChessPiece): String =
-    Map(0 -> "QR",
-        1 -> "QN",
-        2 -> "QB",
-        3 -> "Q",
-        4 -> "K",
-        5 -> "KB",
-        6 -> "KN",
-        7 -> "KR")(p.pos.x)
+  private def simplePieceDn(p: ChessPiece): Set[String] = // Used for this case: P(QR2). It's the part before parens.
+    p match {
+      case _ if p.isRook => Set("R")
+      case _ if p.isKnight => Set("N", "Kt")
+      case _ if p.isBishop => Set("B")
+      case _ if p.isKing => Set("K")
+      case _ if p.isQueen => Set("Q")
+      case _ if p.isPawn => Set("P")
+    }
 
-  private def toPieceDnPos(p: ChessPiece): String =
-    Map(0 -> "QR",
-        1 -> "QN",
-        2 -> "QB",
-        3 -> "Q",
-        4 -> "K",
-        5 -> "KB",
-        6 -> "KN",
-        7 -> "KR")(p.pos.x) + toPieceYPos(p)
+  private def parensPos(xy: ChessXY, turn: ChessPlayer): Set[String] = { // Used for this case: P(QR2). It's the part in parens
+    val dnPoses: Set[DnPos] = xy.toDn(turn) // All possible denominations for fromPos in a (x, y) tuple
 
-  private def toPieceYPos(p: ChessPiece): String =
-    (if (p.owner == WhiteChessPlayer) p.pos.y+1 else 8-p.pos.y).toString
+    // Can omit rank, omit file, omit none, be rank file or file rank. Kill me.
+    dnPoses.map(_.x) ++
+      dnPoses.map(_.y.toString) ++
+      dnPoses.map{ case DnPos(x, y) => s"$x$y" } ++
+      dnPoses.map{ case DnPos(x, y) => s"$y$x" }
+  }
 
-  private def fromPieceYPos(p: ChessPiece): String =
+  private def fromPieceRank(p: ChessPiece): String =
     (if (p.owner == BlackChessPlayer) p.pos.y+1 else 8-p.pos.y).toString
 
   private def checkAndCheckmate(a: ChessAction): Set[String] =

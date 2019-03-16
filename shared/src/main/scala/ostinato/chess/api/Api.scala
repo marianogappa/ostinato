@@ -119,7 +119,8 @@ class Api {
             )
           )
           .toArray,
-      "validActionCount" -> results.results.head.validStepCount
+      "validActionCount" -> results.results.head.validStepCount,
+      "initialBoard" -> initialBoard.toFen
     )
   }
 

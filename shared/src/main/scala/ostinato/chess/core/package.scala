@@ -92,12 +92,12 @@ package object core {
 
     lazy val dnConversions =
       Map('a' -> Set("QR", "R"),
-          'b' -> Set("QN", "N"),
+          'b' -> Set("QN", "N", "QKt", "Kt"),
           'c' -> Set("QB", "B"),
           'd' -> Set("Q"),
           'e' -> Set("K"),
           'f' -> Set("KB", "B"),
-          'g' -> Set("KN", "N"),
+          'g' -> Set("KN", "N", "KKt", "Kt"),
           'h' -> Set("KR", "R"))
 
     lazy val iccfConversions = Map('a' -> 1,

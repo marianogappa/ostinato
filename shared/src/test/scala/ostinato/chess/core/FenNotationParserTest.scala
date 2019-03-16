@@ -40,6 +40,10 @@ class FenNotationParserTest extends FunSpec with Matchers {
       ChessGame.fromFen(fenGame) shouldBe Failure(
         FenStringRegexMismatchException)
     }
+    it("should find actions for FEN string") {
+      val fenGame = "8/1pK5/8/8/8/8/1k3P2/8 w KQkq - 0 1"
+      ChessGame.fromFen(fenGame).get.board.actions.size shouldBe 11
+    }
   }
 
   describe("from short FEN Notation") {
