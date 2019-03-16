@@ -80,6 +80,32 @@ class NotationParserTest extends FunSpec with Matchers {
           )
         )
     }
+    it("should parse descriptive notation with initial board, using N for knight") {
+      val descriptive =
+        NotationParser.parseMatchString("""
+            |1. KxP K-N6
+            |2. K-B6 K-B5
+            |3. K-Q6 K-Q5
+            |4. P-B4 K-K5
+            |""".stripMargin, ChessGame.fromFen("8/1pK5/8/8/8/8/1k3P2/8 w - - 0 1").get.board)
+
+      descriptive.succeeded shouldBe true
+      descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
+      descriptive.parsedMatches.head.size shouldBe 8
+    }
+    it("should parse descriptive notation with initial board, using Kt for knight") {
+      val descriptive =
+        NotationParser.parseMatchString("""
+            |1. KxP K-Kt6
+            |2. K-B6 K-B5
+            |3. K-Q6 K-Q5
+            |4. P-B4 K-K5
+            |""".stripMargin, ChessGame.fromFen("8/1pK5/8/8/8/8/1k3P2/8 w - - 0 1").get.board)
+
+      descriptive.succeeded shouldBe true
+      descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
+      descriptive.parsedMatches.head.size shouldBe 8
+    }
 
     it("should parse iccf notation") {
       val iccf =
