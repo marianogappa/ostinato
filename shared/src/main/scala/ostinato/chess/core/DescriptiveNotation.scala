@@ -49,7 +49,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     castlingSymbol(a) * checkAndCheckmate(a)
 
   protected def lose(a: LoseAction): Set[String] =
-    if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
+    if (a.player == WhiteChessPlayer) Set("0-1", "resigns") else Set("1-0", "resigns")
 
   protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2")
 
@@ -64,7 +64,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
 
   //TODO review this!
   protected def promote(a: PromoteAction): Set[String] =
-    fromPiece(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
+    fromPiece(a) * "-" * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 
   protected def capturePromote(a: CapturePromoteAction): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(

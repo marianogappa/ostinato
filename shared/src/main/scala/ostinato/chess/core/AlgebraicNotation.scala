@@ -1,10 +1,20 @@
 package ostinato.chess.core
 
+object CheckSymbol {
+  val PLUS = "+"
+  val CH = "ch"
+  val CROSS = "†"
+}
+
 case class AlgebraicNotationRules(lowerCaseLetters: Boolean,
                                   figurine: Boolean,
                                   distinguishCaptures: Boolean,
                                   colonForCaptures: Boolean,
-                                  castlingNotation: String)
+                                  castlingNotation: String,
+                                  hashForCheckmate: Boolean,
+                                  noFromPosForPawns: Boolean,
+                                  checkSymbol: String,
+                                  noFromPosOnCapturesExceptPawns: Boolean)
     extends NotationRules {
 
   val shortName = "Algebraic Notation"
@@ -27,12 +37,20 @@ object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
       distinguishCaptures ← Set(true, false)
       colonForCaptures ← Set(true, false)
       castlingNotation ← Set("zeroes", "os", "word")
+      hashForCheckmate ← Set(true, false)
+      noFromPosForPawns ← Set(true, false)
+      checkSymbol ← Set(CheckSymbol.PLUS, CheckSymbol.CH, CheckSymbol.CROSS)
+      noFromPosOnCapturesExceptPawns ← Set(true, false)
     } yield
       AlgebraicNotationRules(lowerCaseLetters,
                              figurine,
                              distinguishCaptures,
                              colonForCaptures,
-                             castlingNotation)
+                             castlingNotation,
+                             hashForCheckmate,
+                             noFromPosForPawns,
+                             checkSymbol,
+                             noFromPosOnCapturesExceptPawns)
 }
 
 case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
@@ -51,16 +69,24 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
 
   protected def promote(a: PromoteAction) =
-    fromPos(a) * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(
+    toPos(a) * promotion(a.promotePiece) * checkAndCheckmate(
       a)
 
+  def promotion(toPiece: ChessPiece) =
+    Set(
+      s"=${toPiece.toAn.toString}",
+      toPiece.toAn.toString,
+      s"(${toPiece.toAn.toString})",
+      s"/${toPiece.toAn.toString}"
+    )
+
   protected def capture(a: CaptureAction) =
-    fromPiece(a) * fromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(
+    fromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(
       a)
 
   protected def capturePromote(a: CapturePromoteAction) =
     fromPiece(a) *
-      fromPos(a) * captureDash * toPos(a, withJustX = true) * genericPromotion(
+      captureFromPos(a) * captureDash * toPos(a, withJustX = true) * genericPromotion(
       a.promotePiece) * checkAndCheckmate(a)
 
   protected def enPassantCapture(a: EnPassantCaptureAction) =
@@ -83,8 +109,17 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     else
       Set(a.fromPiece.toAn.toString)
 
+  private def captureFromPos(a: ChessAction): Set[String] = {
+    if (r.noFromPosOnCapturesExceptPawns && !a.fromPiece.isPawn) {
+      return Set("")
+    }
+    fromPos(a)
+  }
+
   private def fromPos(a: ChessAction) =
-    if (r.lowerCaseLetters)
+    if (r.noFromPosForPawns && a.fromPiece.isPawn)
+      Set("")
+    else if (r.lowerCaseLetters)
       Set("", a.fromPiece.pos.toAn.x.toString, a.fromPiece.pos.toAn.toString)
     else
       Set("",
@@ -105,9 +140,12 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
 
   private def checkAndCheckmate(a: ChessAction): Set[String] =
     if (a.isCheckmate)
-      Set("++", "mate")
+      if (r.hashForCheckmate)
+        Set("#")
+      else
+        Set("#", "++", "mate", "‡", "≠")
     else if (a.isCheck)
-      Set("+", "ch")
+      Set(r.checkSymbol)
     else
       Set("")
 

@@ -7,6 +7,32 @@ class NotationParserTest extends FunSpec with Matchers {
   import ostinato.chess.core.NotationParser.GameStep
 
   describe("Notation parsing") {
+    val algebraicSerialiser = AlgebraicNotationActionSerialiser(
+      AlgebraicNotationRules(
+        lowerCaseLetters = true,
+        figurine = false,
+        distinguishCaptures = true,
+        colonForCaptures = false,
+        castlingNotation = "zeroes",
+        hashForCheckmate = true,
+        noFromPosForPawns = true,
+        checkSymbol = CheckSymbol.PLUS,
+        noFromPosOnCapturesExceptPawns = true
+      )
+    )
+
+    def descriptiveToAlgebraic(descriptive: NotationParser.ParseResultsProxy) = descriptive.parsedMatches.head
+      .flatMap(
+        _.maybeGameStep.map(
+          gameStep ⇒
+            algebraicSerialiser
+              .serialiseAction(gameStep.action)
+              .head
+              ._1
+        )
+      )
+      .toArray
+
     it("should parse descriptive notation") {
       // https://github.com/marianogappa/ostinato/issues/1
       val descriptive =
@@ -105,6 +131,383 @@ class NotationParserTest extends FunSpec with Matchers {
       descriptive.succeeded shouldBe true
       descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
       descriptive.parsedMatches.head.size shouldBe 8
+    }
+
+    // This is a very good debugging snippet: gives you calculated possible next moves in the given notation
+    //      val as = descriptive.parsedMatches.head.last.maybeGameStep.get.board.actions
+    //      val s = DescriptiveNotationActionSerialiser(DescriptiveNotationRules(false, false, false, "castles"))
+    //      val b: Set[(String, (ChessAction, NotationRules))] = as.flatMap(s.serialiseAction)
+    //      b.map(_._1) foreach println
+
+    it("should parse descriptive notation with initial board 2") {
+      val descriptive =
+        NotationParser.parseMatchString("""
+          |1. K-Q6!      K-R6
+          |2. K-B5       K-R5
+          |3. P-B4       P-Kt4
+          |4. P-B5       P-Kt5
+          |5. K-B4!      P-Kt6
+          |6. K-B3!      K-R6
+          |7. P-B6       P-Kt7
+          |8. P-B7       P-Kt8=Q
+          |9. P-B8(Q)ch  K-R5
+          |10. Q-R8ch    K-Kt4
+          |11. Q-Kt7ch   1-0
+          |""".stripMargin, ChessGame.fromFen("8/1pK5/8/8/8/8/k4P2/8 w - - 0 1").get.board)
+
+      descriptive.succeeded shouldBe true
+      descriptive.suceedingNotations.head shouldBe a[DescriptiveNotationRules]
+      descriptive.parsedMatches.head.size shouldBe 22
+
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 1") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. P-R4 K-B5
+          |2. P-R5 K-Q4
+          |3. P-R6 K-K3
+          |4. P-R7 K-B2
+          |5. P-R8(Q) Resigns
+          |""".stripMargin, ChessGame.fromFen("8/8/8/8/8/1k5P/8/2K5 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "h4",
+        "Kc4",
+        "h5",
+        "Kd5",
+        "h6",
+        "Ke6",
+        "h7",
+        "Kf7",
+        "h8=Q",
+        "1-0" // could maintain Resigns
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 2") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-B5!  K-K6
+          |2. K-K5!  K-Q6
+          |3. K-Q5!  K-B6
+          |4. K-B5!  K-Q6
+          |5. P-R4    K-B6
+          |6. P-R5    K-Kt6
+          |7. P-R6    K-R5
+          |8. P-R7    K-R4
+          |9. P-R8(Q) mate
+          |""".stripMargin, ChessGame.fromFen("8/8/8/6K1/8/5k2/P7/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kf5", // could maintain !
+        "Ke3",
+        "Ke5", // could maintain !
+        "Kd3",
+        "Kd5", // could maintain !
+        "Kc3",
+        "Kc5", // could maintain !
+        "Kd3",
+        "a4",
+        "Kc3",
+        "a5",
+        "Kb3",
+        "a6",
+        "Ka4",
+        "a7",
+        "Ka5",
+        "a8=Q#"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 3") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-K6! K-Q1
+          |2. K-B7 K-Q2
+          |3. P-K6ch K-Q1
+          |4. P-K7ch K-Q2
+          |5. P-K8(Q)ch
+          |""".stripMargin, ChessGame.fromFen("4k3/8/3K4/4P3/8/8/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Ke6", // could maintain !
+        "Kd8",
+        "Kf7",
+        "Kd7",
+        "e6+",
+        "Kd8",
+        "e7+",
+        "Kd7",
+        "e8=Q+"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 5") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-Q5 K-Q2
+          |2. K-B5 K-Q1
+          |3. K-Q6! K-B1
+          |4. K-B6 K-Kt1
+          |5. P-Kt7 K-R2
+          |6. K-B7
+          |""".stripMargin, ChessGame.fromFen("3k4/8/1P6/8/4K3/8/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kd5",
+        "Kd7",
+        "Kc5",
+        "Kd8",
+        "Kd6", // could maintain !
+        "Kc8",
+        "Kc6",
+        "Kb8",
+        "b7",
+        "Ka7",
+        "Kc7"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 6") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-Kt6! K-B1
+          |2. K-B6 K-K1
+          |3. K-K6 K-Q1
+          |4. K-Q6 K-B1
+          |5. K-B6 K-Kt1
+          |6. K-Q7 K-Kt2
+          |7. P-B5 K-Kt1
+          |8. P-B6 K-R2
+          |9. P-B7
+          |""".stripMargin, ChessGame.fromFen("6k1/8/7K/8/2P5/8/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kg6", // could maintain !
+        "Kf8",
+        "Kf6",
+        "Ke8",
+        "Ke6",
+        "Kd8",
+        "Kd6",
+        "Kc8",
+        "Kc6",
+        "Kb8",
+        "Kd7",
+        "Kb7",
+        "c5",
+        "Kb8",
+        "c6",
+        "Ka7",
+        "c7"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 7") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-B7! K-R1
+          |2. K-Kt6! K-Kt1
+          |3. K-R6 K-R1
+          |4. P-Kt6 K-Kt1
+          |5. P-Kt7 K-B2
+          |6. K-R7 K-K2
+          |7. P-Kt8(Q)
+          |""".stripMargin, ChessGame.fromFen("8/7k/5K2/6P1/8/8/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kf7", // could maintain !
+        "Kh8",
+        "Kg6", // could maintain !
+        "Kg8",
+        "Kh6",
+        "Kh8",
+        "g6",
+        "Kg8",
+        "g7",
+        "Kf7",
+        "Kh7",
+        "Ke7",
+        "g8=Q"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 8") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-K4 K-K3
+          |2. P-K3! K-Q3
+          |3. K-B5 K-K2
+          |4. K-K5 K-Q2
+          |5. K-B6 K-K1
+          |6. K-K6 K-B1
+          |7. P-K4 K-K1
+          |8. P-K5 K-B1
+          |9. K-Q7 K-B2
+          |10. P-K6ch K-B1
+          |11. P-K7ch
+          |""".stripMargin, ChessGame.fromFen("8/8/5k2/8/5K2/8/4P3/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Ke4",
+        "Ke6",
+        "e3", // could maintain !
+        "Kd6",
+        "Kf5",
+        "Ke7",
+        "Ke5",
+        "Kd7",
+        "Kf6",
+        "Ke8",
+        "Ke6",
+        "Kf8",
+        "e4",
+        "Ke8",
+        "e5",
+        "Kf8",
+        "Kd7",
+        "Kf7",
+        "e6+",
+        "Kf8",
+        "e7+"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 9") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-B2 K-Kt3
+          |2. K-K3 K-B4
+          |3. K-Q4! K-K3
+          |4. K-B5 K-Q2
+          |5. K-Q5 K-K2
+          |6. K-B6 K-K3
+          |7. P-Q4 K-K2
+          |8. P-Q5 K-Q1
+          |9. K-Q6 Resigns
+          |""".stripMargin, ChessGame.fromFen("8/7k/8/8/8/3P4/8/6K1 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kf2",
+        "Kg6",
+        "Ke3",
+        "Kf5",
+        "Kd4", // could maintain !
+        "Ke6",
+        "Kc5",
+        "Kd7",
+        "Kd5",
+        "Ke7",
+        "Kc6",
+        "Ke6",
+        "d4",
+        "Ke7",
+        "d5",
+        "Kd8",
+        "Kd6",
+        "1-0" // Could maintain "resigns"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 12") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-B4 K-Kt2
+          |2. K-B5 K-R1
+          |3. K-Kt5 K-Kt2
+          |4. P-R8(Q)ch! KxQ
+          |5. K-B6 K-Kt1
+          |6. P-Kt7 K-R2
+          |7. K-B7 Resigns
+          |""".stripMargin, ChessGame.fromFen("7k/7P/6P1/8/8/6K1/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kf4",
+        "Kg7",
+        "Kf5",
+        "Kh8",
+        "Kg5",
+        "Kg7",
+        "h8=Q+", // could maintain !
+        "Kxh8",
+        "Kf6",
+        "Kg8",
+        "g7",
+        "Kh7",
+        "Kf7",
+        "1-0" // Could maintain "resigns"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 13") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. P-Kt7 K-R2
+          |2. P-Kt8(Q)ch! KxQ
+          |3. K-Kt6 K-R1
+          |4. K-B7 K-R2
+          |5. P-Kt6ch K-R1
+          |6. P-Kt7ch  Resigns
+          |""".stripMargin, ChessGame.fromFen("6k1/8/5KP1/6P1/8/8/8/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "g7",
+        "Kh7",
+        "g8=Q+", // could maintain !
+        "Kxg8",
+        "Kg6",
+        "Kh8",
+        "Kf7",
+        "Kh7",
+        "g6+",
+        "Kh8",
+        "g7+",
+        "1-0" // Could maintain "resigns"
+      )
+    }
+
+    it("should prepareMatchString properly") {
+      NotationParser.prepareMatchString(
+        """
+          |1. K-B5!  K-K6
+          |2. K-K5!  K-Q6
+          |3. K-Q5!  K-B6
+          |4. K-B5!  K-Q6
+          |5. P-R4    K-B6
+          |6. P-R5    K-Kt6
+          |7. P-R6    K-R5
+          |8. P-R7    K-R4
+          |9. P-R8(Q) mate
+          |""".stripMargin) shouldBe List(
+        "K-B5",
+        "K-K6",
+        "K-K5",
+        "K-Q6",
+        "K-Q5",
+        "K-B6",
+        "K-B5",
+        "K-Q6",
+        "P-R4",
+        "K-B6",
+        "P-R5",
+        "K-KT6",
+        "P-R6",
+        "K-R5",
+        "P-R7",
+        "K-R4",
+        "P-R8(Q)MATE"
+      )
     }
 
     it("should parse iccf notation") {

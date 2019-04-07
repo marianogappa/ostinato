@@ -36,15 +36,17 @@ object NotationParser {
     actions
   }
 
-  private def prepareMatchString(s: String) =
+  def prepareMatchString(s: String) = {
     s.toUpperCase.replaceAll(""" ch""", "ch")
+      .replaceAll(""" dis[. ]{0,2}ch\.?""", "ch")
       .replaceAll(""" dblch""", "dblch")
-      .replaceAll(""" mate""", "mate")
+      .replaceAll(""" MATE""", "MATE")
       .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
       .replaceAll(" +", " ")
       .replaceAll("""[\?!]*""", "")
       .trim
       .split(' ')
+  }
 
   private def doParseMatch(actions: List[String],
                            currentBoard: ChessBoard,

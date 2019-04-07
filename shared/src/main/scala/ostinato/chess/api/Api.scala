@@ -2,7 +2,7 @@ package ostinato.chess.api
 
 import ostinato.chess.ai.{ChessBasicAi, ChessRandomAi}
 import ostinato.chess.core.NotationParser.{FailedParse, ParsedMatch, SuccessfulParse}
-import ostinato.chess.core.{AlgebraicNotation, AlgebraicNotationActionSerialiser, AlgebraicNotationRules, BlackChessPlayer, ChessAction, ChessBoard, ChessGame, ChessPlayer, ChessXY, CoordinateNotation, CoordinateNotationActionSerialiser, DescriptiveNotation, DescriptiveNotationActionSerialiser, IccfNotation, IccfNotationActionSerialiser, NotationParser, NotationRules, SmithNotation, SmithNotationActionSerialiser, WhiteChessPlayer}
+import ostinato.chess.core.{AlgebraicNotation, AlgebraicNotationActionSerialiser, AlgebraicNotationRules, BlackChessPlayer, CheckSymbol, ChessAction, ChessBoard, ChessGame, ChessPlayer, ChessXY, CoordinateNotation, CoordinateNotationActionSerialiser, DescriptiveNotation, DescriptiveNotationActionSerialiser, IccfNotation, IccfNotationActionSerialiser, NotationParser, NotationRules, SmithNotation, SmithNotationActionSerialiser, WhiteChessPlayer}
 
 class Api {
   val defaultGame: String = ChessGame.defaultGame.toFen
@@ -132,7 +132,11 @@ class Api {
           figurine = false,
           distinguishCaptures = true,
           colonForCaptures = false,
-          castlingNotation = "zeroes"
+          castlingNotation = "zeroes",
+          hashForCheckmate = true,
+          noFromPosForPawns = true,
+          checkSymbol = CheckSymbol.PLUS,
+          noFromPosOnCapturesExceptPawns = true
         )
       )
     case "Figurine Algebraic Notation" ⇒
@@ -155,7 +159,11 @@ class Api {
           figurine = false,
           distinguishCaptures = true,
           colonForCaptures = false,
-          castlingNotation = "zeroes"
+          castlingNotation = "zeroes",
+          hashForCheckmate = true,
+          noFromPosForPawns = true,
+          checkSymbol = CheckSymbol.PLUS,
+          noFromPosOnCapturesExceptPawns = true
         )
       )
   }
