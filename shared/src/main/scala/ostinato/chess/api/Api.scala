@@ -109,11 +109,11 @@ class Api {
     Map(
       "actions" ->
         results.parsedMatches.head
-          .flatMap(
-            _.maybeGameStep.map(
+          .flatMap(parseStep ⇒
+            parseStep.maybeGameStep.map(
               gameStep ⇒
                 getActionParser(notation)
-                  .serialiseAction(gameStep.action)
+                  .serialiseAction(gameStep.action, parseStep.preParseInsights)
                   .head
                   ._1
             )

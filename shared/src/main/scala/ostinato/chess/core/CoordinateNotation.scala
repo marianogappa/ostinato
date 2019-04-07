@@ -1,5 +1,7 @@
 package ostinato.chess.core
 
+import ostinato.chess.core.NotationParser.PreParseInsights
+
 case class CoordinateNotationRules(lowerCaseLetters: Boolean,
                                    useDashDelimiter: Boolean,
                                    distinguishCaptures: Boolean,
@@ -33,34 +35,34 @@ object CoordinateNotation extends Notation[CoordinateNotationRules] {
 case class CoordinateNotationActionSerialiser(r: CoordinateNotationRules)
     extends ActionSerialiser {
 
-  protected def lose(a: LoseAction): Set[String] =
+  protected def lose(a: LoseAction, i: PreParseInsights): Set[String] =
     if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
 
-  protected def draw(a: DrawAction): Set[String] =
+  protected def draw(a: DrawAction, i: PreParseInsights): Set[String] =
     Set("1/2-1/2", "½–½", "draws")
 
-  protected def capture(a: CaptureAction) =
+  protected def capture(a: CaptureAction, i: PreParseInsights) =
     fromPos(a) * captureDash * toPos(a) * checkAndCheckmate(a)
 
-  protected def enPassantCapture(a: EnPassantCaptureAction) =
+  protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) =
     fromPos(a) * captureDash * toPos(a) * checkAndCheckmate(a)
 
-  protected def move(a: MoveAction) = action(a)
+  protected def move(a: MoveAction, i: PreParseInsights) = action(a)
 
-  protected def enPassant(a: EnPassantAction) = action(a)
+  protected def enPassant(a: EnPassantAction, i: PreParseInsights) = action(a)
 
   protected def action(a: ChessAction) =
     fromPos(a) * dash * toPos(a) * checkAndCheckmate(a)
 
-  protected def promote(a: PromoteAction) =
+  protected def promote(a: PromoteAction, i: PreParseInsights) =
     fromPos(a) * dash * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(
       a)
 
-  protected def capturePromote(a: CapturePromoteAction) =
+  protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
     fromPos(a) * captureDash * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(
       a)
 
-  protected def castling(a: CastlingAction): Set[String] =
+  protected def castling(a: CastlingAction, i: PreParseInsights): Set[String] =
     r.castlingNotation match {
       case "zeroes" if a.isKingside ⇒ Set("0-0")
       case "zeroes" if a.isQueenside ⇒ Set("0-0-0")

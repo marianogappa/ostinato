@@ -3,6 +3,8 @@ package ostinato.chess.core
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NoStackTrace
 
+import ostinato.chess.core.NotationParser.PreParseInsights
+
 case class IccfNotationRules() extends NotationRules {
   val shortName = "ICCF Notation"
   val fullName = "ICCF Notation"
@@ -62,23 +64,23 @@ object IccfNotation extends Notation[IccfNotationRules] {
 case class IccfNotationActionSerialiser(
     r: IccfNotationRules = IccfNotationRules())
     extends ActionSerialiser {
-  protected def move(a: MoveAction) = action(a)
+  protected def move(a: MoveAction, i: PreParseInsights) = action(a)
 
-  protected def enPassant(a: EnPassantAction) = action(a)
+  protected def enPassant(a: EnPassantAction, i: PreParseInsights) = action(a)
 
-  protected def capture(a: CaptureAction) = action(a)
+  protected def capture(a: CaptureAction, i: PreParseInsights) = action(a)
 
-  protected def enPassantCapture(a: EnPassantCaptureAction) = action(a)
+  protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) = action(a)
 
-  protected def castling(a: CastlingAction) = action(a)
+  protected def castling(a: CastlingAction, i: PreParseInsights) = action(a)
 
-  protected def promote(a: PromoteAction) = action(a) * toPiece(a)
+  protected def promote(a: PromoteAction, i: PreParseInsights) = action(a) * toPiece(a)
 
-  protected def lose(a: LoseAction) = Set("")
+  protected def lose(a: LoseAction, i: PreParseInsights) = Set("")
 
-  protected def draw(a: DrawAction) = Set("")
+  protected def draw(a: DrawAction, i: PreParseInsights) = Set("")
 
-  protected def capturePromote(a: CapturePromoteAction) =
+  protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
     action(a) * toPiece(a)
 
   private def action(a: ChessAction) = fromPos(a) * toPos(a)

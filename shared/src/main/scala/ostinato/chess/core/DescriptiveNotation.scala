@@ -1,5 +1,7 @@
 package ostinato.chess.core
 
+import ostinato.chess.core.NotationParser.PreParseInsights
+
 case class DescriptiveNotationRules(omitDash: Boolean,
                                     numericalRankBeforeFile: Boolean,
                                     omitFirstRank: Boolean,
@@ -33,25 +35,25 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
 
 case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     extends ActionSerialiser {
-  protected def move(a: MoveAction): Set[String] =
+  protected def move(a: MoveAction, i: PreParseInsights): Set[String] =
     (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
       (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
 
-  protected def enPassant(a: EnPassantAction): Set[String] = // same as move
+  protected def enPassant(a: EnPassantAction, i: PreParseInsights): Set[String] = // same as move
     (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
       (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
 
-  protected def capture(a: CaptureAction): Set[String] =
+  protected def capture(a: CaptureAction, i: PreParseInsights): Set[String] =
     (fromPiece(a) * "x" * toCapturedPiece(a) * checkAndCheckmate(a)) ++
       (fromPiece(a) * "x" * toCapturedPiece(a) * "/" * parensPos(a.toPiece.pos, a.turn) * checkAndCheckmate(a)) // This line is edge case: BxN/QB6
 
-  protected def castling(a: CastlingAction): Set[String] =
+  protected def castling(a: CastlingAction, i: PreParseInsights): Set[String] =
     castlingSymbol(a) * checkAndCheckmate(a)
 
-  protected def lose(a: LoseAction): Set[String] =
+  protected def lose(a: LoseAction, i: PreParseInsights): Set[String] =
     if (a.player == WhiteChessPlayer) Set("0-1", "resigns") else Set("1-0", "resigns")
 
-  protected def draw(a: DrawAction): Set[String] = Set("1/2-1/2")
+  protected def draw(a: DrawAction, i: PreParseInsights): Set[String] = Set("1/2-1/2")
 
   private def fromPiece(a: ChessAction): Set[String] =
     a.fromPiece.toDn * Set("", fromPieceRank(a.fromPiece))
@@ -59,14 +61,14 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
   private def toCapturedPiece(a: CaptureAction): Set[String] =
     a.toPiece.toDn * Set("", fromPieceRank(a.fromPiece))
 
-  protected def enPassantCapture(a: EnPassantCaptureAction): Set[String] =
+  protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights): Set[String] =
     fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
 
   //TODO review this!
-  protected def promote(a: PromoteAction): Set[String] =
+  protected def promote(a: PromoteAction, i: PreParseInsights): Set[String] =
     fromPiece(a) * "-" * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
 
-  protected def capturePromote(a: CapturePromoteAction): Set[String] =
+  protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(
       a.promotePiece) * checkAndCheckmate(a)
 

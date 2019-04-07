@@ -1,6 +1,7 @@
 package ostinato.chess.core
 
 import org.scalatest._
+import ostinato.chess.core.NotationParser.PreParseInsights
 
 class NotationParserTest extends FunSpec with Matchers {
 
@@ -22,11 +23,11 @@ class NotationParserTest extends FunSpec with Matchers {
     )
 
     def descriptiveToAlgebraic(descriptive: NotationParser.ParseResultsProxy) = descriptive.parsedMatches.head
-      .flatMap(
-        _.maybeGameStep.map(
+      .flatMap(parseStep ⇒
+        parseStep.maybeGameStep.map(
           gameStep ⇒
             algebraicSerialiser
-              .serialiseAction(gameStep.action)
+              .serialiseAction(gameStep.action, parseStep.preParseInsights)
               .head
               ._1
         )
@@ -478,7 +479,16 @@ class NotationParserTest extends FunSpec with Matchers {
     }
 
     it("should prepareMatchString properly") {
-      NotationParser.prepareMatchString(
+      val descriptiveSerialiser = DescriptiveNotationActionSerialiser(
+        DescriptiveNotationRules(
+          omitDash = false,
+          numericalRankBeforeFile = false,
+          omitFirstRank = false,
+          castlingNotation = "zeroes"
+        )
+      )
+      val noInsights = PreParseInsights()
+      descriptiveSerialiser.prepareMatchString(
         """
           |1. K-B5!  K-K6
           |2. K-K5!  K-Q6
@@ -490,23 +500,23 @@ class NotationParserTest extends FunSpec with Matchers {
           |8. P-R7    K-R4
           |9. P-R8(Q) mate
           |""".stripMargin) shouldBe List(
-        "K-B5",
-        "K-K6",
-        "K-K5",
-        "K-Q6",
-        "K-Q5",
-        "K-B6",
-        "K-B5",
-        "K-Q6",
-        "P-R4",
-        "K-B6",
-        "P-R5",
-        "K-KT6",
-        "P-R6",
-        "K-R5",
-        "P-R7",
-        "K-R4",
-        "P-R8(Q)MATE"
+        ("K-B5", noInsights),
+        ("K-K6", noInsights),
+        ("K-K5", noInsights),
+        ("K-Q6", noInsights),
+        ("K-Q5", noInsights),
+        ("K-B6", noInsights),
+        ("K-B5", noInsights),
+        ("K-Q6", noInsights),
+        ("P-R4", noInsights),
+        ("K-B6", noInsights),
+        ("P-R5", noInsights),
+        ("K-KT6", noInsights),
+        ("P-R6", noInsights),
+        ("K-R5", noInsights),
+        ("P-R7", noInsights),
+        ("K-R4", noInsights),
+        ("P-R8(Q)MATE", noInsights)
       )
     }
 

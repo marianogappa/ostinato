@@ -1,5 +1,7 @@
 package ostinato.chess.core
 
+import ostinato.chess.core.NotationParser.PreParseInsights
+
 object CheckSymbol {
   val PLUS = "+"
   val CH = "ch"
@@ -56,19 +58,19 @@ object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
 case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     extends ActionSerialiser {
 
-  protected def lose(a: LoseAction): Set[String] =
+  protected def lose(a: LoseAction, i: PreParseInsights): Set[String] =
     if (a.player == WhiteChessPlayer) Set("0-1") else Set("1-0")
 
-  protected def draw(a: DrawAction): Set[String] =
+  protected def draw(a: DrawAction, i: PreParseInsights): Set[String] =
     Set("1/2-1/2", "½–½", "draws")
 
-  protected def move(a: MoveAction) =
+  protected def move(a: MoveAction, i: PreParseInsights) =
     fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
 
-  protected def enPassant(a: EnPassantAction) =
+  protected def enPassant(a: EnPassantAction, i: PreParseInsights) =
     fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
 
-  protected def promote(a: PromoteAction) =
+  protected def promote(a: PromoteAction, i: PreParseInsights) =
     toPos(a) * promotion(a.promotePiece) * checkAndCheckmate(
       a)
 
@@ -80,21 +82,21 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
       s"/${toPiece.toAn.toString}"
     )
 
-  protected def capture(a: CaptureAction) =
+  protected def capture(a: CaptureAction, i: PreParseInsights) =
     fromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(
       a)
 
-  protected def capturePromote(a: CapturePromoteAction) =
+  protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
     fromPiece(a) *
       captureFromPos(a) * captureDash * toPos(a, withJustX = true) * genericPromotion(
       a.promotePiece) * checkAndCheckmate(a)
 
-  protected def enPassantCapture(a: EnPassantCaptureAction) =
+  protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) =
     a.fromPawn.pos.toAn.x.toString * (a.fromPawn.pos + a.delta).toAn.toString * Set(
       "e.p.",
       "") * checkAndCheckmate(a)
 
-  protected def castling(a: CastlingAction): Set[String] =
+  protected def castling(a: CastlingAction, i: PreParseInsights): Set[String] =
     r.castlingNotation match {
       case "zeroes" if a.isKingside ⇒ Set("0-0")
       case "zeroes" if a.isQueenside ⇒ Set("0-0-0")

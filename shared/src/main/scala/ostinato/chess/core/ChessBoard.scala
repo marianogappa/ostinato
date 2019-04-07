@@ -1,6 +1,7 @@
 package ostinato.chess.core
 
-import ostinato.core.{XY, Board}
+import ostinato.chess.core.NotationParser.PreParseInsights
+import ostinato.core.{Board, XY}
 
 case class ChessBoard(
     override val grid: Vector[Option[ChessPiece]],
@@ -273,7 +274,7 @@ case class ChessBoard(
   lazy val toOstinatoString: String = (toFen + " " +
     history.reverse
       .flatMap(_.action)
-      .map(IccfNotationActionSerialiser().serialiseAction(_).head._1)
+      .map(IccfNotationActionSerialiser().serialiseAction(_, PreParseInsights()).head._1)
       .mkString(" ")).trim
 
   lazy val serialisedFor3FR =

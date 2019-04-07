@@ -4,7 +4,16 @@ import scala.annotation.tailrec
 
 object NotationParser {
 
-  case class ParseStep(stringToParse: String, maybeGameStep: Option[GameStep])
+  case class PreParseInsights(
+                               good: Boolean = false,
+                               excellent: Boolean = false,
+                               poor: Boolean = false,
+                               blunder: Boolean = false,
+                               maybeGood: Boolean = false,
+                               maybeBad: Boolean = false
+                             )
+
+  case class ParseStep(stringToParse: String, maybeGameStep: Option[GameStep], preParseInsights: PreParseInsights)
 
   case class GameStep(action: ChessAction, board: ChessBoard)
 
@@ -36,19 +45,7 @@ object NotationParser {
     actions
   }
 
-  def prepareMatchString(s: String) = {
-    s.toUpperCase.replaceAll(""" ch""", "ch")
-      .replaceAll(""" dis[. ]{0,2}ch\.?""", "ch")
-      .replaceAll(""" dblch""", "dblch")
-      .replaceAll(""" MATE""", "MATE")
-      .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
-      .replaceAll(" +", " ")
-      .replaceAll("""[\?!]*""", "")
-      .trim
-      .split(' ')
-  }
-
-  private def doParseMatch(actions: List[String],
+  private def doParseMatch(actions: List[(String, PreParseInsights)],
                            currentBoard: ChessBoard,
                            steps: List[ParseStep],
                            actionSerialiser: ActionSerialiser)(
@@ -58,11 +55,13 @@ object NotationParser {
       case Nil ⇒
         Set(ParsedMatch(steps, SuccessfulParse(actionSerialiser.r)))
       case a :: as ⇒
-        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap actionSerialiser.serialiseAction filter (_._1.toUpperCase == a)
+        val nodes = cache.getOrElse(currentBoard, store(currentBoard)) flatMap { case action: ChessAction ⇒
+          actionSerialiser.serialiseAction(action, a._2) filter (_._1.toUpperCase == a._1)
+        }
 
         if (nodes.isEmpty) {
           Set(
-            ParsedMatch(steps ++ (a :: as).map(ParseStep(_, None)),
+            ParsedMatch(steps ++ (a :: as).map(a ⇒ ParseStep(a._1, None, a._2)),
                         FailedParse(Some(actionSerialiser.r))))
         } else {
           reduce {
@@ -74,12 +73,13 @@ object NotationParser {
                     doParseMatch(as,
                                  newBoard,
                                  steps :+ ParseStep(
-                                   a,
-                                   Some(GameStep(chessAction, newBoard))),
+                                   a._1,
+                                   Some(GameStep(chessAction, newBoard)),
+                                   a._2),
                                  actionSerialiser)
                   case None ⇒
-                    val allSteps: List[ParseStep] = steps ++ (a :: as).map(
-                      ParseStep(_, None))
+                    val allSteps: List[ParseStep] = steps ++ (a :: as).map(a ⇒
+                      ParseStep(a._1, None, a._2))
                     Set(
                       ParsedMatch(allSteps, FailedParse(Some(notationRules))))
                 }
@@ -130,7 +130,7 @@ object NotationParser {
           s,
           board,
           as,
-          partialResults ++ doParseMatch(prepareMatchString(s).toList,
+          partialResults ++ doParseMatch(actionSerialiser.prepareMatchString(s),
                                          board,
                                          List.empty[ParseStep],
                                          actionSerialiser))

@@ -1,5 +1,7 @@
 package ostinato.chess.core
 
+import ostinato.chess.core.NotationParser.PreParseInsights
+
 trait NotationRules {
   val shortName: String
   val fullName: String
@@ -13,40 +15,54 @@ trait ActionSerialiser {
   def r: NotationRules
 
   def serialiseAction(
-      a: ChessAction): Set[(String, (ChessAction, NotationRules))] = {
+      a: ChessAction, i: PreParseInsights): Set[(String, (ChessAction, NotationRules))] = {
     val s = a match {
-      case a: MoveAction ⇒ move(a)
-      case a: EnPassantAction ⇒ enPassant(a)
-      case a: CaptureAction ⇒ capture(a)
-      case a: EnPassantCaptureAction ⇒ enPassantCapture(a)
-      case a: PromoteAction ⇒ promote(a)
-      case a: CapturePromoteAction ⇒ capturePromote(a)
-      case a: CastlingAction ⇒ castling(a)
-      case a: LoseAction ⇒ lose(a)
-      case a: DrawAction ⇒ draw(a)
+      case a: MoveAction ⇒ move(a, i)
+      case a: EnPassantAction ⇒ enPassant(a, i)
+      case a: CaptureAction ⇒ capture(a, i)
+      case a: EnPassantCaptureAction ⇒ enPassantCapture(a, i)
+      case a: PromoteAction ⇒ promote(a, i)
+      case a: CapturePromoteAction ⇒ capturePromote(a, i)
+      case a: CastlingAction ⇒ castling(a, i)
+      case a: LoseAction ⇒ lose(a, i)
+      case a: DrawAction ⇒ draw(a, i)
       case _ ⇒ Set.empty[String]
     }
 
     s.map((_, (a, r)))
   }
 
-  protected def move(a: MoveAction): Set[String]
+  protected def move(a: MoveAction, i: PreParseInsights): Set[String]
 
-  protected def enPassant(a: EnPassantAction): Set[String]
+  protected def enPassant(a: EnPassantAction, i: PreParseInsights): Set[String]
 
-  protected def capture(a: CaptureAction): Set[String]
+  protected def capture(a: CaptureAction, i: PreParseInsights): Set[String]
 
-  protected def enPassantCapture(a: EnPassantCaptureAction): Set[String]
+  protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights): Set[String]
 
-  protected def promote(a: PromoteAction): Set[String]
+  protected def promote(a: PromoteAction, i: PreParseInsights): Set[String]
 
-  protected def capturePromote(a: CapturePromoteAction): Set[String]
+  protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights): Set[String]
 
-  protected def castling(a: CastlingAction): Set[String]
+  protected def castling(a: CastlingAction, i: PreParseInsights): Set[String]
 
-  protected def lose(a: LoseAction): Set[String]
+  protected def lose(a: LoseAction, i: PreParseInsights): Set[String]
 
-  protected def draw(a: DrawAction): Set[String]
+  protected def draw(a: DrawAction, i: PreParseInsights): Set[String]
+
+  def prepareMatchString(s: String): List[(String, PreParseInsights)] = {
+    s.toUpperCase.replaceAll(""" ch""", "ch")
+      .replaceAll(""" dis[. ]{0,2}ch\.?""", "ch")
+      .replaceAll(""" dblch""", "dblch")
+      .replaceAll(""" MATE""", "MATE")
+      .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
+      .replaceAll(" +", " ")
+      .replaceAll("""[\?!]*""", "")
+      .trim
+      .split(' ')
+      .toList
+      .map((_, PreParseInsights()))
+  }
 
   implicit class CartesianProductableString(s: String) {
     def *(that: String) = Set(s + that)
