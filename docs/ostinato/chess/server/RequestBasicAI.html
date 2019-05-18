@@ -208,7 +208,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">RequestBasicAI</span><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="depth">depth: <span class="extype" name="scala.Int">Int</span></span>, <span name="debug">debug: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">RequestBasicAI</span><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="depth">depth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="debug">debug: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
@@ -264,9 +264,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.chess.server.RequestBasicAI#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(board:String,depth:Int,debug:Boolean):ostinato.chess.server.RequestBasicAI"></a><a id="&lt;init&gt;:RequestBasicAI"></a>
+      <a id="&lt;init&gt;(board:String,depth:Option[Int],debug:Option[Boolean]):ostinato.chess.server.RequestBasicAI"></a><a id="&lt;init&gt;:RequestBasicAI"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/RequestBasicAI.html#&lt;init&gt;(board:String,depth:Int,debug:Boolean):ostinato.chess.server.RequestBasicAI" title="Permalink">
+      <a href="../../../ostinato/chess/server/RequestBasicAI.html#&lt;init&gt;(board:String,depth:Option[Int],debug:Option[Boolean]):ostinato.chess.server.RequestBasicAI" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -275,7 +275,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">RequestBasicAI</span><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="depth">depth: <span class="extype" name="scala.Int">Int</span></span>, <span name="debug">debug: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">RequestBasicAI</span><span class="params">(<span name="board">board: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="depth">depth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="debug">debug: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>)</span>
       </span>
       
       
@@ -392,9 +392,9 @@
               
         </dd></dl></div>
     </li><li name="ostinato.chess.server.RequestBasicAI#debug" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="debug:Boolean"></a>
+      <a id="debug:Option[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/RequestBasicAI.html#debug:Boolean" title="Permalink">
+      <a href="../../../ostinato/chess/server/RequestBasicAI.html#debug:Option[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -403,14 +403,14 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">debug</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
       </span>
       
       
     </li><li name="ostinato.chess.server.RequestBasicAI#depth" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="depth:Int"></a>
+      <a id="depth:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/RequestBasicAI.html#depth:Int" title="Permalink">
+      <a href="../../../ostinato/chess/server/RequestBasicAI.html#depth:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -419,7 +419,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">depth</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">depth</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>
       </span>
       
       

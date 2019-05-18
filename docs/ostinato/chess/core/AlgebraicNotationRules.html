@@ -211,6 +211,12 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="object" href="CheckSymbol$.html" title=""></a>
+                        <a href="CheckSymbol$.html" title="">
+                          CheckSymbol
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="ChessAction.html" title=""></a>
                         <a href="ChessAction.html" title="">
                           ChessAction
@@ -598,7 +604,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">AlgebraicNotationRules</span><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="figurine">figurine: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="colonForCaptures">colonForCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">AlgebraicNotationRules</span><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="figurine">figurine: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="colonForCaptures">colonForCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="hashForCheckmate">hashForCheckmate: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noFromPosForPawns">noFromPosForPawns: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkSymbol">checkSymbol: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="noFromPosOnCapturesExceptPawns">noFromPosOnCapturesExceptPawns: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="NotationRules.html" class="extype" name="ostinato.chess.core.NotationRules">NotationRules</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
@@ -654,9 +660,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ostinato.chess.core.AlgebraicNotationRules#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(lowerCaseLetters:Boolean,figurine:Boolean,distinguishCaptures:Boolean,colonForCaptures:Boolean,castlingNotation:String):ostinato.chess.core.AlgebraicNotationRules"></a><a id="&lt;init&gt;:AlgebraicNotationRules"></a>
+      <a id="&lt;init&gt;(lowerCaseLetters:Boolean,figurine:Boolean,distinguishCaptures:Boolean,colonForCaptures:Boolean,castlingNotation:String,hashForCheckmate:Boolean,noFromPosForPawns:Boolean,checkSymbol:String,noFromPosOnCapturesExceptPawns:Boolean):ostinato.chess.core.AlgebraicNotationRules"></a><a id="&lt;init&gt;:AlgebraicNotationRules"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#&lt;init&gt;(lowerCaseLetters:Boolean,figurine:Boolean,distinguishCaptures:Boolean,colonForCaptures:Boolean,castlingNotation:String):ostinato.chess.core.AlgebraicNotationRules" title="Permalink">
+      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#&lt;init&gt;(lowerCaseLetters:Boolean,figurine:Boolean,distinguishCaptures:Boolean,colonForCaptures:Boolean,castlingNotation:String,hashForCheckmate:Boolean,noFromPosForPawns:Boolean,checkSymbol:String,noFromPosOnCapturesExceptPawns:Boolean):ostinato.chess.core.AlgebraicNotationRules" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -665,7 +671,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AlgebraicNotationRules</span><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="figurine">figurine: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="colonForCaptures">colonForCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">AlgebraicNotationRules</span><span class="params">(<span name="lowerCaseLetters">lowerCaseLetters: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="figurine">figurine: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="distinguishCaptures">distinguishCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="colonForCaptures">colonForCaptures: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="castlingNotation">castlingNotation: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="hashForCheckmate">hashForCheckmate: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="noFromPosForPawns">noFromPosForPawns: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="checkSymbol">checkSymbol: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="noFromPosOnCapturesExceptPawns">noFromPosOnCapturesExceptPawns: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
       </span>
       
       
@@ -756,6 +762,22 @@
       </span>
       <span class="symbol">
         <span class="name">castlingNotation</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.core.AlgebraicNotationRules#checkSymbol" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="checkSymbol:String"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#checkSymbol:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">checkSymbol</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       
@@ -899,6 +921,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="ostinato.chess.core.AlgebraicNotationRules#hashForCheckmate" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hashForCheckmate:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#hashForCheckmate:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashForCheckmate</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -947,6 +985,38 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ostinato.chess.core.AlgebraicNotationRules#noFromPosForPawns" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="noFromPosForPawns:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#noFromPosForPawns:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">noFromPosForPawns</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      
+    </li><li name="ostinato.chess.core.AlgebraicNotationRules#noFromPosOnCapturesExceptPawns" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="noFromPosOnCapturesExceptPawns:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../ostinato/chess/core/AlgebraicNotationRules.html#noFromPosOnCapturesExceptPawns:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">noFromPosOnCapturesExceptPawns</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">

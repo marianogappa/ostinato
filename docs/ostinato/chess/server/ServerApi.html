@@ -392,9 +392,9 @@
               
         </dd></dl></div>
     </li><li name="ostinato.chess.api.Api#convertNotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="convertNotation(input:String,notation:String):Map[String,Any]"></a><a id="convertNotation(String,String):Map[String,Any]"></a>
+      <a id="convertNotation(input:String,notation:String,initialBoardString:String):Map[String,Any]"></a><a id="convertNotation(String,String,String):Map[String,Any]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/ServerApi.html#convertNotation(input:String,notation:String):Map[String,Any]" title="Permalink">
+      <a href="../../../ostinato/chess/server/ServerApi.html#convertNotation(input:String,notation:String,initialBoardString:String):Map[String,Any]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -403,7 +403,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="notation">notation: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="name">convertNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="notation">notation: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="initialBoardString">initialBoardString: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../../index.html">ChessGame.defaultGame.toFen</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/Api.html" class="extype" name="ostinato.chess.api.Api">Api</a></dd></dl></div>
@@ -574,9 +574,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ostinato.chess.api.Api#parseNotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseNotation(input:String):Map[String,Any]"></a><a id="parseNotation(String):Map[String,Any]"></a>
+      <a id="parseNotation(input:String,initialBoardString:String):Map[String,Any]"></a><a id="parseNotation(String,String):Map[String,Any]"></a>
       <span class="permalink">
-      <a href="../../../ostinato/chess/server/ServerApi.html#parseNotation(input:String):Map[String,Any]" title="Permalink">
+      <a href="../../../ostinato/chess/server/ServerApi.html#parseNotation(input:String,initialBoardString:String):Map[String,Any]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -585,7 +585,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="name">parseNotation</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="initialBoardString">initialBoardString: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../../index.html">ChessGame.defaultGame.toFen</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/Api.html" class="extype" name="ostinato.chess.api.Api">Api</a></dd></dl></div>
