@@ -36,19 +36,19 @@ object DescriptiveNotation extends Notation[DescriptiveNotationRules] {
 case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     extends ActionSerialiser {
   protected def move(a: MoveAction, i: PreParseInsights): Set[String] =
-    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
-      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
+    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) ++
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
 
   protected def enPassant(a: EnPassantAction, i: PreParseInsights): Set[String] = // same as move
-    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a)) ++
-      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")") // This line is edge case: P(QR2)
+    (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) ++
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
 
   protected def capture(a: CaptureAction, i: PreParseInsights): Set[String] =
-    (fromPiece(a) * "x" * toCapturedPiece(a) * checkAndCheckmate(a)) ++
-      (fromPiece(a) * "x" * toCapturedPiece(a) * "/" * parensPos(a.toPiece.pos, a.turn) * checkAndCheckmate(a)) // This line is edge case: BxN/QB6
+    (fromPiece(a) * "x" * toCapturedPiece(a) * checkAndCheckmate(a) * moveQuality(i)) ++
+      (fromPiece(a) * "x" * toCapturedPiece(a) * "/" * parensPos(a.toPiece.pos, a.turn) * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: BxN/QB6
 
   protected def castling(a: CastlingAction, i: PreParseInsights): Set[String] =
-    castlingSymbol(a) * checkAndCheckmate(a)
+    castlingSymbol(a) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def lose(a: LoseAction, i: PreParseInsights): Set[String] =
     if (a.player == WhiteChessPlayer) Set("0-1", "resigns") else Set("1-0", "resigns")
@@ -62,15 +62,15 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     a.toPiece.toDn * Set("", fromPieceRank(a.fromPiece))
 
   protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights): Set[String] =
-    fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a)
+    fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a) * moveQuality(i)
 
   //TODO review this!
   protected def promote(a: PromoteAction, i: PreParseInsights): Set[String] =
-    fromPiece(a) * "-" * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a)
+    fromPiece(a) * "-" * toPos(a) * genericPromotion(a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights): Set[String] =
     fromPiece(a) * "x" * a.capturedPiece.toDn * genericPromotion(
-      a.promotePiece) * checkAndCheckmate(a)
+      a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   private def toPos(a: ChessAction): Set[String] =
     (a.fromPiece.pos + a.delta).toDn(a.turn).map {
@@ -115,4 +115,39 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
       Set("castles", "Castles")
     else if (a.isKingside) Set("O-O", "0-0")
     else Set("O-O-O", "0-0-0")
+
+  private def moveQuality(i: PreParseInsights): Set[String] = {
+    val qualifier = i match {
+      case pi if pi.good ⇒ "!"
+      case pi if pi.excellent ⇒ "!!"
+      case pi if pi.poor ⇒ "?"
+      case pi if pi.blunder ⇒ "??"
+      case pi if pi.maybeBad ⇒ "?!"
+      case pi if pi.maybeGood ⇒ "!?"
+      case _ ⇒ ""
+    }
+    Set("", qualifier)
+  }
+
+  override def prepareMatchString(s: String): List[(String, PreParseInsights)] = {
+    def preParseInsights(s: String) = PreParseInsights(
+      good = s.matches(""".*[^!?]?![^!?]?.*"""),
+      excellent = s.matches(""".*!!.*"""),
+      poor = s.matches(""".*[^!?]?\?[^!?]?.*"""),
+      blunder = s.matches(""".*\?\?.*"""),
+      maybeGood = s.matches(""".*!\?.*"""),
+      maybeBad = s.matches(""".*\?!.*""")
+    )
+    s.toUpperCase.replaceAll(""" ch""", "ch")
+      .replaceAll(""" dis[. ]{0,2}ch\.?""", "ch")
+      .replaceAll(""" dblch""", "dblch")
+      .replaceAll(""" MATE""", "MATE")
+      .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
+      .replaceAll(" +", " ")
+      .trim
+      .split(' ')
+      .toList
+      .map(actionString => (actionString, preParseInsights(actionString)))
+      .map(st => (st._1.replaceAll("""[\?!]*""", ""), st._2))
+  }
 }

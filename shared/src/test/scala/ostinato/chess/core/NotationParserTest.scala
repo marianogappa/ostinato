@@ -203,13 +203,13 @@ class NotationParserTest extends FunSpec with Matchers {
       )
 
       actual shouldBe Array(
-        "Kf5", // could maintain !
+        "Kf5!",
         "Ke3",
-        "Ke5", // could maintain !
+        "Ke5!",
         "Kd3",
-        "Kd5", // could maintain !
+        "Kd5!",
         "Kc3",
-        "Kc5", // could maintain !
+        "Kc5!",
         "Kd3",
         "a4",
         "Kc3",
@@ -235,7 +235,7 @@ class NotationParserTest extends FunSpec with Matchers {
       )
 
       actual shouldBe Array(
-        "Ke6", // could maintain !
+        "Ke6!",
         "Kd8",
         "Kf7",
         "Kd7",
@@ -264,7 +264,7 @@ class NotationParserTest extends FunSpec with Matchers {
         "Kd7",
         "Kc5",
         "Kd8",
-        "Kd6", // could maintain !
+        "Kd6!",
         "Kc8",
         "Kc6",
         "Kb8",
@@ -290,7 +290,7 @@ class NotationParserTest extends FunSpec with Matchers {
       )
 
       actual shouldBe Array(
-        "Kg6", // could maintain !
+        "Kg6!",
         "Kf8",
         "Kf6",
         "Ke8",
@@ -324,9 +324,9 @@ class NotationParserTest extends FunSpec with Matchers {
       )
 
       actual shouldBe Array(
-        "Kf7", // could maintain !
+        "Kf7!",
         "Kh8",
-        "Kg6", // could maintain !
+        "Kg6!",
         "Kg8",
         "Kh6",
         "Kh8",
@@ -360,7 +360,7 @@ class NotationParserTest extends FunSpec with Matchers {
       actual shouldBe Array(
         "Ke4",
         "Ke6",
-        "e3", // could maintain !
+        "e3!",
         "Kd6",
         "Kf5",
         "Ke7",
@@ -402,7 +402,7 @@ class NotationParserTest extends FunSpec with Matchers {
         "Kg6",
         "Ke3",
         "Kf5",
-        "Kd4", // could maintain !
+        "Kd4!",
         "Ke6",
         "Kc5",
         "Kd7",
@@ -439,7 +439,7 @@ class NotationParserTest extends FunSpec with Matchers {
         "Kh8",
         "Kg5",
         "Kg7",
-        "h8=Q+", // could maintain !
+        "h8=Q+!",
         "Kxh8",
         "Kf6",
         "Kg8",
@@ -465,7 +465,7 @@ class NotationParserTest extends FunSpec with Matchers {
       actual shouldBe Array(
         "g7",
         "Kh7",
-        "g8=Q+", // could maintain !
+        "g8=Q+!",
         "Kxg8",
         "Kg6",
         "Kh8",
@@ -475,6 +475,34 @@ class NotationParserTest extends FunSpec with Matchers {
         "Kh8",
         "g7+",
         "1-0" // Could maintain "resigns"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 24") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+          |1. K-B5! P-Kt4
+          |2. P-Kt4 P-Kt5
+          |3. K-Q4 P-Kt6
+          |4. K-K3 K-Kt4
+          |5. P-Kt5 K-Kt5
+          |6. P-Kt6 K-R6
+          |7. P-Kt7 P-Kt7
+          |8. K-B2 K-R7
+          |9. P-Kt8(Q)ch
+          |""".stripMargin, ChessGame.fromFen("8/6p1/7k/8/1K6/8/1P6/8 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "Kc5!", "g5",
+        "b4", "g4",
+        "Kd4", "g3",
+        "Ke3", "Kg5",
+        "b5", "Kg4",
+        "b6", "Kh3",
+        "b7", "g2",
+        "Kf2", "Kh2",
+        "b8=Q+"
       )
     }
 
@@ -500,13 +528,13 @@ class NotationParserTest extends FunSpec with Matchers {
           |8. P-R7    K-R4
           |9. P-R8(Q) mate
           |""".stripMargin) shouldBe List(
-        ("K-B5", noInsights),
+        ("K-B5", noInsights.copy(good = true)),
         ("K-K6", noInsights),
-        ("K-K5", noInsights),
+        ("K-K5", noInsights.copy(good = true)),
         ("K-Q6", noInsights),
-        ("K-Q5", noInsights),
+        ("K-Q5", noInsights.copy(good = true)),
         ("K-B6", noInsights),
-        ("K-B5", noInsights),
+        ("K-B5", noInsights.copy(good = true)),
         ("K-Q6", noInsights),
         ("P-R4", noInsights),
         ("K-B6", noInsights),

@@ -65,14 +65,13 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     Set("1/2-1/2", "½–½", "draws")
 
   protected def move(a: MoveAction, i: PreParseInsights) =
-    fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
+    fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def enPassant(a: EnPassantAction, i: PreParseInsights) =
-    fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a)
+    fromPiece(a) * fromPos(a) * toPos(a) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def promote(a: PromoteAction, i: PreParseInsights) =
-    toPos(a) * promotion(a.promotePiece) * checkAndCheckmate(
-      a)
+    toPos(a) * promotion(a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   def promotion(toPiece: ChessPiece) =
     Set(
@@ -83,18 +82,17 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     )
 
   protected def capture(a: CaptureAction, i: PreParseInsights) =
-    fromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(
-      a)
+    fromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
     fromPiece(a) *
       captureFromPos(a) * captureDash * toPos(a, withJustX = true) * genericPromotion(
-      a.promotePiece) * checkAndCheckmate(a)
+      a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) =
     a.fromPawn.pos.toAn.x.toString * (a.fromPawn.pos + a.delta).toAn.toString * Set(
       "e.p.",
-      "") * checkAndCheckmate(a)
+      "") * checkAndCheckmate(a) * moveQuality(i)
 
   protected def castling(a: CastlingAction, i: PreParseInsights): Set[String] =
     r.castlingNotation match {
@@ -154,4 +152,39 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
   private def captureDash =
     if (r.distinguishCaptures) if (r.colonForCaptures) Set(":") else Set("x")
     else Set("")
+
+  private def moveQuality(i: PreParseInsights): Set[String] = {
+    val qualifier = i match {
+      case pi if pi.good ⇒ "!"
+      case pi if pi.excellent ⇒ "!!"
+      case pi if pi.poor ⇒ "?"
+      case pi if pi.blunder ⇒ "??"
+      case pi if pi.maybeBad ⇒ "?!"
+      case pi if pi.maybeGood ⇒ "!?"
+      case _ ⇒ ""
+    }
+    Set(qualifier)
+  }
+
+  override def prepareMatchString(s: String): List[(String, PreParseInsights)] = {
+    def preParseInsights(s: String) = PreParseInsights(
+      good = s.matches(""".*[^!?]?![^!?]?.*"""),
+      excellent = s.matches(""".*!!.*"""),
+      poor = s.matches(""".*[^!?]?\?[^!?]?.*"""),
+      blunder = s.matches(""".*\?\?.*"""),
+      maybeGood = s.matches(""".*!\?.*"""),
+      maybeBad = s.matches(""".*\?!.*""")
+    )
+    s.toUpperCase.replaceAll(""" ch""", "ch")
+      .replaceAll(""" dis[. ]{0,2}ch\.?""", "ch")
+      .replaceAll(""" dblch""", "dblch")
+      .replaceAll(""" MATE""", "MATE")
+      .replaceAll("""\s+|\d+\.|\[[^\]]*\]""", " ")
+      .replaceAll(" +", " ")
+      .trim
+      .split(' ')
+      .toList
+      .map(actionString => (actionString, preParseInsights(actionString)))
+      .map(st => (st._1.replaceAll("""[\?!]*""", ""), st._2))
+  }
 }
