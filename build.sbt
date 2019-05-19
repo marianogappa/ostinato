@@ -9,7 +9,6 @@ enablePlugins(PackPlugin)
 
 val akkaVersion = "10.0.4"
 
-
 lazy val root = project.in(file(".")).
   aggregate(js, jvm).
   settings(

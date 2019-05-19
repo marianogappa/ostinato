@@ -31,29 +31,15 @@ cd -
 
 echo
 echo "Update & push to ostinato-example repo"
-echo "TODO use npm in this repo, so this step is unnecessary"
 
 cd "$WORKSPACE"/ostinato-example
+git pull --rebase
+git pull --rebase
 cp "$WORKSPACE"/ostinato/js/target/scala-2.12/ostinato-opt.js ostinato.js
-git pull --rebase
-git pull --rebase
 git commit -am "Updates library."
 git push
 
 cd -
-
-echo
-echo "Updates JS npm package repo"
-
-cd "$WORKSPACE"/ostinatojs
-cp "$WORKSPACE"/ostinato/js/target/scala-2.12/ostinato-opt.js ostinato.js
-jq '.version=env.VERSION' package.json > package.json.tmp && mv package.json.tmp package.json
-git pull --rebase
-git pull --rebase
-git commit -am "Updates library."
-git push
 
 echo
 echo "Done!"
-
-cd -
