@@ -170,7 +170,7 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     def preParseInsights(s: String) = PreParseInsights(
       good = s.matches(""".*[^!?]?![^!?]?.*"""),
       excellent = s.matches(""".*!!.*"""),
-      poor = s.matches(""".*[^!?]?\?[^!?]?.*"""),
+      poor = s.matches("""[^?]*\?[^?]*"""),
       blunder = s.matches(""".*\?\?.*"""),
       maybeGood = s.matches(""".*!\?.*"""),
       maybeBad = s.matches(""".*\?!.*""")
@@ -185,6 +185,5 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
       .split(' ')
       .toList
       .map(actionString => (actionString, preParseInsights(actionString)))
-      .map(st => (st._1.replaceAll("""[\?!]*""", ""), st._2))
   }
 }

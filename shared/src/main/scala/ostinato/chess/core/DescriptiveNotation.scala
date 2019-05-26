@@ -133,7 +133,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     def preParseInsights(s: String) = PreParseInsights(
       good = s.matches(""".*[^!?]?![^!?]?.*"""),
       excellent = s.matches(""".*!!.*"""),
-      poor = s.matches(""".*[^!?]?\?[^!?]?.*"""),
+      poor = s.matches("""[^?]*\?[^?]*"""),
       blunder = s.matches(""".*\?\?.*"""),
       maybeGood = s.matches(""".*!\?.*"""),
       maybeBad = s.matches(""".*\?!.*""")
