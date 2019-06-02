@@ -62,7 +62,7 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     a.toPiece.toDn * Set("", fromPieceRank(a.fromPiece))
 
   protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights): Set[String] =
-    fromPiece(a) * "x" * a.toPawn.toDn * checkAndCheckmate(a) * moveQuality(i)
+    fromPiece(a) * "x" * a.toPawn.toDn * Set("e.p.", "") * checkAndCheckmate(a) * moveQuality(i)
 
   //TODO review this!
   protected def promote(a: PromoteAction, i: PreParseInsights): Set[String] =

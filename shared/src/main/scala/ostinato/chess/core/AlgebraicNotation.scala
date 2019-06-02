@@ -82,7 +82,7 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     )
 
   protected def capture(a: CaptureAction, i: PreParseInsights) =
-    fromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(a) * moveQuality(i)
+    captureFromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
     fromPiece(a) *
@@ -90,7 +90,7 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
       a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) =
-    a.fromPawn.pos.toAn.x.toString * (a.fromPawn.pos + a.delta).toAn.toString * Set(
+    a.fromPawn.pos.toAn.x.toString * captureDash * (a.fromPawn.pos + a.delta).toAn.toString * Set(
       "e.p.",
       "") * checkAndCheckmate(a) * moveQuality(i)
 
@@ -102,6 +102,12 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
       case "os" if a.isQueenside ⇒ Set("O-O-O")
       case "word" ⇒ Set("castles")
     }
+
+  private def captureFromPiece(a: CaptureAction) =
+    if (a.fromPiece.isPawn)  // This is to prevent captures starting with "x" due to pawn.toAn == ""
+      Set(a.fromPiece.pos.toAn.x.toString)
+    else
+      fromPiece(a)
 
   private def fromPiece(a: ChessAction) =
     if (r.figurine)
