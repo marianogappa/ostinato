@@ -37,11 +37,11 @@ case class DescriptiveNotationActionSerialiser(r: DescriptiveNotationRules)
     extends ActionSerialiser {
   protected def move(a: MoveAction, i: PreParseInsights): Set[String] =
     (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) ++
-      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
 
   protected def enPassant(a: EnPassantAction, i: PreParseInsights): Set[String] = // same as move
     (fromPiece(a) * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) ++
-      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
+      (simplePieceDn(a.fromPiece) * "(" * parensPos(a.fromPiece.pos, a.turn) * ")" * "-" * toPos(a) * checkAndCheckmate(a) * moveQuality(i)) // This line is edge case: P(QR2)
 
   protected def capture(a: CaptureAction, i: PreParseInsights): Set[String] =
     (fromPiece(a) * "x" * toCapturedPiece(a) * checkAndCheckmate(a) * moveQuality(i)) ++
