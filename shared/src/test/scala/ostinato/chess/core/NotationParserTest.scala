@@ -18,6 +18,7 @@ class NotationParserTest extends FunSpec with Matchers {
         hashForCheckmate = true,
         noFromPosForPawns = true,
         checkSymbol = CheckSymbol.PLUS,
+        promoteSymbol = PromoteSymbol.EQUALS,
         noFromPosOnCapturesExceptPawns = true
       )
     )
@@ -582,6 +583,51 @@ class NotationParserTest extends FunSpec with Matchers {
         "Rg6",
         "b1=Q",
         "Rc6"
+      )
+    }
+
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 278") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+                                          |1. P-B7 R-R3ch
+                                          |2. B-R3! RxBch!
+                                          |3. K-Kt2 R-R7ch!
+                                          |4. K-B1! R-R8ch
+                                          |5. K-Q2 R-R7ch
+                                          |6. K-K3 R-R6ch
+                                          |7. K-B4 R-R5ch
+                                          |8. K-Kt5 R-Kt5ch!
+                                          |9. K-R6! R-Kt1!
+                                          |10. Kt-K7 B-K3
+                                          |11. PxR(Q)ch BxQ
+                                          |12. Kt-Kt6 mate!
+          |""".stripMargin, ChessGame.fromFen("2b4k/8/5Pr1/5N2/8/8/8/K1B5 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "f7",
+        "Ra6+",
+        "Ba3!",
+        "Rxa3+!",
+        "Kb2",
+        "Ra2+!",
+        "Kc1!",
+        "Ra1+",
+        "Kd2",
+        "Ra2+",
+        "Ke3",
+        "Ra3+",
+        "Kf4",
+        "Ra4+",
+        "Kg5",
+        "Rg4+!",
+        "Kh6!",
+        "Rg8!",
+        "Ne7",
+        "Be6",
+        "fxg8=Q+",
+        "Bxg8",
+        "Ng6#!"
       )
     }
 

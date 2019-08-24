@@ -42,4 +42,16 @@ git push
 cd -
 
 echo
+echo "Update & push to nowinalgebraic repo"
+
+cd "$WORKSPACE"/nowinalgebraic
+git pull --rebase
+git pull --rebase
+cp "$WORKSPACE"/ostinato/js/target/scala-2.12/ostinato-opt.js ostinato.js
+git commit -am "Updates library."
+git push
+
+cd -
+
+echo
 echo "Done!"

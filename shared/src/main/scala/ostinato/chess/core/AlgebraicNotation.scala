@@ -8,6 +8,14 @@ object CheckSymbol {
   val CROSS = "†"
 }
 
+object PromoteSymbol {
+  val EQUALS = "="
+  val SLASH = "/"
+  val PARENS = "("
+  val NOTHING = ""
+  val ANY = "*"
+}
+
 case class AlgebraicNotationRules(lowerCaseLetters: Boolean,
                                   figurine: Boolean,
                                   distinguishCaptures: Boolean,
@@ -16,6 +24,7 @@ case class AlgebraicNotationRules(lowerCaseLetters: Boolean,
                                   hashForCheckmate: Boolean,
                                   noFromPosForPawns: Boolean,
                                   checkSymbol: String,
+                                  promoteSymbol: String,
                                   noFromPosOnCapturesExceptPawns: Boolean)
     extends NotationRules {
 
@@ -42,6 +51,7 @@ object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
       hashForCheckmate ← Set(true, false)
       noFromPosForPawns ← Set(true, false)
       checkSymbol ← Set(CheckSymbol.PLUS, CheckSymbol.CH, CheckSymbol.CROSS)
+      promoteSymbol ← Set(PromoteSymbol.ANY)
       noFromPosOnCapturesExceptPawns ← Set(true, false)
     } yield
       AlgebraicNotationRules(lowerCaseLetters,
@@ -52,6 +62,7 @@ object AlgebraicNotation extends Notation[AlgebraicNotationRules] {
                              hashForCheckmate,
                              noFromPosForPawns,
                              checkSymbol,
+                             promoteSymbol,
                              noFromPosOnCapturesExceptPawns)
 }
 
@@ -73,20 +84,26 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
   protected def promote(a: PromoteAction, i: PreParseInsights) =
     toPos(a) * promotion(a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
-  def promotion(toPiece: ChessPiece) =
-    Set(
-      s"=${toPiece.toAn.toString}",
-      toPiece.toAn.toString,
-      s"(${toPiece.toAn.toString})",
-      s"/${toPiece.toAn.toString}"
-    )
+  def promotion(toPiece: ChessPiece) = r.promoteSymbol match {
+    case PromoteSymbol.ANY =>
+      Set(
+        s"=${toPiece.toAn.toString}",
+        toPiece.toAn.toString,
+        s"(${toPiece.toAn.toString})",
+        s"/${toPiece.toAn.toString}"
+      )
+    case PromoteSymbol.EQUALS => Set(s"=${toPiece.toAn.toString}")
+    case PromoteSymbol.SLASH => Set(s"/${toPiece.toAn.toString}")
+    case PromoteSymbol.PARENS => Set(s"(${toPiece.toAn.toString})")
+    case PromoteSymbol.NOTHING => Set(toPiece.toAn.toString)
+  }
 
   protected def capture(a: CaptureAction, i: PreParseInsights) =
     captureFromPiece(a) * captureFromPos(a) * captureDash * toPos(a, withJustX = true) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def capturePromote(a: CapturePromoteAction, i: PreParseInsights) =
-    fromPiece(a) *
-      captureFromPos(a) * captureDash * toPos(a, withJustX = true) * genericPromotion(
+    capturePromoteFromPiece(a) *
+      captureFromPos(a) * captureDash * toPos(a, withJustX = true) * promotion(
       a.promotePiece) * checkAndCheckmate(a) * moveQuality(i)
 
   protected def enPassantCapture(a: EnPassantCaptureAction, i: PreParseInsights) =
@@ -104,6 +121,12 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
     }
 
   private def captureFromPiece(a: CaptureAction) =
+    if (a.fromPiece.isPawn)  // This is to prevent captures starting with "x" due to pawn.toAn == ""
+      Set(a.fromPiece.pos.toAn.x.toString)
+    else
+      fromPiece(a)
+
+  private def capturePromoteFromPiece(a: CapturePromoteAction) =
     if (a.fromPiece.isPawn)  // This is to prevent captures starting with "x" due to pawn.toAn == ""
       Set(a.fromPiece.pos.toAn.x.toString)
     else
