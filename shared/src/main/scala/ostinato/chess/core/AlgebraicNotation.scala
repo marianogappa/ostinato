@@ -197,7 +197,7 @@ case class AlgebraicNotationActionSerialiser(r: AlgebraicNotationRules)
 
   override def prepareMatchString(s: String): List[(String, PreParseInsights)] = {
     def preParseInsights(s: String) = PreParseInsights(
-      good = s.matches(""".*[^!?]?![^!?]?.*"""),
+      good = s.matches("""^[^!?]*![^!?]*$"""),
       excellent = s.matches(""".*!!.*"""),
       poor = s.matches("""[^?]*\?[^?]*"""),
       blunder = s.matches(""".*\?\?.*"""),

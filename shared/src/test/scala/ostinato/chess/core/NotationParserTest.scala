@@ -526,6 +526,19 @@ class NotationParserTest extends FunSpec with Matchers {
       )
     }
 
+    it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 87") {
+      val actual = descriptiveToAlgebraic(
+        NotationParser.parseMatchString("""
+                                          |1.   P-K6! Kt-K7ch
+                                          |2.   K-R2!!
+          |""".stripMargin, ChessGame.fromFen("8/8/8/4P3/2k5/6K1/8/2n5 w - - 0 1").get.board)
+      )
+
+      actual shouldBe Array(
+        "e6!", "Ne2+", "Kh2!!"
+      )
+    }
+
     it("should parse descriptive notation Irving Chernev Practical Chess Endings Game 294") {
       val actual = descriptiveToAlgebraic(
         NotationParser.parseMatchString("""
