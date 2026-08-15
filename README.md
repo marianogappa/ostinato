@@ -1,4 +1,7 @@
 ![Ostinato](ostinato.jpg?v=1)
+
+> **This project is archived.** Development continues in its successor, [cheesse](https://github.com/marianogappa/cheesse). The demos below keep working at the same URLs, now powered by cheesse.
+
 A chess library that runs on the server (Scala), on the browser (ScalaJS) and on the REPL.
 
 [![Build Status](https://img.shields.io/travis/marianogappa/ostinato.svg)](https://travis-ci.org/marianogappa/ostinato)
@@ -228,3 +231,17 @@ TakeMovement(♝(XY(1, 3), WhiteChessPlayer), XY(1, -1), ♞(XY(2, 2), BlackChes
         |♖♘♗♕♔♗♘♖""".stripMargin, turn = WhiteChessPlayer, castlingFullyAvailable, 5, 4).get)
     }    
 ```
+
+
+## Successor: cheesse
+
+ostinato is archived and no longer maintained. Its successor is [cheesse](https://github.com/marianogappa/cheesse), a rewrite in Go with the same features and more: all the notations plus PGN, complete draw rules, a much larger test suite (including 5,553 real games), and a WebAssembly build for the browser.
+
+The demo pages keep working at the same URLs, now running cheesse:
+
+- [Chess Match Parser](https://marianogappa.github.io/ostinato-examples/parser)
+- [Chess Match Notation Converter](https://marianogappa.github.io/ostinato-examples/convert)
+- [Chess Game](https://marianogappa.github.io/ostinato-examples/play)
+- [Chess Auto-play](https://marianogappa.github.io/ostinato-examples/autoplay)
+
+Bug reports and feature requests are welcome on the [cheesse issue tracker](https://github.com/marianogappa/cheesse/issues).
